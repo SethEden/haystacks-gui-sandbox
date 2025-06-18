@@ -1,0 +1,16 @@
+{
+  "name": "haystacks-gui-sandbox",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "A GUI sandbox powered by the Haystacks-Tech platform.",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Seth Hollingsead",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^31.7.7",
+    "vue": "^3.5.13"
+  }
+}
