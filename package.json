@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "type": "module",
   "description": "A GUI sandbox powered by the Haystacks-Tech platform.",
-  "main": "src/main.js",
+  "main": "test/testHarness/src/testHarness.js",
   "scripts": {
     "start": "electron ."
   },

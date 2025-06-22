@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: executrix/socketsClient.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: executrix/socketsClient.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file socketsClient.js
+ * @module socketsClient
+ * @description Creates a socket client to connect and send messages through the server to other processes 
+ * @requires @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
+ * @requires {@link https://www.npmjs.com/package/path|path}
+ * @author Seth Hollingsead
+ * @NOTE: Original author Karl-Edward FP Jean-Mehu
+ * @date 2025-01-02 - Originally 2023/12/29
+ * @copyright Copyright © 2025-… by Seth Hollingsead. All rights reserved
+ */
+
+// Internal imports
+import ruleBroker from '../brokers/ruleBroker.js';
+// External imports
+import { Socket } from 'net';
+import process from 'process'
+import { promisify } from 'util';
+import hayConst from '@haystacks/constants';
+import path from 'path';
+
+const {bas, biz, gen, msg, sys, wrd} = hayConst;
+const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+// framework.executrix.loggers.
+// eslint-disable-next-line no-unused-vars
+const namespacePrefix =  wrd.cframework + bas.cDot + wrd.cexecutrix + bas.cDot + baseFileName + bas.cDot;
+
+// Host and port to which the socket
+// connection will be listening to
+const SOCKET = {
+  host: '127.0.0.1',
+  port: 3000
+}
+
+// Get current development mode
+const isDevMode =
+  !process.env[sys.cNODE_ENV] ||
+  process.env[sys.cNODE_ENV].toLowerCase() !== wrd.cproduction;
+const messageDelimiter = bas.cHash.repeat(2) + wrd.cEND + bas.cHash.repeat(2); // ##END##
+const chunkDelimiter = bas.cPipe + bas.cTilde + bas.cPipe; // |~|
+const maxMessageLength = 840;
+
+/**
+ * @name socketsClient
+ * @description Creates a socket client instance and handles communication to the server 
+ * @author Karl-Edward FP Jean-Mehu
+ * @date 2023/12/29
+ */
+export default async function socketsClient() {
+  try {
+    const socket = Socket({});
+    const writeAsync = promisify(socket.write.bind(socket));
+
+    // Keep connection live
+    socket.setKeepAlive(true);
+
+    // Connect to server
+    let isConnected = false;
+
+    // Connections has been refused or connection is in use.
+    let connectionRefusedOrInUse = false;
+
+    if (isConnected == false) {
+      socket.connect(SOCKET.port, SOCKET.host);
+      socket.setNoDelay(true);  // Disable Nagle's algorithm to avoid packet batching
+      isConnected = true;
+    }
+
+    // Error handler
+    socket.on(wrd.cerror, (error) => {
+      if (error.code === gen.cECONNREFUSED || error.code === gen.cEADDRINUSE){
+        connectionRefusedOrInUse = true;
+        // Server is offline! Connection is already in use or has been denied.
+        // console.log(bas.cCarriageReturn + bas.cNewLine + msg.csocketsClientServerOffline + bas.cCarriageReturn + bas.cNewLine);
+      }else{
+        console.log(bas.cCarriageReturn + bas.cNewLine + msg.cErrorOnClient + error.message);
+      }
+    });
+
+    // Handle connection being closed
+    socket.on(wrd.cclose, async () => {
+      // Connection closed!
+      if (!connectionRefusedOrInUse) console.log(msg.cConnectionClosed);
+    });
+
+    // Handles actions to take when the server establishes a connection
+    // Client connection established!
+    socket.on(wrd.cconnect, async () => console.log(msg.cClientConnectionEstablished));
+
+    // Handle receiving data
+    socket.on(wrd.cdata, async (chunk) => {
+      // console.log(`Received data, ${JSON.parse(chunk)}`);
+    });
+
+    /**
+     * Sends data through to the socket server.
+     * Parses and sends test result as well.
+     * @param { string } message - Message to be logged.
+     */
+    socket.send = async (message) => {
+      if (isConnected) {
+        // Create timestamp
+        const timestamp = await ruleBroker.processRules([gen.cYYYYMMDD_HHmmss_SSS, ''], [biz.cgetNowMoment]);
+        let broadcastMessage = JSON.stringify({ message: `${message}`, timestamp }) + messageDelimiter;
+        
+        // Write data to socket
+        await writeAsync(broadcastMessage, async (error) => {
+
+          // Assuming app is called locally / directly. Display only debug logs on failed
+          // stream writes
+          if (error) {
+            if (error.code === gen.ERR_STREAM_DESTROYED) {
+              console.log(bas.cCarriageReturn + bas.cNewLine + msg.cConnectionClosedFailedSendingChunk + broadcastMessage +
+                bas.cCarriageReturn + bas.cNewLine);
+            } else {
+              console.log(namespacePrefix + wrd.csend + bas.cSpace + wrd.cchunk + bas.cColon + bas.cSpace + broadcastMessage +
+                bas.cCarriageReturn + bas.cNewLine);
+              console.log(namespacePrefix + wrd.csend + bas.cSpace + wrd.cerror + bas.cColon + bas.cSpace + error.message +
+                bas.cCarriageReturn + bas.cNewLine);
+            }
+          } // End-if (error)
+        });
+
+        // Parse broadcastMessage for and return test results
+        const REGEX = /((TestResultsLog)\s:\s(Test_\w+)\s:)\s(\w)+/g;
+
+        const validResponses = [wrd.cPass, wrd.cFail, wrd.cWarning];
+        const matchResult = broadcastMessage.match(REGEX);
+
+        if  (matchResult) {
+          // Testing for match
+          console.log(msg.cTestingForMatch + matchResult[0]);
+          const testResultsMatch = matchResult[0].split(':').map(v => v.trim())[2];
+
+          if (!testResultsMatch) {
+            console.log({testResultsMatch});
+            return;
+          }
+
+          console.log({ testResultsMatch });
+          const testResult = validResponses.includes(( testResultsMatch || "").toLowerCase()) ? testResultsMatch[2] : wrd.cFail
+
+          await writeAsync(JSON.stringify({ testResult }));
+        }
+      } else {
+        return;
+      }
+     };
+
+    // Return connection status
+    socket.isConnected = async () => {
+      await new Promise(resolve => {
+        resolve(isConnected);
+      });
+    };
+
+    // Closes the connection with the server
+    socket.close = async () => {
+      isConnected = false;
+      await promisify(socket.end.bind(socket))();
+      // await promisify(socket.exit.bind(socket))();
+      await promisify(socket.destroy.bind(socket))();
+    };
+
+    return socket;
+  } catch (error) {
+    if (error.code === gen.cECONNREFUSED || error.code === gen.cEADDRINUSE){
+      // Socket server offline!
+      console.log(bas.cCarriageReturn + bas.cNewLine + msg.cSocketServerOffline + bas.cCarriageReturn + bas.cNewLine);
+    } else {
+      // Socket client failed:
+      console.log(bas.cCarriageReturn + bas.cNewLine + msg.cSocketClientFailed + error.message);
+    }
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-advanced.html">advanced</a></li><li><a href="module-auxiliary.html">auxiliary</a></li><li><a href="module-auxiliaryArrayParsing.html">auxiliaryArrayParsing</a></li><li><a href="module-auxiliaryStringParsing.html">auxiliaryStringParsing</a></li><li><a href="module-characterArrayParsing.html">characterArrayParsing</a></li><li><a href="module-characterGeneration.html">characterGeneration</a></li><li><a href="module-characterStringParsing.html">characterStringParsing</a></li><li><a href="module-chiefCommander.html">chiefCommander</a></li><li><a href="module-chiefConfiguration.html">chiefConfiguration</a></li><li><a href="module-chiefConstant.html">chiefConstant</a></li><li><a href="module-chiefData.html">chiefData</a></li><li><a href="module-chiefPlugin.html">chiefPlugin</a></li><li><a href="module-chiefTheme.html">chiefTheme</a></li><li><a href="module-chiefWorkflow.html">chiefWorkflow</a></li><li><a href="module-colorizer.html">colorizer</a></li><li><a href="module-commandArrayParsing.html">commandArrayParsing</a></li><li><a href="module-commandBroker.html">commandBroker</a></li><li><a href="module-commandsLibrary.html">commandsLibrary</a></li><li><a href="module-commandStringParsing.html">commandStringParsing</a></li><li><a href="module-configuration.html">configuration</a></li><li><a href="module-configurator.html">configurator</a></li><li><a href="module-constant.html">constant</a></li><li><a href="module-constantArrayParsing.html">constantArrayParsing</a></li><li><a href="module-constantBroker.html">constantBroker</a></li><li><a href="module-constantStringParsing.html">constantStringParsing</a></li><li><a href="module-data.html">data</a></li><li><a href="module-dataArrayParsing.html">dataArrayParsing</a></li><li><a href="module-dataBroker.html">dataBroker</a></li><li><a href="module-dataDirectorate.html">dataDirectorate</a></li><li><a href="module-dataStringParsing.html">dataStringParsing</a></li><li><a href="module-fileOperations.html">fileOperations</a></li><li><a href="module-fileStringParsing.html">fileStringParsing</a></li><li><a href="module-integrationTests.html">integrationTests</a></li><li><a href="module-languageParsing.html">languageParsing</a></li><li><a href="module-lexicalAnalyzer.html">lexicalAnalyzer</a></li><li><a href="module-loggers.html">loggers</a></li><li><a href="module-main.html">main</a></li><li><a href="module-mathOperations.html">mathOperations</a></li><li><a href="module-pathArrayParsing.html">pathArrayParsing</a></li><li><a href="module-performanceMetric.html">performanceMetric</a></li><li><a href="module-pluginBroker.html">pluginBroker</a></li><li><a href="module-plugins.html">plugins</a></li><li><a href="module-promptOperations.html">promptOperations</a></li><li><a href="module-queue.html">queue</a></li><li><a href="module-ruleBroker.html">ruleBroker</a></li><li><a href="module-ruleParsing.html">ruleParsing</a></li><li><a href="module-rulesLibrary.html">rulesLibrary</a></li><li><a href="module-socketsClient.html">socketsClient</a></li><li><a href="module-stack.html">stack</a></li><li><a href="module-stringGeneration.html">stringGeneration</a></li><li><a href="module-stringParsingUtilities.html">stringParsingUtilities</a></li><li><a href="module-system.html">system</a></li><li><a href="module-themeBroker.html">themeBroker</a></li><li><a href="module-timeComputation.html">timeComputation</a></li><li><a href="module-warden.html">warden</a></li><li><a href="module-wordArrayParsing.html">wordArrayParsing</a></li><li><a href="module-wordStringParsing.html">wordStringParsing</a></li><li><a href="module-workflowBroker.html">workflowBroker</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Fri Jan 10 2025 05:31:53 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
