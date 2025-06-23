@@ -10,6 +10,15 @@
   "author": "Seth Hollingsead",
   "license": "MIT",
   "dependencies": {
+    "@haystacks/constants": "^0.3.0",
+    "adm-zip": "^0.5.9",
+    "dotenv": "^16.0.0",
+    "figlet": "^1.5.2",
+    "mathjs": "10.1.0",
+    "papaparse": "5.3.1",
+    "xml2js": "^0.4.23",
+    "moment": "2.29.4",
+    "moment-duration-format": "^2.3.2",
     "electron": "^31.7.7",
     "vue": "^3.5.13"
   }
