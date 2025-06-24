@@ -85,17 +85,17 @@ async function initializeAllClientConstantsValidationData() {
   let resolvedConstantsPath_ApplicationSystem = path.resolve(constantsPath + bas.cForwardSlash + app_sys.capplication_system_constants_js);
 
   // resolvedConstantsPath_ApplicationBusiness is:
-  await haystacks.consoleLog(namespacePrefix, functionName, app_msg.cresolvedConstantsPath_ApplicationBusinessIs + resolvedConstantsPath_ApplicationBusiness);
+  await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.cresolvedConstantsPath_ApplicationBusinessIs + resolvedConstantsPath_ApplicationBusiness);
   // resolvedConstantsPath_ApplicationCommand is:
-  await haystacks.consoleLog(namespacePrefix, functionName, app_msg.cresolvedConstantsPath_ApplicationCommandIs + resolvedConstantsPath_ApplicationCommand);
+  await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.cresolvedConstantsPath_ApplicationCommandIs + resolvedConstantsPath_ApplicationCommand);
   // resolvedConstantsPath_ApplicationConfiguration is:
-  await haystacks.consoleLog(namespacePrefix, functionName, app_msg.cresolvedConstantsPath_ApplicationConfigurationIs + resolvedConstantsPath_ApplicationConfiguration);
+  await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.cresolvedConstantsPath_ApplicationConfigurationIs + resolvedConstantsPath_ApplicationConfiguration);
   // resolvedConstantsPath_ApplicationConstant is:
-  await haystacks.consoleLog(namespacePrefix, functionName, app_msg.cresolvedConstantsPath_ApplicationConstantIs + resolvedConstantsPath_ApplicationConstant);
+  await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.cresolvedConstantsPath_ApplicationConstantIs + resolvedConstantsPath_ApplicationConstant);
   // resolvedConstantsPath_ApplicationMessage is:
-  await haystacks.consoleLog(namespacePrefix, functionName, app_msg.cresolvedConstantsPath_ApplicationMessageIs + resolvedConstantsPath_ApplicationMessage);
+  await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.cresolvedConstantsPath_ApplicationMessageIs + resolvedConstantsPath_ApplicationMessage);
   // resolvedConstantsPath_ApplicationSystem is:
-  await haystacks.consoleLog(namespacePrefix, functionName, app_msg.cresolvedConstantsPath_ApplicationSystemIs + resolvedConstantsPath_ApplicationSystem);
+  await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.cresolvedConstantsPath_ApplicationSystemIs + resolvedConstantsPath_ApplicationSystem);
 
   allClientConstantsValidationData[sys.cConstantsValidationData][sys.cConstantsFilePaths][app_sys.capplicationBusinessConstantsValidation] = resolvedConstantsPath_ApplicationBusiness;
   allClientConstantsValidationData[sys.cConstantsValidationData][sys.cConstantsFilePaths][app_sys.capplicationCommandConstantsValidation] = resolvedConstantsPath_ApplicationCommand;
@@ -152,8 +152,8 @@ async function initializeAllClientConstantsValidationData() {
   allClientConstantsValidationData[sys.cConstantsValidationData][sys.cConstantsPrefix][app_sys.capplicationSystemConstantsValidation] = gen.capp + bas.cUnderscore + gen.csys + bas.cDot;
 
   // allClientConstantsValidationData is:
-  await haystacks.consoleLog(namespacePrefix, functionName, app_msg.callClientConstantsValidationDataIs + JSON.stringify(allClientConstantsValidationData));
-  await haystacks.consoleLog(namespacePrefix, functionName, msg.cEND_Function);
+  await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.callClientConstantsValidationDataIs + JSON.stringify(allClientConstantsValidationData));
+  await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cEND_Function);
   return allClientConstantsValidationData;
 }
 
