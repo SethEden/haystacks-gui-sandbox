@@ -4,6 +4,8 @@
  * @description This is the main init for the testHarness application.
  * It contains just enough for the main program loop and/or basic argument parsing to
  * effectively test the framework.
+ * @requires module:clientRules
+ * @requires module:clientCommands
  * @requires module:application.command.constants
  * @requires module:application.configuration.constants
  * @requires module:application.constants
@@ -11,6 +13,7 @@
  * @requires module:allApplicationConstantsValidationMetadata
  * @requires module:main
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
+ * @requires {@link https://www.npmjs.com/package/electron|electron}
  * @requires {@link https://www.npmjs.com/package/url|url}
  * @requires {@link https://www.npmjs.com/package/dotenv|dotenv}
  * @requires {@link https://www.npmjs.com/package/path|path}
@@ -20,14 +23,16 @@
  */
 
 // Internal imports
-import { app, BrowserWindow, screen } from 'electron';
+import clientRules from './businessRules/clientRulesLibrary.js';
+import clientCommands from './commands/clientCommandsLibrary.js';
 import * as app_cfg from './constants/application.configuration.constants.js';
 import * as apc from './constants/application.constants.js';
 import * as app_msg from './constants/application.message.constants.js';
 import allAppCV from './resources/constantsValidation/allApplicationConstantsValidationMetadata.js';
 // External imports
-import main from '../../../src/main.js';
+import haystacksGui from '../../../src/main.js';
 import hayConst from '@haystacks/constants';
+import { app, BrowserWindow, screen } from 'electron';
 import url from 'url';
 import dotenv from 'dotenv';
 import path from 'path';
@@ -117,8 +122,8 @@ async function bootstrapApplication() {
       clientCommands: {}
     };
   }
-  // appConfig[sys.cclientBusinessRules] = await clientRules.initClientRulesLibrary();
-  // appConfig[sys.cclientCommands] = await clientCommands.initClientCommandsLibrary();
+  appConfig[sys.cclientBusinessRules] = await clientRules.initClientRulesLibrary();
+  appConfig[sys.cclientCommands] = await clientCommands.initClientCommandsLibrary();
   console.log('appConfig is: ', appConfig);
   console.log(`END ${namespacePrefix}${functionName} function`);
 }
