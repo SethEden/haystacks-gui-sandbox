@@ -27,6 +27,7 @@
  * @requires module:stringGeneration
  * @requires module:stringParsingUtilities
  * @requires module:timeComputation
+ * @requires module:windowOperations
  * @requires module:data
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
  * @requires {@link https://www.npmjs.com/package/path|path}
@@ -61,6 +62,7 @@ import ruleParsing from './rules/ruleParsing.js';
 import stringGeneration from './rules/stringGeneration.js';
 import stringParsingUtilities from './rules/stringParsingUtilities.js';
 import timeComputation from './rules/timeComputation.js';
+import windowOperations from './rules/windowOperations.js';
 import D from '../structures/data.js';
 // External imports
 import hayConst from '@haystacks/constants';
@@ -432,6 +434,14 @@ async function initRulesLibrary() {
      [biz.ccomputeDeltaTime]: (inputData, inputMetaData) => timeComputation.computeDeltaTime(inputData, inputMetaData),
      [biz.creformatDeltaTime]: (inputData, inputMetaData) => timeComputation.reformatDeltaTime(inputData, inputMetaData),
      [biz.csleep]: (inputData, inputMetaData) => timeComputation.sleep(inputData, inputMetaData),
+
+     // ***********************************************
+     // windowOperations rules in order
+     // ***********************************************
+     [biz.cparseLoadedWindowConfiguration]: (inputData, inputMetaData) => windowOperations.parseLoadedWindowConfiguration(inputData, inputMetaData),
+     [biz.cgetAllWindowConfigurations]: (inputData, inputMetaData) => windowOperations.getAllWindowConfigurations(inputData, inputMetaData),
+     [biz.ccreateWindowRule]: (inputData, inputMetaData) => windowOperations.createWindowRule(inputData, inputMetaData),
+     [biz.cresolveWindowSchemaHtmlPath]: (inputData, inputMetaData) => windowOperations.resolveWindowSchemaHtmlPath(inputData, inputMetaData)
    }
    // console.log(`END ${namespacePrefix}${functionName} function`);
 }

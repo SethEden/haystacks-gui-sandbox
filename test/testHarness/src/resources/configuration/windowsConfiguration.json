@@ -1,0 +1,15 @@
+{
+  "windows": {
+    "main": {
+      "id": "main",
+      "type": "primary",
+      "title": "My Minimalist App",
+      "x": 100,
+      "y": 100,
+      "width": 1200,
+      "height": 800,
+      "visible": true,
+      "state": "normal"
+    }
+  }
+}

@@ -24,6 +24,7 @@ export const cConfigurationCommonPath = wrd.cconfiguration + bas.cForwardSlash; 
 export const cPluginsRegistryCommonPath = wrd.cplugins + bas.cForwardSlash + wrd.cplugins + gen.cDotjson; // plugins/plugins.json
 export const cWorkflowsCommonPath = wrd.cworkflows + bas.cForwardSlash; // workflows/
 export const cThemesCommonPath = wrd.cthemes + bas.cForwardSlash; // themes/
+export const cSchemasCommonPath = wrd.cschemas + bas.cForwardSlash; // schemas/
 export const cReleasePath = wrd.crelease + bas.cForwardSlash; // release/
 
 // Full Dev paths
@@ -34,6 +35,7 @@ export const cFullDevConfigurationPath = cFullDevResourcesPath + cConfigurationC
 export const cFullDevPluginsRegistryPath = cFullDevResourcesPath + cPluginsRegistryCommonPath; // /src/resources/plugins/
 export const cFullDevWorkflowsPath = cFullDevResourcesPath + cWorkflowsCommonPath; // /src/resources/workflows/
 export const cFullDevThemesPath = cFullDevResourcesPath + cThemesCommonPath; // /src/resources/themes/
+export const cFullDevSchemasPath = cFullDevResourcesPath + cSchemasCommonPath; // /src/resources/schemas/
 export const cmetaDataDevPath = cFullDevResourcesPath + sys.cmetaDatadotJson; // /src/resources/metaData.json
 
 // Full Prod paths
@@ -44,4 +46,5 @@ export const cFullProdConfigurationPath = cFullProdResourcesPath + cConfiguratio
 export const cFullProdPluginsRegistryPath = cFullProdResourcesPath + cPluginsRegistryCommonPath; // /bin/resources/plugins/
 export const cFullProdWorkflowsPath = cFullProdResourcesPath + cWorkflowsCommonPath; // /bin/resources/workflows/
 export const cFullProdThemesPath = cFullProdResourcesPath + cThemesCommonPath; // /bin/resources/themes/
+export const cFullProdSchemasPath = cFullProdResourcesPath + cSchemasCommonPath; // /bin/resources/schemas/
 export const cmetaDataProdPath = cFullProdResourcesPath + sys.cmetaDatadotJson; // /bin/resources/metaData.json

@@ -751,9 +751,9 @@ async function storeSchemaData(schemaDataObject) {
  * @NOTE Cannot use the loggers here, because of a circular dependency.
  */
 async function getSchema(schemaName) {
-  // let functionName = getSchema.name;
-  // await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
-  // await loggers.consoleLog(namespacePrefix + functionName, msg.cschemaNameIs + schemaName);
+  let functionName = getSchema.name;
+  // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
+  // console.log('schemaName is: ' + schemaName);
   let returnData = false;
   let schemasLoaded = await configurator.getConfigurationSetting(wrd.csystem, cfg.cschemasLoaded);
   if (schemasLoaded) {
@@ -763,22 +763,22 @@ async function getSchema(schemaName) {
       } catch (err) {
         // ERROR: Invalid schema name. Schema does not exist: 
         console.log(msg.cErrorGetSchemaMessage01 + schemaName);
-        // await loggers.consoleLog(namespacePrefix + functionName, msg.cErrorGetSchemaMessage01 + schemaName);
         returnData = false;
       }
     } else {
       // return all schemas.
-      // await loggers.consoleLog(namespacePrefix + functionName, msg.creturnAllSchemas);
+      await loggers.consoleLog(namespacePrefix + functionName, msg.creturnAllSchemas);
       returnData = D[wrd.cSchemas];
     }
+    // console.log('returnData is: ' + JSON.stringify(returnData));
   } else {
     // Fail silently, as this is going to get hit during the loading process.
     // The loggers is calling this to get the loggers schema, but since it hasn't been loaded,
     // it's not going to work, just fail silently.
     returnData = false;
   }
-  // await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
-  // await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+  // console.log('returnData is: ' + JSON.stringify(returnData));
+  // console.log(`END ${namespacePrefix}${functionName} function`);
   return returnData;
 }
 
