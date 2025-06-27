@@ -1,7 +1,7 @@
 {
   "windows": {
-    "main": {
-      "id": "main",
+    "applicationMain": {
+      "id": "applicationMain",
       "type": "primary",
       "title": "My Minimalist App",
       "x": -2770,

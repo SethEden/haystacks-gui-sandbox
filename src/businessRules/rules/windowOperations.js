@@ -427,7 +427,7 @@ async function attachWindowEventListeners(inputData, inputMetaData) {
 
     // ----- CLOSE EVENT -----
     inputMetaData.on(wrd.cclose, async (e) => {
-      const isMain = inputData === wrd.cmain;
+      const isMain = inputData.toLowerCase().includes(wrd.cmain);
       if (!isMain) {
         D[wrd.cconfiguration][wrd.cwindows][windowConfigNamespace][wrd.cvisible] = false;
         D[wrd.cconfiguration][wrd.cwindows][windowConfigNamespace][wrd.cstate] = wrd.cclosed;

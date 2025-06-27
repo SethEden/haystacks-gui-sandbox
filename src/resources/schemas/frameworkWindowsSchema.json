@@ -1,5 +1,5 @@
 {
   "console": { "htmlPath": "./src/resources/windows/console/html/console.html" },
-  "main": { "htmlPath": "./src/resources/windows/main/html/main.html" },
+  "frameworkMain": { "htmlPath": "./src/resources/windows/frameworkMain/html/frameworkMain.html" },
   "configuration": { "htmlPath": "./src/resources/windows/configuration/html/configuration.html" }
 }
