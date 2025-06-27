@@ -3,6 +3,7 @@
  * @module windowOperations
  * @description Contains all of the business rule functions for doing window operations, data parsing/processing, etc.
  * @requires module:dataBroker
+ * @requires module:ruleParsing
  * @requires module:configurator
  * @requires module:loggers
  * @requires module:data
@@ -16,6 +17,7 @@
 
 // Internal imports
 import dataBroker from '../../brokers/dataBroker.js';
+import ruleParsing from './ruleParsing.js';
 import configurator from '../../executrix/configurator.js';
 import loggers from '../../executrix/loggers.js';
 import D from '../../structures/data.js';
@@ -46,6 +48,45 @@ async function parseWindowsConfigurationPath(inputData, inputMetaData) {
   console.log('inputMetaData is: ' + JSON.stringify(inputMetaData));
   let returnData = false;
 
+  let windowsConfigurationFileName = await configurator.getConfigurationSetting(wrd.csystem, sys.cwindowsConfigurationFileName);
+  // windowsConfigurationFileName is:
+  console.log('windowsConfigurationFileName is: ' + windowsConfigurationFileName);
+  let applicationConfigDataPath = await configurator.getConfigurationSetting(wrd.csystem, sys.cappConfigPath);
+  // applicationConfigDataPath is:
+  console.log('applicationConfigDataPath is: ' + applicationConfigDataPath);
+  let applicationConfigFiles = await dataBroker.scanDataPath(applicationConfigDataPath);
+  // applicationConfigFiles is:
+  console.log('applicationConfigFiles is: ' + applicationConfigFiles);
+  // filesToLoad = await configurator.getConfigurationSetting(wrd.csystem, cfg.cappConfigFiles);
+  if (applicationConfigFiles && Array.isArray(applicationConfigFiles) && applicationConfigFiles.length > 0) {
+    let windowsConfigFullPath = '';
+    for (let idx = 0; idx < applicationConfigFiles.length; idx++) {
+      // idx is:
+      console.log('idx is: ' + idx);
+      const filePath = applicationConfigFiles[idx];
+      // filePath is:
+      console.log('filePath is: ' + filePath);
+      // Compare the base filename (handle nested folders)
+      if (filePath.includes(windowsConfigurationFileName)) {
+        windowsConfigFullPath = filePath;
+        console.log(`MATCH FOUND: ${filePath}`);
+        // If you want the first match only, break here.
+        break;
+      }
+    }
+    if (windowsConfigFullPath) {
+      // Store the resolved path in the configuration D-hive for future use
+      await configurator.setConfigurationSetting(wrd.csystem, sys.cwindowsConfigurationFileNameAndPath, windowsConfigFullPath);
+      returnData = true;
+      console.log('windowsConfigFullPath saved: ' + windowsConfigFullPath);
+    } else {
+      // ERROR: No matching windows configuration file found in applicationConfigFiles:
+      console.log('No matching windows configuration file found in applicationConfigFiles: ' + JSON.stringify(applicationConfigFiles));
+    }
+  } else {
+    // ERROR: No application configuration files found: 
+    console.log('ERROR: No application configuration files found: ' + JSON.stringify(applicationConfigFiles));
+  }
   console.log('return data is: ' + returnData);
   console.log(`END ${namespacePrefix}${functionName} function`);
   return returnData;
@@ -81,6 +122,7 @@ async function parseLoadedWindowConfiguration(inputData, inputMetaData) {
         failed = true;
       }
     } // End-for (const windowId in inputMetaData)
+    await parseWindowsConfigurationPath('', '');
   } // End-if (inputData && inputMetaData && inputData !== '')
 
   // TODO: Can also consider a default application defined window configuration.
@@ -197,7 +239,6 @@ async function removeWindowFromWindowsOps(inputData, inputMetaData) {
       } else {
         newWindowsOps.push(winObj);
       }
-      return !shouldRemove;
     }
     D[sys.cwindowsOps] = newWindowsOps;
     let afterCount = D[sys.cwindowsOps]?.length || 0;
@@ -257,10 +298,10 @@ async function createWindowRule(inputData, inputMetaData) {
   let returnData = false;
   if (inputData && inputMetaData && inputMetaData !== '') {
       const win = new BrowserWindow({
-        x: inputData[bas.cx],
-        y: inputData[bas.cy],
-        width: inputData[wrd.cwidth],
-        height: inputData[wrd.cheight],
+        x: Number(inputData[bas.cx]),
+        y: Number(inputData[bas.cy]),
+        width: Number(inputData[wrd.cwidth]),
+        height: Number(inputData[wrd.cheight]),
         show: inputData[wrd.cvisible],
         title: inputData[wrd.ctitle],
         // More options as needed:
@@ -280,6 +321,13 @@ async function createWindowRule(inputData, inputMetaData) {
         case wrd.cnormal: case wrd.cnormalize:
         default:
           // Already in normal state
+          // Force the bounds *again* for extra reliability
+          win.setBounds({
+            x: Number(inputData[bas.cx]),
+            y: Number(inputData[bas.cy]),
+            width: Number(inputData[wrd.cwidth]),
+            height: Number(inputData[wrd.cheight])
+          });
           break;
       }
       // Load the HTML URL path by looking it up in the schema.
@@ -379,8 +427,11 @@ async function attachWindowEventListeners(inputData, inputMetaData) {
 
     // ----- CLOSE EVENT -----
     inputMetaData.on(wrd.cclose, async (e) => {
-      D[wrd.cconfiguration][wrd.cwindows][windowConfigNamespace][wrd.cvisible] = false;
-      D[wrd.cconfiguration][wrd.cwindows][windowConfigNamespace][wrd.cstate] = wrd.cclosed;
+      const isMain = inputData === wrd.cmain;
+      if (!isMain) {
+        D[wrd.cconfiguration][wrd.cwindows][windowConfigNamespace][wrd.cvisible] = false;
+        D[wrd.cconfiguration][wrd.cwindows][windowConfigNamespace][wrd.cstate] = wrd.cclosed;
+      }
       // Window Closed:
       await loggers.consoleLog(namespacePrefix + functionName, msg.cWindowClosed + inputData);
       // Optional: remove from windowsOps array or flag as closed in operational metadata.
@@ -480,7 +531,11 @@ async function saveWindowsConfigurationToDisk(inputData, inputMetaData) {
   await loggers.consoleLog(namespacePrefix + functionName, msg.cjsonWindowsConfigToWriteIs + JSON.stringify(jsonWindowsConfigToWrite));
 
   // 4. Determine output path:
-  // const outputPath = await configurator.getConfigurationSetting
+  const outputPath = await configurator.getConfigurationSetting(wrd.csystem, sys.cwindowsConfigurationFileNameAndPath);
+  // outputPath is:
+  await loggers.consoleLog(namespacePrefix + functionName, msg.coutputPathIs + outputPath);
+
+  await ruleParsing.processRulesInternal([outputPath, jsonWindowsConfigToWrite], [biz.cwriteJsonData]);
 
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
