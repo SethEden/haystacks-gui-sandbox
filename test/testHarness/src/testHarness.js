@@ -32,7 +32,7 @@ import allAppCV from './resources/constantsValidation/allApplicationConstantsVal
 // External imports
 import haystacksGui from '../../../src/main.js';
 import hayConst from '@haystacks/constants';
-import { app, BrowserWindow, screen } from 'electron';
+import { app, screen } from 'electron';
 import url from 'url';
 import dotenv from 'dotenv';
 import path from 'path';
@@ -41,7 +41,7 @@ const {bas, biz, cmd, msg, sys, wrd} = hayConst;
 let rootPath = '';
 let baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
 // application.testHarness.
-let namespacePrefix = wrd.capplication + bas.cDot + baseFileName + bas.cDot;
+const namespacePrefix = wrd.capplication + bas.cDot + baseFileName + bas.cDot;
 // eslint-disable-next-line no-undef
 global.appRoot = path.resolve(process.cwd());
 dotenv.config();
@@ -155,7 +155,7 @@ async function applicationInit() {
     // } // End-While (await haystacksGui.isCommandQueueEmpty() === false)
 
     // 2. Only now create the main application window
-    await createWindow();
+    await createWindows();
   } catch (error) {
     // ERROR: Fatal error during bootstrap: 
     console.log(app_msg.cErrorFatalBootstrap, error);
@@ -164,35 +164,44 @@ async function applicationInit() {
 }
 
 /**
- * @function createWindow
- * @description This creates the main application window.
+ * @function createWindows
+ * @description This creates all the application windows according to the user configuration.
  * @return {void}
  * @author Seth Hollingsead
  * @date 2025/06/22
  */
-async function createWindow() {
-  const functionName = createWindow.name;
+async function createWindows() {
+  const functionName = createWindows.name;
   console.log(`BEGIN ${namespacePrefix}${functionName} function`);
 
   let windowsConfig = await haystacksGui.executeBusinessRules(['', ''], [biz.cgetAllWindowConfigurations]);
-
   // windowsConfig is:
-  await haystacksGui.consoleLog(namespacePrefix, functionName, 'windowsConfig is: ' + JSON.stringify(windowsConfig));
-
-  // TODO: Make sure we hydrate all windows in the window configuration, NOT just the main window!!
-  // TODO: TEST BELOW!!!!
-  // let mainWindowSuccess = await haystacksGui.executeBusinessRules([windowsConfig, wrd.cmain], [biz.ccreateWindowRule]);
+  await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cwindowsConfigIs + JSON.stringify(windowsConfig));
 
   for (const windowKey in windowsConfig) {
     // windowKey is:
-    await haystacksGui.consoleLog(namespacePrefix, functionName, 'windowKey is: ' + windowKey);
-    const windowCfg = windowsConfig[windowKey];
-    // windowCfg is:
-    await haystacksGui.consoleLog(namespacePrefix, functionName, 'windowCfg is: ' + JSON.stringify(windowCfg));
-    await haystacksGui.executeBusinessRules([windowCfg, windowCfg[bas.cid]], [biz.ccreateWindowRule]);
-    // Attach listeners as needed (move/resize/close)
-  }
+    await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cwindowKeyIs + windowKey);
+    if (windowKey.includes(sys.cwindowsDot)) {
+      // Gate object keys that are actual windows in case we have other meta-data at some point in the future.
+      const windowCfg = windowsConfig[windowKey];
+      // windowCfg is:
+      await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cwindowCfgIs + JSON.stringify(windowCfg));
+      if (windowCfg) {
+        try {
+          await haystacksGui.executeBusinessRules([windowCfg, windowCfg[bas.cid]], [biz.ccreateWindowRule]);
+          // Attach listeners as needed (move/resize/close)
 
+        } catch (windowError) {
+          // ERROR: Failure creating the application window:
+          console.log(msg.cErrorFailureCreatingApplicationWindow + windowCfg[bas.cid]);
+          await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cErrorFailureCreatingApplicationWindow + windowCfg[bas.cid]);
+        }
+      } else {
+        // ERROR: Failure to load window without metaData: 
+        console.log(msg.cErrorFailureToLoadWindowWithoutMetaData + JSON.stringify(windowCfg));
+      }
+    } // End-if (windowKey.includes(sys.cwindowsDot))
+  }
   console.log(`END ${namespacePrefix}${functionName} function`);
 };
 

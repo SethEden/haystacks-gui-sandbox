@@ -438,10 +438,16 @@ async function initRulesLibrary() {
      // ***********************************************
      // windowOperations rules in order
      // ***********************************************
+     [biz.cparseWindowsConfigurationPath]: (inputData, inputMetaData) => windowOperations.parseWindowsConfigurationPath(inputData, inputMetaData),
      [biz.cparseLoadedWindowConfiguration]: (inputData, inputMetaData) => windowOperations.parseLoadedWindowConfiguration(inputData, inputMetaData),
+     [biz.cinitWindowsOperations]: (inputData, inputMetaData) => windowOperations.initWindowsOperations(inputData, inputMetaData),
+     [biz.caddWindowToWindowsOps]: (inputData, inputMetaData) => windowsOperations.addWindowToWindowsOps(inputData, inputMetaData),
+     [biz.cremoveWindowFromWindowsOps]: (inputData, inputMetaData) => windowsOperations.removeWindowFromWindowsOps(inputData, inputMetaData),
      [biz.cgetAllWindowConfigurations]: (inputData, inputMetaData) => windowOperations.getAllWindowConfigurations(inputData, inputMetaData),
      [biz.ccreateWindowRule]: (inputData, inputMetaData) => windowOperations.createWindowRule(inputData, inputMetaData),
-     [biz.cresolveWindowSchemaHtmlPath]: (inputData, inputMetaData) => windowOperations.resolveWindowSchemaHtmlPath(inputData, inputMetaData)
+     [biz.cattachWindowEventListeners]: (inputData, inputMetaData) => windowOperations.attachWindowEventListeners(inputData, inputMetaData),
+     [biz.cresolveWindowSchemaHtmlPath]: (inputData, inputMetaData) => windowOperations.resolveWindowSchemaHtmlPath(inputData, inputMetaData),
+     [biz.csaveWindowsConfigurationToDisk]: (inputData, inputMetaData) => windowOperations.saveWindowsConfigurationToDisk(inputData, inputMetaData)
    }
    // console.log(`END ${namespacePrefix}${functionName} function`);
 }

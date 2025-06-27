@@ -9,7 +9,8 @@
       "width": 1200,
       "height": 800,
       "visible": true,
-      "state": "normal"
+      "state": "normal",
+      "devTools": true
     }
   }
 }
