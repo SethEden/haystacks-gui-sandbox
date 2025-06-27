@@ -113,7 +113,7 @@ async function initWindowsOperations(inputData, inputMetaData) {
   const functionName = initWindowsOperations.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
-  await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaData + inputMetaData);
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
   let returnData = false;
   D[sys.cwindowsOps] = [];
   returnData = true;
@@ -386,6 +386,7 @@ async function attachWindowEventListeners(inputData, inputMetaData) {
       // Optional: remove from windowsOps array or flag as closed in operational metadata.
       await removeWindowFromWindowsOps(inputData, inputMetaData);
       // If you want to actually prevent close (for prompt), use: e.preventDefault();
+      await saveWindowsConfigurationToDisk('', '');
     });
     returnData = true;
   } // End-if (inputData && inputMetaData && inputData !== '')
@@ -479,7 +480,7 @@ async function saveWindowsConfigurationToDisk(inputData, inputMetaData) {
   await loggers.consoleLog(namespacePrefix + functionName, msg.cjsonWindowsConfigToWriteIs + JSON.stringify(jsonWindowsConfigToWrite));
 
   // 4. Determine output path:
-  const outputPath = await configurator.getConfigurationSetting
+  // const outputPath = await configurator.getConfigurationSetting
 
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
