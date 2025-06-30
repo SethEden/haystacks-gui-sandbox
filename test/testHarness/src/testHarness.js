@@ -32,7 +32,7 @@ import allAppCV from './resources/constantsValidation/allApplicationConstantsVal
 // External imports
 import haystacksGui from '../../../src/main.js';
 import hayConst from '@haystacks/constants';
-import { app, screen } from 'electron';
+import { app, ipcMain, screen } from 'electron';
 import url from 'url';
 import dotenv from 'dotenv';
 import path from 'path';
@@ -206,3 +206,9 @@ async function createWindows() {
 };
 
 app.whenReady().then(await applicationInit);
+
+ipcMain.on('shell-command', async (event, cmd) => {
+  // Run your haystacks-async command interpreter
+  const result = await haystacksAsyncEngine.runCommand(cmd);
+  event.reply('shell-output', result);
+});
