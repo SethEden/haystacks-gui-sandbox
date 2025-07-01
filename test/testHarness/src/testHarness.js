@@ -156,6 +156,14 @@ async function applicationInit() {
 
     // 2. Only now create the main application window
     await createWindows();
+
+    // 3. Start the main application DOS/Bash/Shell CLI as a backup.
+    // NOTE: If the application was started from a packaged EXE like a Electron-Builder or WebPack,
+    // and that EXE is run by double-clicking the application icon,
+    // then we might not have a DOS/Bash/Shell CLI interface.
+    // But we can try here anyway!
+    programRunning = true;
+    await launchInteractiveCLI();
   } catch (error) {
     // ERROR: Fatal error during bootstrap: 
     console.log(app_msg.cErrorFatalBootstrap, error);
@@ -205,6 +213,91 @@ async function createWindows() {
   console.log(`END ${namespacePrefix}${functionName} function`);
 };
 
+/**
+ * @function launchInteractiveCli
+ * @description This is the main program loop CLI, the init for the testHarness application.
+ * @return {void}
+ * @author Seth Hollingsead
+ * @date 2025/06/30
+ */
+async function launchInteractiveCli() {
+  const functionName = launchInteractiveCli.name;
+  await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cBEGIN_Function);
+  let argumentDrivenInterface = false;
+  let commandInput;
+  let commandResult;
+
+  argumentDrivenInterface = await haystacksGui.getConfigurationSetting(wrd.csystem, app_cfg.cargumentDrivenInterface);
+  if (argumentDrivenInterface === undefined) {
+    argumentDrivenInterface = false;
+  }
+  // argumentDrivenInterface is:
+  await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.cargumentDrivenInterfaceIs + argumentDrivenInterface);
+  await haystacksGui.enqueueCommand(cmd.cStartupWorkflow);
+  // NOTE: We are processing the argument driven interface first that way even if we are not in an argument driven interface,
+  // arguments can still be passed in and they will be executed first, after the startup workflow is complete.
+  //
+  // We need to strip off any preceding "--" before we try to process it as an actual command.
+  // Also need to make sure that the command to execute actually contains the "--" or "/" or "\" or "-".
+  let commandToExecute = '';
+  // Make sure we execute any and all commands so the command queue is empty before
+  // we process the command args and add more commands to the command queue.
+  // Really this is about getting out the application name, version and about message.
+  while (await haystacksGui.isCommandQueueEmpty() === false) {
+    commandResult = await haystacksGui.processCommandQueue();
+  } // End-while (haystacksGui.isCommandQueueEmpty() === false)
+
+  // NOW process the command args and add them to the command queue for execution.
+  if (Array.isArray(process.argv) && process.argv.length > 2) {
+    // Caught the case that some arguments were passed in as input to the application.
+    console.log(app_msg.capplicationMessage00);
+    if (process.argv[2].includes(bas.cDash) === true ||
+    process.argv[2].includes(bas.cForwardSlash) === true ||
+    process.argv[2].includes(bas.cBackSlash) === true) {
+      commandToExecute = await haystacksGui.executeBusinessRules([process.argv, ''], [biz.caggregateCommandArguments]);
+    } else {
+      commandToExecute = await haystacksGui.executeBusinessRules([process.argv, ''], [biz.caggregateCommandArguments]);
+    }
+    if (commandToExecute !== '') {
+      console.log(msg.ccommandToExecuteIs + commandToExecute);
+      await haystacksGui.enqueueCommand(commandToExecute);
+    }
+    while (await haystacksGui.isCommandQueueEmpty() === false) {
+      commandResult = await haystacksGui.processCommandQueue();
+    } // End-while (haystacksGui.isCommandQueueEmpty() === false)
+  } // End-if (Array.isArray(process.argv) && process.argv.length > 2)
+
+  // NOW the application can continue with the interactive interface if the flag was set to false.
+  if (argumentDrivenInterface === false) {
+    // BEGIN main program loop
+    await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.capplicationMessage01);
+
+    // BEGIN command parser
+    await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.capplicationMessage02);
+    while (programRunning === true) {
+      if (await haystacksGui.isCommandQueueEmpty() === true) {
+        // biz.cprompt is some how undefined here, although other biz.c<something-else> do still work.
+        // We will use wrd.cprompt here because it is working. No idea what the issue is with biz.cprompt.
+        commandInput = await haystacksGui.executeBusinessRules([bas.cGreaterThan, ''], [wrd.cprompt]);
+        await haystacksGui.enqueueCommand(commandInput);
+      } // End-if (haystacksGui.isCommandQueueEmpty() === true)
+      commandResult = await haystacksGui.processCommandQueue();
+      if (commandResult[exitConditionArrayIndex] === false) {
+        // END command parser
+        await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.capplicationMessage03);
+        programRunning = false;
+        // END main program loop
+        await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.capplicationMessage04);
+        // Exiting TEST HARNESS APPLICATION
+        await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.capplicationMessage05);
+        break;
+      } // End-if (commandResult[exitConditionArrayIndex] === false)
+    } // End-while (programRunning === true)
+  } // End-if (argumentDrivenInterface === false)
+  await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cEND_Function);
+}
+
+let programRunning = false;
 app.whenReady().then(await applicationInit);
 
 ipcMain.on('shell-command', async (event, cmd) => {

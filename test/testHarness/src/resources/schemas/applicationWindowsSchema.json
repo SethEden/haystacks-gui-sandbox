@@ -1,4 +1,5 @@
 {
   "applicationMain": { "htmlPath": "./test/testHarness/src/resources/windows/applicationMain/html/applicationMain.html"},
+  "applicationShell": { "htmlPath": "./test/testHarness/src/resources/windows/applicationShell/html/applicationShell.html"},
   "equalizer": { "htmlPath": ".test/testHarness/src/resources/windows/equalizer/html/equalizer.html" }
 }
