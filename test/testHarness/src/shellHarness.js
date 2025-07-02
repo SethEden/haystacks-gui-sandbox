@@ -7,6 +7,7 @@
  * This code is designed to be executed from a secondary spawned child process.
  * This is a DUMB TERMINAL ONLY!!
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
+ * @requires {@link https://nodejs.org/api/readline.html|readline}
  * @requires {@link https://www.npmjs.com/package/path|path}
  * @author Seth Hollingsead
  * @date 2025/07/01
@@ -17,53 +18,34 @@
 
 // External imports
 import hayConst from '@haystacks/constants';
+import readline from 'readline';
 import path from 'path';
 
 const {bas, msg, wrd} = hayConst;
 
-// Dumb terminal: prompt for input, send to parent
-/**
- * @function promptLoop
- * @description prompts the user for input, send user responses to parent.
- * @return {void}
- * @author Seth Hollingsead
- * @date 2025/07/01
- */
-function promptLoop() {
-  console.log('[shellHarness] promptLoop: displaying prompt...');
-  process.stdout.write('> ');
-  process.stdin.once(wrd.cdata, (data) => {
-    const input = data.toString().trim();
-    console.log('[shellHarness] promptLoop: received user input:', input);
-    if (input.length) {
-      console.log('[shellHarness] promptLoop: sending IPC input to parent:', input);
-      process.send({ type: wrd.cinput, payload: input });
-    }
-    // Continue prompting unless told to exit
-    console.log('Continue prompting unless told to exit');
-    promptLoop();
-  });
-}
+console.log('[proxyShell] Proxy Shell started. Type commands below:');
 
-// Display output from parent
-process.on(wrd.cmessage, (eventMsg) => {
-  console.log('[shellHarness] process.on("message"): received IPC message:', eventMsg);
-
-  if (eventMsg[wrd.ctype] === wrd.coutput) {
-    console.log('[shellHarness] process.on("message"): writing output to terminal:', eventMsg.payload);
-    process.stdout.write(msg.payload + '\n');
-  } else if (eventMsg[wrd.ctype] === wrd.clog) {
-    console.log('[shellHarness] process.on("message"): writing log to terminal:', eventMsg.payload);
-    process.stdout.write('[LOG] ' + msg.payload + '\n');
-  } else if (eventMsg[wrd.ctype] === wrd.cexit) {
-    console.log('[shellHarness] process.on("message"): received exit. Exiting CLI.');
-    process.stdout.write('Exiting CLI. Goodbye!\n');
-    process.exit(0);
-  } else {
-    console.log('[shellHarness] process.on("message"): unknown message type:', eventMsg.type);
-  }
+const r1 = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+  prompt: bas.cGreaterThan + bas.cSpace
 });
 
-// Log script start for debugging
-console.log('[shellHarness] Starting shellHarness.js — entering prompt loop.');
-promptLoop();
+r1.prompt();
+
+r1.on(wrd.cline, (line) => {
+  // Output to parent: all user input lines
+  process.stdout.write('[shellHarness] input: ' + line + bas.cCarRetNewLin);
+  r1.prompt();
+}).on(wrd.cclose, () => {
+  process.stdout.write('Exiting proxy shell. Goodbye!' + bas.cCarRetNewLin);
+  process.exit(0);
+});
+
+// Optional: Listen for piped messages from parent (could be process.stdin, but may require extra plumbing)
+process.on(wrd.cmessage, (eventMsg) => {
+  // For 'fork' model, not standard shell
+  if (eventMsg && eventMsg[wrd.ctype] === wrd.coutput) {
+    process.stdout.write(eventMsg[wrd.cpayload + bas.cCarRetNewLin]);
+  }
+});
