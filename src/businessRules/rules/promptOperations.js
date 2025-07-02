@@ -97,7 +97,44 @@ async function promptRaw(inputData, inputMetaData) {
   return returnData;
 }
 
+/**
+ * @function promptNonBlocking
+ * @description In a non-blocking way, prompts the user for input. When input arrives,
+ * a callback is invoked.
+ * @param {string} inputData The prompt string to display.
+ * @param {function} inputMetaData Callback function to receive input when available.
+ * @return {boolean} A True or False value to indicate if the prompt finished successfully or not.
+ * @author Seth Hollingsead
+ * @date 2025/07/01
+ */
+async function promptNonBlocking(inputData, inputMetaData) {
+  const functionName = promptNonBlocking.name;
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
+  let returnData = '';
+  if (inputData && typeof inputMetaData === wrd.cfunction) {
+    process.stdout.write(inputData);
+
+    process.stdin.resume();
+    process.stdin.once(wrd.cdata, (data) => {
+      const userInput = data.toString().trim();
+      // In case you want to stop reading after first input.
+      process.stdin.pause();
+      inputMetaData(userInput); // Call the callback with the user input.
+    });
+  } else {
+    // ERROR: No prompt or input callback provided.
+    console.log(msg.cErrorPromptNonBlockingMessage01);
+    await loggers.consoleLog(namespacePrefix + functionName, msg.cErrorPromptNonBlockingMessage01);
+  }
+  await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+  return returnData;
+}
+
 export default {
   prompt,
-  promptRaw
+  promptRaw,
+  promptNonBlocking
 };

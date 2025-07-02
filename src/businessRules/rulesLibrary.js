@@ -375,7 +375,8 @@ async function initRulesLibrary() {
      // promptOperations rules in order
      // ***********************************************
      [biz.cprompt]: (inputData, inputMetaData) => promptOperations.prompt(inputData, inputMetaData),
-     [biz.cpromptRaw]: (inputData, inputMetaData) =>promptOperations.promptRaw(inputData, inputMetaData),
+     [biz.cpromptRaw]: (inputData, inputMetaData) => promptOperations.promptRaw(inputData, inputMetaData),
+     [biz.cpromptNonBlocking]: (inputData, inputMetaData) => promptOperations.promptNonBlocking(inputData, inputMetaData),
 
      // ***********************************************
      // ruleParsing rules in order

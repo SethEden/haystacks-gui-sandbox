@@ -37,5 +37,18 @@
   "debugFunctions|debugSetting.framework.businessRules.rules.promptOperations.promptRaw@ModuleFontBackgroundColor": "Default",
   "debugFunctions|debugSetting.framework.businessRules.rules.promptOperations.promptRaw@FunctionFontBackgroundColor": "Default",
   "debugFunctions|debugSetting.framework.businessRules.rules.promptOperations.promptRaw@MessageFontBackgroundColor": "Default",
-  "debugFunctions|debugSetting.framework.businessRules.rules.promptOperations.promptRaw@DataFontBackgroundColor": "Default"
+  "debugFunctions|debugSetting.framework.businessRules.rules.promptOperations.promptRaw@DataFontBackgroundColor": "Default",
+  "debugFunctions|debugSetting.framework.businessRules.rules.promptOperations.promptNonBlocking": false,
+  "debugFunctions|debugSetting.framework.businessRules.rules.promptOperations.promptNonBlocking@ModuleFontStyle": "Default",
+  "debugFunctions|debugSetting.framework.businessRules.rules.promptOperations.promptNonBlocking@FunctionFontStyle": "Default",
+  "debugFunctions|debugSetting.framework.businessRules.rules.promptOperations.promptNonBlocking@MessageFontStyle": "Default",
+  "debugFunctions|debugSetting.framework.businessRules.rules.promptOperations.promptNonBlocking@DataFontStyle": "Default",
+  "debugFunctions|debugSetting.framework.businessRules.rules.promptOperations.promptNonBlocking@ModuleFontColor": "Default",
+  "debugFunctions|debugSetting.framework.businessRules.rules.promptOperations.promptNonBlocking@FunctionFontColor": "Default",
+  "debugFunctions|debugSetting.framework.businessRules.rules.promptOperations.promptNonBlocking@MessageFontColor": "Default",
+  "debugFunctions|debugSetting.framework.businessRules.rules.promptOperations.promptNonBlocking@DataFontColor": "Default",
+  "debugFunctions|debugSetting.framework.businessRules.rules.promptOperations.promptNonBlocking@ModuleFontBackgroundColor": "Default",
+  "debugFunctions|debugSetting.framework.businessRules.rules.promptOperations.promptNonBlocking@FunctionFontBackgroundColor": "Default",
+  "debugFunctions|debugSetting.framework.businessRules.rules.promptOperations.promptNonBlocking@MessageFontBackgroundColor": "Default",
+  "debugFunctions|debugSetting.framework.businessRules.rules.promptOperations.promptNonBlocking@DataFontBackgroundColor": "Default"
 }

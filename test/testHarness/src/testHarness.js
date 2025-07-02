@@ -16,6 +16,7 @@
  * @requires {@link https://www.npmjs.com/package/electron|electron}
  * @requires {@link https://www.npmjs.com/package/url|url}
  * @requires {@link https://www.npmjs.com/package/dotenv|dotenv}
+ * @requires {@link https://nodejs.org/api/child_process.html|child_process}
  * @requires {@link https://www.npmjs.com/package/path|path}
  * @author Seth Hollingsead
  * @date 2025/06/19
@@ -35,9 +36,10 @@ import hayConst from '@haystacks/constants';
 import { app, ipcMain, screen } from 'electron';
 import url from 'url';
 import dotenv from 'dotenv';
+import { fork } from 'child_process';
 import path from 'path';
 
-const {bas, biz, cmd, msg, sys, wrd} = hayConst;
+const {bas, biz, cmd, gen, msg, sys, wrd} = hayConst;
 let rootPath = '';
 let baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
 // application.testHarness.
@@ -163,7 +165,7 @@ async function applicationInit() {
     // then we might not have a DOS/Bash/Shell CLI interface.
     // But we can try here anyway!
     programRunning = true;
-    await launchInteractiveCLI();
+    launchInteractiveCli(); // WARNING: DO NOT await, it will block the rest of the application.
   } catch (error) {
     // ERROR: Fatal error during bootstrap: 
     console.log(app_msg.cErrorFatalBootstrap, error);
@@ -224,7 +226,6 @@ async function launchInteractiveCli() {
   const functionName = launchInteractiveCli.name;
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cBEGIN_Function);
   let argumentDrivenInterface = false;
-  let commandInput;
   let commandResult;
 
   argumentDrivenInterface = await haystacksGui.getConfigurationSetting(wrd.csystem, app_cfg.cargumentDrivenInterface);
@@ -274,34 +275,155 @@ async function launchInteractiveCli() {
 
     // BEGIN command parser
     await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.capplicationMessage02);
-    while (programRunning === true) {
-      if (await haystacksGui.isCommandQueueEmpty() === true) {
-        // biz.cprompt is some how undefined here, although other biz.c<something-else> do still work.
-        // We will use wrd.cprompt here because it is working. No idea what the issue is with biz.cprompt.
-        commandInput = await haystacksGui.executeBusinessRules([bas.cGreaterThan, ''], [wrd.cprompt]);
-        await haystacksGui.enqueueCommand(commandInput);
-      } // End-if (haystacksGui.isCommandQueueEmpty() === true)
-      commandResult = await haystacksGui.processCommandQueue();
-      if (commandResult[exitConditionArrayIndex] === false) {
-        // END command parser
-        await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.capplicationMessage03);
-        programRunning = false;
-        // END main program loop
-        await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.capplicationMessage04);
-        // Exiting TEST HARNESS APPLICATION
-        await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.capplicationMessage05);
-        break;
-      } // End-if (commandResult[exitConditionArrayIndex] === false)
-    } // End-while (programRunning === true)
+
+    mainPromptLoop(); // WARNING: DO NOT await!! It will block the GUI.
+
+    // while (programRunning === true) {
+    //   if (await haystacksGui.isCommandQueueEmpty() === true) {
+    //     // biz.cprompt is some how undefined here, although other biz.c<something-else> do still work.
+    //     // We will use wrd.cprompt here because it is working. No idea what the issue is with biz.cprompt.
+    //     commandInput = await haystacksGui.executeBusinessRules([bas.cGreaterThan, ''], [wrd.cprompt]);
+    //     await haystacksGui.enqueueCommand(commandInput);
+    //   } // End-if (haystacksGui.isCommandQueueEmpty() === true)
+    //   commandResult = await haystacksGui.processCommandQueue();
+    //   if (commandResult[exitConditionArrayIndex] === false) {
+    //     // END command parser
+    //     await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.capplicationMessage03);
+    //     programRunning = false;
+    //     // END main program loop
+    //     await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.capplicationMessage04);
+    //     // Exiting TEST HARNESS APPLICATION
+    //     await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.capplicationMessage05);
+    //     break;
+    //   } // End-if (commandResult[exitConditionArrayIndex] === false)
+    // } // End-while (programRunning === true)
   } // End-if (argumentDrivenInterface === false)
+  await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cEND_Function);
+}
+
+/**
+ * @function mainPromptLoop
+ * @description Main CLI event loop for non-blocking command line input.
+ * Handles prompting the user and passing user commands into the haystacks command queue.
+ * Runs asynchronously in parallel with the GUI event loop.
+ * DO NOT await this function (fire-and-forget only).
+ * All internal awaits (such as queue checks or enqueues)
+ * do NOT block the GUI or main application thread.
+ * @returns {void}
+ * @author Seth Hollingsead
+ * @date 2025/07/01
+ * @NOTE NEVER await this function at the top level.
+ * Safe to use 'await' for inner async calls as they operate inside event callbacks.
+ * Designed for maximal concurrency: does not block the main event loop.
+ */
+async function mainPromptLoop() {
+  const functionName = mainPromptLoop.name;
+  await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cBEGIN_Function);
+  let shouldReturnEarly = false;
+  // Only prompt if program is running and the queue is empty
+  if (!programRunning) {
+    // programRunning is false. Returning.
+    await haystacksGui.consoleLog(namespacePrefix, functionName, 'programRunning is false. Returning.');
+    shouldReturnEarly = true;
+  } else {
+    // Checking if command queue is empty...
+    await haystacksGui.consoleLog(namespacePrefix, functionName, 'Checking if command queue is empty...');
+    await haystacksGui.isCommandQueueEmpty().then(async (isEmpty) => {
+      // isCommandQueueEmpty: 
+      await haystacksGui.consoleLog(namespacePrefix, functionName, 'isCommandQueueEmpty: ' + isEmpty);
+      if (isEmpty) {
+        // Prompting user (non-blocking)...
+        await haystacksGui.consoleLog(namespacePrefix, functionName, 'Prompting user (non-blocking)...');
+        haystacksGui.executeBusinessRules([bas.cGreaterThan, (answer) => {
+          // User entered: 
+          haystacksGui.consoleLog(namespacePrefix, functionName, 'User entered: ' + answer);
+          haystacksGui.enqueueCommand(answer).then(() => {
+            // Command enqueued, starting processCommandLoop...
+            haystacksGui.consoleLog(namespacePrefix, functionName, 'Command enqueued, starting processCommandLoop...');
+            processCommandLoop();
+          });
+        }], [biz.cpromptNonBlocking]);
+      } else {
+        // Commands pending, processing queue...
+        await haystacksGui.consoleLog(namespacePrefix, functionName, 'Commands pending, processing queue...');
+        processCommandLoop();
+      }
+      await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cEND_Function);
+    });
+  }
+  return shouldReturnEarly ? undefined : undefined;
+}
+
+/**
+ * @function processCommandLoop
+ * @description Processes the next command in the haystacks command queue.
+ * If the program exit condition is met, ends the main prompt loop; otherwise,
+ * returns control to the mainPromptLoop for further input.
+ * DO NOT await this function (fire-and-forget only).
+ * All internal awaits are safe; they only affect internal sequencing.
+ * @return {void}
+ * @author Seth Hollingsead
+ * @date 2025/07/01
+ * @NOTE DO NOT await at top level. Function is designed for cooperative concurrency with mainPromptLoop
+ */
+async function processCommandLoop() {
+  const functionName = processCommandLoop.name;
+  await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cBEGIN_Function);
+
+  // Process the next command in the queue (safe to await)
+  while (!(await haystacksGui.isCommandQueueEmpty())) {
+    // Processing next command in queue...
+    await haystacksGui.consoleLog(namespacePrefix, functionName, 'Processing next command in queue...');
+    const commandResult = await haystacksGui.processCommandQueue();
+    // commandResult is:
+    await haystacksGui.consoleLog(namespacePrefix, functionName, 'commandResult is: ' + JSON.stringify(commandResult));
+
+    // Exit if commanded to
+    if (commandResult && commandResult[exitConditionArrayIndex] === false) {
+      // Exit condition met, ending processCommandLoop.
+      await haystacksGui.consoleLog(namespacePrefix, functionName, 'Exit condition met, ending processCommandLoop.');
+      programRunning = false;
+      return;
+    }
+  }
+  // Now the queue is empty, so go back to prompting
+  // Command queue is empty, calling mainPromptLoop...
+  await haystacksGui.consoleLog(namespacePrefix, functionName, 'Command queue is empty, calling mainPromptLoop...');
+  mainPromptLoop();
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cEND_Function);
 }
 
 let programRunning = false;
 app.whenReady().then(await applicationInit);
 
-ipcMain.on('shell-command', async (event, cmd) => {
-  // Run your haystacks-async command interpreter
-  const result = await haystacksAsyncEngine.runCommand(cmd);
-  event.reply('shell-output', result);
+const shellProcess = fork('./shellHarness.js', [], {
+  stdio: [wrd.cpipe, wrd.cpipe, wrd.cpipe, gen.cipc] // 'ipc' for message passing
 });
+console.log('[testHarness] Forked shellHarness process with PID:', shellProcess.pid);
+
+shellProcess.on(wrd.cmessage, async (eventMsg) => {
+  console.log('[testHarness] Received message from shellProcess:', eventMsg);
+
+  if (eventMsg[wrd.ctype] === wrd.cinput) {
+    // User typed a command in the CLI-process it here
+    await haystacksGui.enqueueCommand(eventMsg.payload);
+    await processCommandLoop(); // drain the command queue as before
+  }
+  if (eventMsg[wrd.ctype] === wrd.coutput) {
+    // Forward to GUI or log file, etc.
+    console.log(eventMsg.payload);
+  }
+  if (eventMsg[wrd.ctype] === gen.clog) {
+    // Forward to GUI, CLI, etc.
+  }
+});
+
+shellProcess.on('exit', (code, signal) => {
+  console.log(`[testHarness] shellProcess exited. Code: ${code}, Signal: ${signal}`);
+});
+
+// ipcMain.on('shell-command', async (event, cmd) => {
+//   // Run your haystacks-async command interpreter
+//   const result = await haystacksGui.runCommand(cmd);
+//   event.reply('shell-output', result);
+// });
