@@ -23,7 +23,7 @@ import path from 'path';
 
 const {bas, msg, wrd} = hayConst;
 
-console.log('[proxyShell] Proxy Shell started. Type commands below:');
+console.log('[shellHarness] Proxy Shell started. Type commands below:');
 
 const r1 = readline.createInterface({
   input: process.stdin,
@@ -40,12 +40,4 @@ r1.on(wrd.cline, (line) => {
 }).on(wrd.cclose, () => {
   process.stdout.write('Exiting proxy shell. Goodbye!' + bas.cCarRetNewLin);
   process.exit(0);
-});
-
-// Optional: Listen for piped messages from parent (could be process.stdin, but may require extra plumbing)
-process.on(wrd.cmessage, (eventMsg) => {
-  // For 'fork' model, not standard shell
-  if (eventMsg && eventMsg[wrd.ctype] === wrd.coutput) {
-    process.stdout.write(eventMsg[wrd.cpayload + bas.cCarRetNewLin]);
-  }
 });
