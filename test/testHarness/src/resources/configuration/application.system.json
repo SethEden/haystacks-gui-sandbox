@@ -31,5 +31,6 @@
   "system.enableUserCommandsLogClearing": true,
   "system.enableAllCommandsLogClearing": true,
   "system.windowsConfigurationFileName": "windowsConfiguration",
+  "system.spawnNativeCliCommandWindow": true,
   "system.AppSetting": "TrunkMonkey"
 }

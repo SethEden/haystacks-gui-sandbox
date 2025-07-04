@@ -19,5 +19,6 @@ import * as app_cfg from '../../constants/application.configuration.constants.js
  * @date 2025/06/22
  */
 export const applicationConfigurationConstantsValidation = [
-  {Name: 'cargumentDrivenInterface', Actual: app_cfg.cargumentDrivenInterface, Expected: 'argumentDrivenInterface'}
+  {Name: 'cargumentDrivenInterface', Actual: app_cfg.cargumentDrivenInterface, Expected: 'argumentDrivenInterface'},
+  {Name: 'cspawnNativeCliCommandWindow', Actual: app_cfg.cspawnNativeCliCommandWindow, Expected: 'spawnNativeCliCommandWindow'}
 ];

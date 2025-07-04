@@ -10,6 +10,7 @@
  * @requires module:application.configuration.constants
  * @requires module:application.constants
  * @requires module:application.message.constants
+ * @requires module:application.system.constants
  * @requires module:allApplicationConstantsValidationMetadata
  * @requires module:main
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
@@ -29,6 +30,7 @@ import clientCommands from './commands/clientCommandsLibrary.js';
 import * as app_cfg from './constants/application.configuration.constants.js';
 import * as apc from './constants/application.constants.js';
 import * as app_msg from './constants/application.message.constants.js';
+import * as app_sys from './constants/application.system.constants.js';
 import allAppCV from './resources/constantsValidation/allApplicationConstantsValidationMetadata.js';
 // --- NEW: Import sockets server glue so we can wire up CLI <-> haystacksGui ---
 import { setShellCommandHandler, sendShellOutput } from './childProcess/socketsServer.js';
@@ -52,6 +54,7 @@ dotenv.config();
 // eslint-disable-next-line no-undef
 const {NODE_ENV} = process.env;
 let exitConditionArrayIndex = 0;
+let interactiveNativeCliWindow = false;
 
 /**
  * @function bootstrapApplication
@@ -133,6 +136,12 @@ async function bootstrapApplication() {
   appConfig[sys.cclientCommands] = await clientCommands.initClientCommandsLibrary();
   console.log('appConfig is: ', appConfig);
   await haystacksGui.initFramework(appConfig);
+  interactiveNativeCliWindow = await haystacksGui.getConfigurationSetting(wrd.csystem, app_cfg.cspawnNativeCliCommandWindow);
+  // interactiveNativeCliWindow is:
+  console.log('interactiveNativeCliWindow is: ' + interactiveNativeCliWindow);
+  if (typeof interactiveNativeCliWindow === 'undefined') {
+    interactiveNativeCliWindow = false;
+  }
   console.log(`END ${namespacePrefix}${functionName} function`);
 }
 
@@ -167,7 +176,12 @@ async function applicationInit() {
     // then we might not have a DOS/Bash/Shell CLI interface.
     // But we can try here anyway!
     programRunning = true;
-    launchInteractiveCli(); // WARNING: DO NOT await, it will block the rest of the application.
+    if (interactiveNativeCliWindow === true) {
+      console.log('----------------- interactiveNativeCliWindow is set to true!!');
+      launchInteractiveCli(); // WARNING: DO NOT await, it will block the rest of the application.
+    } else {
+      console.log('----------------- interactiveNativeCliWindow is set to FALSE!!');
+    }
   } catch (error) {
     // ERROR: Fatal error during bootstrap: 
     console.log(app_msg.cErrorFatalBootstrap, error);
@@ -279,26 +293,6 @@ async function launchInteractiveCli() {
     await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.capplicationMessage02);
 
     mainPromptLoop(); // WARNING: DO NOT await!! It will block the GUI.
-
-    // while (programRunning === true) {
-    //   if (await haystacksGui.isCommandQueueEmpty() === true) {
-    //     // biz.cprompt is some how undefined here, although other biz.c<something-else> do still work.
-    //     // We will use wrd.cprompt here because it is working. No idea what the issue is with biz.cprompt.
-    //     commandInput = await haystacksGui.executeBusinessRules([bas.cGreaterThan, ''], [wrd.cprompt]);
-    //     await haystacksGui.enqueueCommand(commandInput);
-    //   } // End-if (haystacksGui.isCommandQueueEmpty() === true)
-    //   commandResult = await haystacksGui.processCommandQueue();
-    //   if (commandResult[exitConditionArrayIndex] === false) {
-    //     // END command parser
-    //     await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.capplicationMessage03);
-    //     programRunning = false;
-    //     // END main program loop
-    //     await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.capplicationMessage04);
-    //     // Exiting TEST HARNESS APPLICATION
-    //     await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.capplicationMessage05);
-    //     break;
-    //   } // End-if (commandResult[exitConditionArrayIndex] === false)
-    // } // End-while (programRunning === true)
   } // End-if (argumentDrivenInterface === false)
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cEND_Function);
 }
@@ -398,13 +392,18 @@ async function processCommandLoop() {
 let programRunning = false;
 app.whenReady().then(async () => {
   await applicationInit();
-  launchShellHarness();
+  if (interactiveNativeCliWindow === true) {
+    console.log('Launching interactive native CLI shell window.');
+    launchShellHarness();
 
-  setShellCommandHandler(async (command, clientId) => {
-    await haystacksGui.enqueueCommand(command);
-    sendShellOutput(clientId, `[Queued] Command: ${command}`);
-    processCommandLoop(); // (do not await!)
-  });
+    setShellCommandHandler(async (command, clientId) => {
+      await haystacksGui.enqueueCommand(command);
+      sendShellOutput(clientId, `[Queued] Command: ${command}`);
+      processCommandLoop(); // (do not await!)
+    });
+  } else {
+    console.log('Interactive nativeCLI window is disabled by configuration.');
+  }
 });
 
 function launchShellHarness() {
