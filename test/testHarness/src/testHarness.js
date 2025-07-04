@@ -30,6 +30,8 @@ import * as app_cfg from './constants/application.configuration.constants.js';
 import * as apc from './constants/application.constants.js';
 import * as app_msg from './constants/application.message.constants.js';
 import allAppCV from './resources/constantsValidation/allApplicationConstantsValidationMetadata.js';
+// --- NEW: Import sockets server glue so we can wire up CLI <-> haystacksGui ---
+import { onShellCommand, sendShellOutput } from './childProcess/socketsServer.js';
 // External imports
 import haystacksGui from '../../../src/main.js';
 import hayConst from '@haystacks/constants';
@@ -394,58 +396,26 @@ async function processCommandLoop() {
 }
 
 let programRunning = false;
-let child;
 app.whenReady().then(async () => {
   await applicationInit;
-  launchShellHarness();
-});
 
-function launchShellHarness() {
-  let shellHarnessPath = path.resolve('./test/testHarness/src/shellHarness.js');
-  console.log('shellHarnessPath is: ' + shellHarnessPath);
-
-  // Path to your proxy shell script
-  const proxyScriptPath = path.resolve(shellHarnessPath); // Adjust path as needed
-
-  // Spawn a new Windows CMD window running Node
-  child = spawn('cmd.exe', [
-    '/c',
-    'start',
-    'cmd.exe',
-    '/k',
-    'node', proxyScriptPath
-  ], {
+  // Start the CLI shell bridge process after ap init
+  // The bridge process (spawnProcess.js) will spawn the real shell and handle socket comms
+  const spawnProcessPath = path.resolve('./src/childProcess/spwanProcess.js');
+  const childShell = spawn(wrd.cnode, [spawnProcessPath], {
     cwd: process.cwd(),
-    detached: true, // Allows terminal to run separately
-    stdio: ['pipe', 'pipe', 'pipe']
+    detached: true,
+    stdio: 'ignore' // No need for direct stdio-IO handled via sockets!
   });
-}
 
-child.stdout.on('data', async (data) => {
-  const lines = data.toString().split('\n');
-  for (let line of lines) {
-    line = line.trim();
-    if (!line) continue;
-    if (line.startsWith('[shellHarness] input: ')) {
-      const userCmd = line.replace('[shellHarness] input: ', '').trim();
-      console.log('[testHarness] Got user command from real terminal:', userCmd);
-      // Enqueue and process as before
-      await haystacksGui.enqueueCommand(userCmd);
-      await processCommandLoop();
-    } else {
-      // Any other output is native shell stuff or log it if you want
-      process.stdout.write(line + '\n');
-    }
-  }
+  // Wire up shell commands arriving from the CLI (via socketsServer.js)
+  // This function gets called with every {command: "..."} message from any connected shell
+  onShellCommand(async (commandArrayParsing, clientId) => {
+    // 1. Enqueue command in haystacksGui as if typed in the CLI or GUI
+    await haystacksGui.enqueueCommand(command);
+    // 2. Process command and capture output/result
+    const result = await haystacksGui.processCommandQueue();
+    // 3. Send output/result back to the right CLI shell (just echo as plain text for now)
+    sendShellOutput(clientId, result);
+  });
 });
-
-function writeToProxyShell(output) {
-  // Always add a newline so prompt displays cleanly
-  child.stdin.write(output + '\n');
-}
-
-// ipcMain.on('shell-command', async (event, cmd) => {
-//   // Run your haystacks-async command interpreter
-//   const result = await haystacksGui.runCommand(cmd);
-//   event.reply('shell-output', result);
-// });
