@@ -31,7 +31,7 @@ import * as apc from './constants/application.constants.js';
 import * as app_msg from './constants/application.message.constants.js';
 import allAppCV from './resources/constantsValidation/allApplicationConstantsValidationMetadata.js';
 // --- NEW: Import sockets server glue so we can wire up CLI <-> haystacksGui ---
-import { onShellCommand, sendShellOutput } from './childProcess/socketsServer.js';
+import { setShellCommandHandler, sendShellOutput } from './childProcess/socketsServer.js';
 // External imports
 import haystacksGui from '../../../src/main.js';
 import hayConst from '@haystacks/constants';
@@ -378,7 +378,7 @@ async function processCommandLoop() {
     await haystacksGui.consoleLog(namespacePrefix, functionName, 'Processing next command in queue...');
     const commandResult = await haystacksGui.processCommandQueue();
     // commandResult is:
-    await haystacksGui.consoleLog(namespacePrefix, functionName, 'commandResult is: ' + JSON.stringify(commandResult));
+    // await haystacksGui.consoleLog(namespacePrefix, functionName, 'commandResult is: ' + JSON.stringify(commandResult));
 
     // Exit if commanded to
     if (commandResult && commandResult[exitConditionArrayIndex] === false) {
@@ -397,25 +397,23 @@ async function processCommandLoop() {
 
 let programRunning = false;
 app.whenReady().then(async () => {
-  await applicationInit;
+  await applicationInit();
+  launchShellHarness();
 
-  // Start the CLI shell bridge process after ap init
-  // The bridge process (spawnProcess.js) will spawn the real shell and handle socket comms
-  const spawnProcessPath = path.resolve('./src/childProcess/spwanProcess.js');
-  const childShell = spawn(wrd.cnode, [spawnProcessPath], {
-    cwd: process.cwd(),
-    detached: true,
-    stdio: 'ignore' // No need for direct stdio-IO handled via sockets!
-  });
-
-  // Wire up shell commands arriving from the CLI (via socketsServer.js)
-  // This function gets called with every {command: "..."} message from any connected shell
-  onShellCommand(async (commandArrayParsing, clientId) => {
-    // 1. Enqueue command in haystacksGui as if typed in the CLI or GUI
+  setShellCommandHandler(async (command, clientId) => {
     await haystacksGui.enqueueCommand(command);
-    // 2. Process command and capture output/result
-    const result = await haystacksGui.processCommandQueue();
-    // 3. Send output/result back to the right CLI shell (just echo as plain text for now)
-    sendShellOutput(clientId, result);
+    sendShellOutput(clientId, `[Queued] Command: ${command}`);
+    processCommandLoop(); // (do not await!)
   });
 });
+
+function launchShellHarness() {
+  const shellHarnessPath = path.resolve('./test/testHarness/src/shellHarness.js');
+  spawn('cmd.exe', [
+    '/c', 'start', 'cmd.exe', '/k', 'node', shellHarnessPath
+  ], {
+    cwd: process.cwd(),
+    detached: true,
+    stdio: 'ignore'
+  });
+}

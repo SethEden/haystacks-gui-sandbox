@@ -5,7 +5,7 @@
   "description": "A GUI sandbox powered by the Haystacks-Tech platform.",
   "main": "test/testHarness/src/testHarness.js",
   "scripts": {
-    "start": "electron ."
+    "start": "chcp 65001 && electron ."
   },
   "author": "Seth Hollingsead",
   "license": "MIT",

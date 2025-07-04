@@ -25,6 +25,7 @@ const PORT = 3000;
 const MESSAGE_DELIMITER = '##END##';
 
 let clientCounter = 0;
+let shellCommandHandler = null;
 const clients = new Map(); // id => socket
 
 /**
@@ -55,6 +56,10 @@ function broadcast(payload) {
   }
 }
 
+function setShellCommandHandler(callback) {
+  shellCommandHandler = callback;
+}
+
 const server = net.createServer((socket) => {
   // Assign an ID to each client for routing (optional)
   const clientId = `client-${++clientCounter}`;
@@ -74,10 +79,15 @@ const server = net.createServer((socket) => {
         const eventMsg = JSON.parse(part);
         // ROUTE: incoming {command: "..."}
         if (eventMsg.command) {
-          // TODO: Pass command to your core/main Electron logic, e.g. a command queue
-          // Here, you might: eventBus.emit('shellCommand', { clientId, command: eventMsg.command })
-          // For now, echo back
-          sendToClient(socket, { output: `[ECHO] Command received: ${msg.command}` });
+          if (typeof shellCommandHandler === wrd.cfunction) {
+            try {
+              shellCommandHandler(eventMsg.command, clientId);
+            } catch (shellError) {
+              sendToClient(socket, { error: `[ERR] Handler threw: ${shellError.message}`});
+            }
+          } else {
+            sendToClient(socket, { output: `[WARN] No shell command handler registered.` });
+          }
         }
         // Other client→server messages can be handled here as needed
       } catch (err) {
@@ -102,16 +112,18 @@ const server = net.createServer((socket) => {
 });
 
 // Optional: Expose a function to send output to any/all clients (e.g., from main Electron logic)
-export function sendShellOutput(clientId, output) {
+function sendShellOutput(clientId, output) {
   if (clients.has(clientId)) {
     sendToClient(clients.get(clientId), { output });
   }
 }
 
-export function broadcastShellOutput(output) {
+function broadcastShellOutput(output) {
   broadcast({ output });
 }
 
 server.listen(PORT, HOST, () => {
   console.log(`[socketsServer] Listening on ${HOST}:${PORT}`);
 });
+
+export { setShellCommandHandler, sendShellOutput, broadcastShellOutput, server };
