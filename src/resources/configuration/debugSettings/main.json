@@ -492,5 +492,18 @@
   "debugFunctions|debugSetting.framework.main.getConfigurationSetting@ModuleFontBackgroundColor": "Default",
   "debugFunctions|debugSetting.framework.main.getConfigurationSetting@FunctionFontBackgroundColor": "Default",
   "debugFunctions|debugSetting.framework.main.getConfigurationSetting@MessageFontBackgroundColor": "Default",
-  "debugFunctions|debugSetting.framework.main.getConfigurationSetting@DataFontBackgroundColor": "Default"
+  "debugFunctions|debugSetting.framework.main.getConfigurationSetting@DataFontBackgroundColor": "Default",
+  "debugFunctions|debugSetting.framework.main.initServerLogTransmission": true,
+  "debugFunctions|debugSetting.framework.main.initServerLogTransmission@ModuleFontStyle": "Default",
+  "debugFunctions|debugSetting.framework.main.initServerLogTransmission@FunctionFontStyle": "Default",
+  "debugFunctions|debugSetting.framework.main.initServerLogTransmission@MessageFontStyle": "Default",
+  "debugFunctions|debugSetting.framework.main.initServerLogTransmission@DataFontStyle": "Default",
+  "debugFunctions|debugSetting.framework.main.initServerLogTransmission@ModuleFontColor": "Default",
+  "debugFunctions|debugSetting.framework.main.initServerLogTransmission@FunctionFontColor": "Default",
+  "debugFunctions|debugSetting.framework.main.initServerLogTransmission@MessageFontColor": "Default",
+  "debugFunctions|debugSetting.framework.main.initServerLogTransmission@DataFontColor": "Default",
+  "debugFunctions|debugSetting.framework.main.initServerLogTransmission@ModuleFontBackgroundColor": "Default",
+  "debugFunctions|debugSetting.framework.main.initServerLogTransmission@FunctionFontBackgroundColor": "Default",
+  "debugFunctions|debugSetting.framework.main.initServerLogTransmission@MessageFontBackgroundColor": "Default",
+  "debugFunctions|debugSetting.framework.main.initServerLogTransmission@DataFontBackgroundColor": "Default"
 }

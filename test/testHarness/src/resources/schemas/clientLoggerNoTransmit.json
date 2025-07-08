@@ -1,0 +1,10 @@
+{
+  "controlFlags": {
+    "Warning": true,
+    "Info": true,
+    "JournalActions": true
+  },
+  "flagNames": {
+    "logFileConfigFlagName": "logFileEnabled"
+  }
+}

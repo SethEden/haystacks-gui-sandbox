@@ -23,7 +23,7 @@ import net from 'net';
 import readline from 'readline';
 import path from 'path';
 
-const {bas, msg, wrd} = hayConst;
+const {bas, msg, sys, wrd} = hayConst;
 
 const SOCKET_HOST = '127.0.0.1';
 const SOCKET_PORT = 3000;
@@ -60,6 +60,7 @@ function createSocketClient() {
   // Print any output/log from the server
   let leftover = '';
   socket.on(wrd.cdata, (data) => {
+    console.log('data package received is: ' + data);
     // Support messages split across packets or multiple in one chunk
     leftover += data.toString();
     let parts = leftover.split(MESSAGE_DELIMITER);
@@ -68,13 +69,52 @@ function createSocketClient() {
       if (!part.trim()) continue;
       try {
         const inEventMsg = JSON.parse(part);
-        if (inEventMsg[wrd.coutput]) process.stdout.write(inEventMsg[wrd.coutput + bas.cCarRetNewLin]);
-        if (inEventMsg[wrd.clog]) process.stdout.write(bas.cOpenBracket + wrd.cLOG + bas.cCloseBracket + bas.cSpace + inEventMsg[wrd.clog] + bas.cCarRetNewLin);
+    
+        // Patch: Handle new tableLog type
+        if (inEventMsg.type === sys.ctableLog) {
+          // If possible, use console.table
+          if (typeof console.table === wrd.cfunction) {
+            // Optionally, print a label and classPath
+            if (inEventMsg.classPath) {
+              process.stdout.write(`[TABLE] ${inEventMsg.classPath}${bas.cCarRetNewLin}`);
+            }
+            // Output the table
+            if (Array.isArray(inEventMsg.tableData)) {
+              if (Array.isArray(inEventMsg.columnNames) && inEventMsg.columnNames.length > 0) {
+                // Use columnNames as keys to select columns for display
+                const filteredData = inEventMsg.tableData.map(row =>
+                  inEventMsg.columnNames.reduce((acc, key) => {
+                    acc[key] = row[key];
+                    return acc;
+                  }, {})
+                );
+                console.table(filteredData, inEventMsg.columnNames);
+              } else {
+                // No columnNames? Show all fields.
+                console.table(inEventMsg.tableData);
+              }
+            } else {
+              process.stdout.write('[TABLE] (malformed table data)\n');
+            }
+          } else {
+            // Fallback for older Node: print as JSON
+            process.stdout.write(`[TABLE] ${inEventMsg.classPath || ''}\n`);
+            process.stdout.write(JSON.stringify(inEventMsg.tableData, null, 2) + bas.cCarRetNewLin);
+          }
+        }
+        // Normal outputs
+        else if (inEventMsg[wrd.coutput]) {
+          process.stdout.write(inEventMsg[wrd.coutput + bas.cCarRetNewLin]);
+        }
+        else if (inEventMsg[wrd.clog]) {
+          process.stdout.write(bas.cOpenBracket + wrd.cLOG + bas.cCloseBracket + bas.cSpace + inEventMsg[wrd.clog] + bas.cCarRetNewLin);
+        }
       } catch (err) {
         // Not JSON
         process.stdout.write(part + bas.cCarRetNewLin);
       }
     }
+    
   });
 
   // Handle disconnects and errors

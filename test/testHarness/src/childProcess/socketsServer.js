@@ -2,6 +2,7 @@
  * @file socketsServer.js
  * @module socketsServer
  * @description Creates a socket server through which clients can communicate.
+ * @requires module:application.constants
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
  * @requires {@link https://www.npmjs.com/package/path|path}
  * @requires {@link https://nodejs.dev/learn/the-nodejs-process-module|process}
@@ -12,13 +13,18 @@
  */
 
 // Internal imports
-
+import * as apc from '../constants/application.constants.js';
 // External imports
 import hayConst from '@haystacks/constants';
 import net from 'net';
 import path from 'path';
 
 const {bas, msg, wrd} = hayConst;
+
+const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+// application.testHarness.childProcess.socketsServer.
+// eslint-disable-next-line no-unused-vars
+const namespacePrefix =  wrd.capplication + bas.cDot + apc.cApplicationName + bas.cDot + wrd.cchild + wrd.cProcess + bas.cDot + baseFileName + bas.cDot;
 
 const HOST = '127.0.0.1';
 const PORT = 3000;
@@ -38,7 +44,22 @@ const clients = new Map(); // id => socket
  * @date 2025/07/03
  */
 function sendToClient(socket, payload) {
-  socket.write(JSON.stringify(payload) + MESSAGE_DELIMITER);
+  const functionName = sendToClient.name;
+  console.log(`BEGIN ${namespacePrefix}${functionName} function`);
+  console.log('socket is: ', socket);
+  console.log('payload is: ', payload);
+  // socket.write(JSON.stringify(payload) + MESSAGE_DELIMITER);
+  const maxMessageLength = 840;
+  let jsonString = JSON.stringify(payload) + MESSAGE_DELIMITER;
+  console.log('jsonString is: ' + jsonString);
+
+  // Chunk the message if needed
+  for (let i = 0; i < jsonString.length; i += maxMessageLength) {
+    const chunk = jsonString.slice(i, i + maxMessageLength);
+    console.log('chunk to send is: ' + chunk);
+    socket.write(chunk);
+  }
+  console.log(`END ${namespacePrefix}${functionName} function`);
 }
 
 /**
@@ -83,15 +104,15 @@ const server = net.createServer((socket) => {
             try {
               shellCommandHandler(eventMsg.command, clientId);
             } catch (shellError) {
-              sendToClient(socket, { error: `[ERR] Handler threw: ${shellError.message}`});
+              sendToClient(socket, `ERROR: Handler threw: ${shellError.message}`);
             }
           } else {
-            sendToClient(socket, { output: `[WARN] No shell command handler registered.` });
+            sendToClient(socket, `WARNING: No shell command handler registered.`);
           }
         }
         // Other client→server messages can be handled here as needed
       } catch (err) {
-        sendToClient(socket, { error: `Malformed message: ${err.message}` });
+        sendToClient(socket, `ERROR: Malformed message: ${err.message}`);
       }
     } // End-for (const part of parts)
   });
@@ -108,7 +129,7 @@ const server = net.createServer((socket) => {
   });
 
   // Send greeting/banner
-  sendToClient(socket, { output: `Connected to Haystacks Electron CLI Server! [${clientId}]` });
+  sendToClient(socket, `Connected to Haystacks Electron CLI Server! [${clientId}]`);
 });
 
 // Optional: Expose a function to send output to any/all clients (e.g., from main Electron logic)

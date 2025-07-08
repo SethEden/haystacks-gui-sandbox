@@ -12,6 +12,9 @@
 import hayConst from '@haystacks/constants';
 const {bas, gen, wrd} = hayConst;
 
+export const cclientLoggerTransmit = wrd.cclient + wrd.cLogger + wrd.cTransmit; // clientLoggerTransmit
+export const cclientLoggerNoTransmit = wrd.cclient + wrd.cLogger + wrd.cNo + wrd.cTransmit; // clientLoggerNoTransmit
+
 // Constants Validation
 export const cresolvedConstantsPath_Application = wrd.cresolved + wrd.cConstants + wrd.cPath + bas.cUnderscore + wrd.cApplication; // resolvedConstantsPath_Application
 export const capplicationBusinessConstantsValidation = wrd.capplication + wrd.cBusiness + wrd.cConstants + wrd.cValidation; // applicationBusinessConstantsValidation

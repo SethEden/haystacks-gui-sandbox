@@ -11,6 +11,7 @@
  * @requires module:application.constants
  * @requires module:application.message.constants
  * @requires module:application.system.constants
+ * @requires module:warden
  * @requires module:allApplicationConstantsValidationMetadata
  * @requires module:main
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
@@ -31,9 +32,10 @@ import * as app_cfg from './constants/application.configuration.constants.js';
 import * as apc from './constants/application.constants.js';
 import * as app_msg from './constants/application.message.constants.js';
 import * as app_sys from './constants/application.system.constants.js';
+import warden from './controllers/warden.js';
 import allAppCV from './resources/constantsValidation/allApplicationConstantsValidationMetadata.js';
 // --- NEW: Import sockets server glue so we can wire up CLI <-> haystacksGui ---
-import { setShellCommandHandler, sendShellOutput } from './childProcess/socketsServer.js';
+import { setShellCommandHandler, sendShellOutput, broadcastShellOutput } from './childProcess/socketsServer.js';
 // External imports
 import haystacksGui from '../../../src/main.js';
 import hayConst from '@haystacks/constants';
@@ -136,12 +138,14 @@ async function bootstrapApplication() {
   appConfig[sys.cclientCommands] = await clientCommands.initClientCommandsLibrary();
   console.log('appConfig is: ', appConfig);
   await haystacksGui.initFramework(appConfig);
+  await haystacksGui.initServerLogTransmission(broadcastShellOutput);
   interactiveNativeCliWindow = await haystacksGui.getConfigurationSetting(wrd.csystem, app_cfg.cspawnNativeCliCommandWindow);
   // interactiveNativeCliWindow is:
   console.log('interactiveNativeCliWindow is: ' + interactiveNativeCliWindow);
   if (typeof interactiveNativeCliWindow === 'undefined') {
     interactiveNativeCliWindow = false;
   }
+  await warden.initApplication(appConfig, interactiveNativeCliWindow);
   console.log(`END ${namespacePrefix}${functionName} function`);
 }
 

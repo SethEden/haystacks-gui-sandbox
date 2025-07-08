@@ -20,5 +20,6 @@ import * as app_cfg from '../../constants/application.configuration.constants.js
  */
 export const applicationConfigurationConstantsValidation = [
   {Name: 'cargumentDrivenInterface', Actual: app_cfg.cargumentDrivenInterface, Expected: 'argumentDrivenInterface'},
-  {Name: 'cspawnNativeCliCommandWindow', Actual: app_cfg.cspawnNativeCliCommandWindow, Expected: 'spawnNativeCliCommandWindow'}
+  {Name: 'cspawnNativeCliCommandWindow', Actual: app_cfg.cspawnNativeCliCommandWindow, Expected: 'spawnNativeCliCommandWindow'},
+  {Name: 'clogToSocketTransmissionEnabled', Actual: app_cfg.clogToSocketTransmissionEnabled, Expected: 'logToSocketTransmissionEnabled'}
 ];

@@ -953,6 +953,23 @@ async function getConfigurationSetting(configurationNamespace, configurationName
 }
 
 /**
+ * @function initServerLogTransmission
+ * @description This is a wrapper function for the warden.initServerLogTransmission function.
+ * Initializes the websocket server log transmittion process following the pattern of dependency injection.
+ * @param {function} inputData The function that should transmit the logs to all connected web socket clients.
+ * @return {void}
+ * @author Seth Hollingsead
+ * @date 2025/07/07
+ */
+async function initServerLogTransmission(inputData) {
+  const functionName = initServerLogTransmission.name;
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
+  await warden.initServerLogTransmission(inputData);
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+}
+
+/**
  * @function consoleLog
  * @description A wrapper function to expose the loggers.consoleLog function to the client application.
  * @param {string} theNamespacePrefix The namespace of the log that is being sent. Ex: folder.filename
@@ -1032,6 +1049,7 @@ export default {
   processCommandQueue,
   setConfigurationSetting,
   getConfigurationSetting,
+  initServerLogTransmission,
   consoleLog,
   consoleTableLog
 };

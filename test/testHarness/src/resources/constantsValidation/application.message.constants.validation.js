@@ -36,6 +36,10 @@ export const applicationMessageConstantsValidation = [
   {Name: 'cmisCompareCountBeforeIncrementIs', Actual: app_msg.cmisCompareCountBeforeIncrementIs, Expected: 'misCompareCount before increment is: '},
   {Name: 'cmisCompareCountPostIncrementIs', Actual: app_msg.cmisCompareCountPostIncrementIs, Expected: 'misCompareCount post increment is: '},
   {Name: 'cmisCompareCountAfterForLoopIs', Actual: app_msg.cmisCompareCountAfterForLoopIs, Expected: 'misCompareCount after the for-loop is: '},
+  {Name: 'cclientLoggerToUseIs', Actual: app_msg.cclientLoggerToUseIs, Expected: 'clientLoggerToUse is: '},
+  {Name: 'cclientLoggerSchemaIs', Actual: app_msg.cclientLoggerSchemaIs, Expected: 'clientLoggerSchema is: '},
+  {Name: 'cappConfigIs', Actual: app_msg.cappConfigIs, Expected: 'appConfig is: '},
+  {Name: 'ctransmitLogsIs', Actual: app_msg.ctransmitLogsIs, Expected: 'transmitLogs is: '},
 
   {Name: 'cmostPopularNumberMessage01', Actual: app_msg.cmostPopularNumberMessage01, Expected: 'BEGIN first for-loop'},
   {Name: 'cmostPopularNumberMessage02', Actual: app_msg.cmostPopularNumberMessage02, Expected: 'BEGIN nested for-loop i = '},

@@ -13,6 +13,7 @@
  * @requires module:chiefWorkflow
  * @requires module:configurator
  * @requires module:loggers
+ * @requires module:socketsServerLogTransmit
  * @requires module:stack
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
  * @requires {@link https://www.npmjs.com/package/path|path}
@@ -33,6 +34,7 @@ import chiefTheme from './chiefTheme.js';
 import chiefWorkflow from './chiefWorkflow.js';
 import configurator from '../executrix/configurator.js';
 import loggers from '../executrix/loggers.js';
+import socketsServerLogTransmit from '../executrix/socketsServerLogTransmit.js';
 import stack from '../structures/stack.js';
 // eslint-disable-next-line no-unused-vars
 import D from '../structures/data.js';
@@ -1217,6 +1219,23 @@ async function getConfigurationSetting(configurationNamespace, configurationName
 }
 
 /**
+ * @function initServerLogTransmission
+ * @description This is a wrapper function for the socketsServerLogTransmit.initLogTransmission function.
+ * Initializes the websocket server log transmittion process following the pattern of dependency injection.
+ * @param {function} inputData The function that should transmit the logs to all connected web socket clients.
+ * @return {void}
+ * @author Seth Hollingsead
+ * @date 2025/07/07
+ */
+async function initServerLogTransmission(inputData) {
+  const functionName = initServerLogTransmission.name;
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
+  await socketsServerLogTransmit.initLogTransmission(inputData);
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+}
+
+/**
  * @function consoleLog
  * @description This is just a wrapper for the loggers.consoleLog function.
  * @param {string} classPath The class path for the caller of this function file.function or class.method.
@@ -1297,6 +1316,7 @@ export default {
   processCommandQueue,
   setConfigurationSetting,
   getConfigurationSetting,
+  initServerLogTransmission,
   consoleLog,
   consoleTableLog
 };

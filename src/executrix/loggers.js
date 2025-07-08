@@ -11,6 +11,8 @@
  * @requires module:chiefData
  * @requires module:colorizer
  * @requires module:configurator
+ * @requires module:socketsClient
+ * @requires module:socketsServerLogTransmit
  * @requires module:data
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
  * @requires {@link https://www.npmjs.com/package/path|path}
@@ -25,6 +27,7 @@ import chiefData from '../controllers/chiefData.js';
 import colorizer from './colorizer.js';
 import configurator from './configurator.js';
 import socketsClient from './socketsClient.js';
+import socketsServerLogTransmit from './socketsServerLogTransmit.js';
 import D from '../structures/data.js';
 // External imports
 import hayConst from '@haystacks/constants';
@@ -119,6 +122,13 @@ async function consoleLog(classPathControlFlag, message) {
         // You can also reference other keys in controlFlagObject:
         let fileFlagKey = controlFlagObject.logFileConfigFlagName; // 'logFileEnabled'
         let socketFlagKey = controlFlagObject.logSocketTransmissionFlagName; // 'logToSocketTransmissionEnabled'
+        let socketServerBroadcastFlagKey = controlFlagObject.logSocketServerBroadcastFlagName;
+        let isSocketServerBroadcastOn = false;
+        if (socketServerBroadcastFlagKey) {
+          isSocketServerBroadcastOn = await configurator.getConfigurationSetting(wrd.csystem, socketServerBroadcastFlagKey);
+          // isSocketServerBroadcastOn is:
+          // console.log('isSocketServerBroadcastOn is: ' + isSocketServerBroadcastOn);
+        }
         // fileFlagKey is:
         // console.log('fileFlagKey is: ' + fileFlagKey);
         // socketFlagKey is:
@@ -143,6 +153,7 @@ async function consoleLog(classPathControlFlag, message) {
           message: message,
           isFileLoggingOn: isFileLoggingOn,
           isSocketLoggingOn: isSocketLoggingOn,
+          isSocketServerBroadcastOn: isSocketServerBroadcastOn,
           classPath: classPathControlFlag
         }
         await consoleLogProcess(processLogOptions);
@@ -216,13 +227,23 @@ async function loggerSchemaGateLogic(classPathControlFlag) {
  * @date 2022/02/22
  */
 async function consoleTableLog(classPath, tableData, columnNames) {
-  // let functionName = consoleTableLog.name;
-  // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
-  // console.log(`classPath is: ${classPath}`);
-  // console.log(`tableData is: ${JSON.stringify(tableData)}`);
-  // console.log(`columnNames is: ${JSON.stringify(columnNames)}`);
+  let functionName = consoleTableLog.name;
+  console.log(`BEGIN ${namespacePrefix}${functionName} function`);
+  console.log(`classPath is: ${classPath}`);
+  console.log(`tableData is: ${JSON.stringify(tableData)}`);
+  console.log(`columnNames is: ${JSON.stringify(columnNames)}`);
   console.table(tableData, columnNames);
-  // console.log(`END ${namespacePrefix}${functionName} function`);
+  if (await configurator.getConfigurationSetting(wrd.csystem, sys.clogToSocketTransmissionEnabled) === true &&
+  socketClient && typeof socketClient.send === wrd.cfunction) {
+    const tableLogPayload = {
+      [wrd.ctype]: sys.ctableLog,
+      classPath,
+      tableData,
+      columnNames
+    };
+    socketClient.send(JSON.stringify(tableLogPayload));
+  }
+  console.log(`END ${namespacePrefix}${functionName} function`);
 }
 
 /**
@@ -250,6 +271,10 @@ async function constantsValidationSummaryLog(message, passFail) {
       outputMessage = await colorizer.colorizeMessageSimple(outputMessage, blackColorArray, true);
       outputMessage = await colorizer.colorizeMessageSimple(outputMessage, greenColorArray, false);
       console.log(outputMessage);
+      // Path: Broadcast over client socket if enabled
+      if (await configurator.getConfigurationSetting(wrd.csystem, sys.clogToSocketTransmissionEnabled) === true && socketClient) {
+        socketClient.send(outputMessage);
+      }
     } // End-if (configurator.getConfigurationSetting(wrd.csystem, cfg.cdisplaySummaryConstantsValidationPassMessages) === true)
   } else { // passFail === false
     if (await configurator.getConfigurationSetting(wrd.csystem, cfg.cdisplaySummaryConstantsValidationFailMessages) === true) {
@@ -257,6 +282,10 @@ async function constantsValidationSummaryLog(message, passFail) {
       outputMessage = await colorizer.colorizeMessageSimple(outputMessage, blackColorArray, true);
       outputMessage = await colorizer.colorizeMessageSimple(outputMessage, redColorArray, false);
       console.log(outputMessage);
+      // Patch: Broadcast over client socket if enabled
+      if (await configurator.getConfigurationSetting(wrd.csystem, sys.clogToSocketTransmissionEnabled) === true && socketClient) {
+        socketClient.send(outputMessage);
+      }
     } // End-if (configurator.getConfigurationSetting(wrd.csystem, cfg.cdisplaySummaryConstantsValidationFailMessages) === true)
   }
   // console.log(`END ${namespacePrefix}${functionName} function`);
@@ -270,7 +299,7 @@ async function constantsValidationSummaryLog(message, passFail) {
  * @param {*} logOptions A JSON object that contains data and meta-data that will be used to determine
  * how and where a console log message should be logged. The object example prototype is:
  * logFile: logFile,
- * isControlFlag: controlFlagObject.isControlFlag,
+ * isControlFlag: isControlFlag,
  * classPathControlFlag: classPathControlFlag,
  * configurationNamespace: configurationNamespace,
  * configurationName: configurationName,
@@ -278,11 +307,18 @@ async function constantsValidationSummaryLog(message, passFail) {
  * debugFunctionSetting: debugFunctionSetting,
  * message: message,
  * isFileLoggingOn: isFileLoggingOn,
- * ifSocketLoggingOn: isSocketLoggingOn,
+ * isSocketLoggingOn: isSocketLoggingOn,
+ * isSocketServerBroadcastOn: isSocketServerBroadcastOn,
  * classPath: classPathControlFlag
  * @return {void}
  * @author Seth Hollingsead
  * @date 2024/12/31
+ * @NOTE This function uses Serial Chaining Logic:
+ * WebSocket log transmission is controlled by two flags.
+ *  - isSocketLoggingOn - Must be true for any webSocket logging to occur.
+ *  - if isSocketServerBroadcastOn - is True, log transmission is done via server broadcast (socketsServerLogTransmit).
+ *  - if isSocketServerBroadcastOn - is False,null,undefined, log transmission is done via client (socketClient.send).
+ * This ensures only one WebSocket transmission strategy is active at a time, based on configuration/schema.
  */
 async function consoleLogProcess(logOptions) {
   // let functionName = consoleLogProcess.name;
@@ -297,6 +333,7 @@ async function consoleLogProcess(logOptions) {
     message,
     isFileLoggingOn,
     isSocketLoggingOn,
+    isSocketServerBroadcastOn,
     classPath
   } = logOptions;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
@@ -321,6 +358,8 @@ async function consoleLogProcess(logOptions) {
   // console.log('isFileLoggingOn is: ' + isFileLoggingOn);
   // isSocketLoggingOn is:
   // console.log('isSocketLoggingOn is: ' + isSocketLoggingOn);
+  // isSocketServerBroadcastOn is:
+  // console.log('isSocketServerBroadcastOn is: ' + isSocketServerBroadcastOn);
   // classPath is:
   // console.log('classPath is: ' + classPath);
 
@@ -341,7 +380,12 @@ async function consoleLogProcess(logOptions) {
 
   if (isSocketLoggingOn) {
     // console.log('socketClient.sending message: ' + outputMessage);
-    socketClient.send(outputMessage);
+    if (isSocketServerBroadcastOn) {
+      // console.log('Transmitting log via socket server broadcast: ', outputMessage);
+      socketsServerLogTransmit.transmitLog(outputMessage);
+    } else {
+      socketClient.send(outputMessage);
+    }
   }
   // console.log(`END ${namespacePrefix}${functionName} function`);
   return;

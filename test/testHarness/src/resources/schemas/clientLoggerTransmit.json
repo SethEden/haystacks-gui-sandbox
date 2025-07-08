@@ -1,0 +1,13 @@
+{
+  "controlFlags": {
+    "Warning": true,
+    "Info": true,
+    "JournalActions": true,
+    "TestResultsLog": true
+  },
+  "flagNames": {
+    "logFileConfigFlagName": "logFileEnabled",
+    "logSocketTransmissionFlagName": "logToSocketTransmissionEnabled",
+    "logSocketServerBroadcastFlagName": "logToSocketServerBroadcastEnabled"
+  }
+}

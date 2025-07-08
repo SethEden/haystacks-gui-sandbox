@@ -19,6 +19,9 @@ import * as app_sys from '../../constants/application.system.constants.js';
  * @date 2025/06/22
  */
 export const applicationSystemConstantsValidation = [
+  {Name: 'cclientLoggerTransmit', Actual: app_sys.cclientLoggerTransmit, Expected: 'clientLoggerTransmit'},
+  {Name: 'cclientLoggerNoTransmit', Actual: app_sys.cclientLoggerNoTransmit, Expected: 'clientLoggerNoTransmit'},
+
   // Constants Validation
   {Name: 'cresolvedConstantsPath_Application', Actual: app_sys.cresolvedConstantsPath_Application, Expected: 'resolvedConstantsPath_Application'},
   {Name: 'capplicationBusinessConstantsValidation', Actual: app_sys.capplicationBusinessConstantsValidation, Expected: 'applicationBusinessConstantsValidation'},

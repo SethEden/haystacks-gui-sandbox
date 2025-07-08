@@ -28,6 +28,8 @@
   "system.configurationInitialized": false,
   "system.logUserEnteredCommands": true,
   "system.logAllCommands": true,
+  "system.logToSocketTransmissionEnabled": true,
+  "system.logToSocketServerBroadcastEnabled": true,
   "system.enableUserCommandsLogClearing": true,
   "system.enableAllCommandsLogClearing": true,
   "system.windowsConfigurationFileName": "windowsConfiguration",

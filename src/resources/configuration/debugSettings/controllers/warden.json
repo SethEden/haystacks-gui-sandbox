@@ -505,5 +505,18 @@
   "debugFunctions|debugSetting.framework.controllers.warden.getConfigurationSetting@ModuleFontBackgroundColor": "Default",
   "debugFunctions|debugSetting.framework.controllers.warden.getConfigurationSetting@FunctionFontBackgroundColor": "Default",
   "debugFunctions|debugSetting.framework.controllers.warden.getConfigurationSetting@MessageFontBackgroundColor": "Default",
-  "debugFunctions|debugSetting.framework.controllers.warden.getConfigurationSetting@DataFontBackgroundColor": "Default"
+  "debugFunctions|debugSetting.framework.controllers.warden.getConfigurationSetting@DataFontBackgroundColor": "Default",
+  "debugFunctions|debugSetting.framework.controllers.warden.initServerLogTransmission": false,
+  "debugFunctions|debugSetting.framework.controllers.warden.initServerLogTransmission@ModuleFontStyle": "Default",
+  "debugFunctions|debugSetting.framework.controllers.warden.initServerLogTransmission@FunctionFontStyle": "Default",
+  "debugFunctions|debugSetting.framework.controllers.warden.initServerLogTransmission@MessageFontStyle": "Default",
+  "debugFunctions|debugSetting.framework.controllers.warden.initServerLogTransmission@DataFontStyle": "Default",
+  "debugFunctions|debugSetting.framework.controllers.warden.initServerLogTransmission@ModuleFontColor": "Default",
+  "debugFunctions|debugSetting.framework.controllers.warden.initServerLogTransmission@FunctionFontColor": "Default",
+  "debugFunctions|debugSetting.framework.controllers.warden.initServerLogTransmission@MessageFontColor": "Default",
+  "debugFunctions|debugSetting.framework.controllers.warden.initServerLogTransmission@DataFontColor": "Default",
+  "debugFunctions|debugSetting.framework.controllers.warden.initServerLogTransmission@ModuleFontBackgroundColor": "Default",
+  "debugFunctions|debugSetting.framework.controllers.warden.initServerLogTransmission@FunctionFontBackgroundColor": "Default",
+  "debugFunctions|debugSetting.framework.controllers.warden.initServerLogTransmission@MessageFontBackgroundColor": "Default",
+  "debugFunctions|debugSetting.framework.controllers.warden.initServerLogTransmission@DataFontBackgroundColor": "Default"
 }
