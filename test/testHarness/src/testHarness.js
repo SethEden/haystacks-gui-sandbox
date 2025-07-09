@@ -68,7 +68,7 @@ let interactiveNativeCliWindow = false;
  */
 async function bootstrapApplication() {
   const functionName = bootstrapApplication.name;
-  // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
+  console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   rootPath = url.fileURLToPath(path.dirname(import.meta.url));
   let rootPathArray = [];
   if (rootPath.includes(bas.cBackSlash) === true) {
@@ -137,17 +137,17 @@ async function bootstrapApplication() {
   }
   appConfig[sys.cclientBusinessRules] = await clientRules.initClientRulesLibrary();
   appConfig[sys.cclientCommands] = await clientCommands.initClientCommandsLibrary();
-  // console.log('appConfig is: ', appConfig);
+  console.log('appConfig is: ', appConfig);
   await haystacksGui.initFramework(appConfig);
   await haystacksGui.initServerLogTransmission(broadcastShellOutput);
   interactiveNativeCliWindow = await haystacksGui.getConfigurationSetting(wrd.csystem, app_cfg.cspawnNativeCliCommandWindow);
   // interactiveNativeCliWindow is:
-  // console.log('interactiveNativeCliWindow is: ' + interactiveNativeCliWindow);
+  console.log('interactiveNativeCliWindow is: ' + interactiveNativeCliWindow);
   if (typeof interactiveNativeCliWindow === 'undefined') {
     interactiveNativeCliWindow = false;
   }
   await warden.initApplication(appConfig, interactiveNativeCliWindow);
-  // console.log(`END ${namespacePrefix}${functionName} function`);
+  console.log(`END ${namespacePrefix}${functionName} function`);
 }
 
 /**
@@ -161,12 +161,9 @@ async function bootstrapApplication() {
  */
 async function applicationInit() {
   const functionName = applicationInit.name;
-  // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
+  console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // let commandResult = '';
   try {
-    // 1. Wait for all bootstrapping to complete
-    await bootstrapApplication();
-
     // await haystacksGui.enqueueCommand(cmd.cprintDataHive);
     // while (await haystacksGui.isCommandQueueEmpty() === false) {
     //   commandResult = await haystacksGui.processCommandQueue();
@@ -182,16 +179,16 @@ async function applicationInit() {
     // But we can try here anyway!
     programRunning = true;
     if (interactiveNativeCliWindow === true) {
-      // console.log('----------------- interactiveNativeCliWindow is set to true!!');
-      launchInteractiveCli(); // WARNING: DO NOT await, it will block the rest of the application.
+      console.log('----------------- interactiveNativeCliWindow is set to true!!');
+      await launchInteractiveCli(); // WARNING: DO NOT await, it will block the rest of the application.
     } else {
-      // console.log('----------------- interactiveNativeCliWindow is set to FALSE!!');
+      console.log('----------------- interactiveNativeCliWindow is set to FALSE!!');
     }
   } catch (error) {
     // ERROR: Fatal error during bootstrap: 
     console.log(app_msg.cErrorFatalBootstrap, error);
   }
-  // console.log(`END ${namespacePrefix}${functionName} function`);
+  console.log(`END ${namespacePrefix}${functionName} function`);
 }
 
 /**
@@ -396,21 +393,42 @@ async function processCommandLoop() {
 
 let programRunning = false;
 app.whenReady().then(async () => {
-  await applicationInit();
+  // 1. Wait for all bootstrapping to complete
+  // console.log('app.whenReady().then(async() => { BEGIN calling bootstrapApplication function');
+  await bootstrapApplication();
+  // console.log('app.whenReady().then(async() => { END calling bootstrapApplication function');
   if (interactiveNativeCliWindow === true) {
     // Launching interactive native CLI shell window.
     console.log(app_msg.claunchingInteractiveNativeCliShellWindow);
+    
+    // console.log('app.whenReady().then(async() => { BEGIN calling launchShellHarness function');
     launchShellHarness();
+    // console.log('app.whenReady().then(async() => { END calling launchShellHarness function');
 
+    // console.log('app.whenReady().then(async() => { BEGIN calling setShellCommandHandler function');
     setShellCommandHandler(async (command, clientId) => {
       await haystacksGui.enqueueCommand(command);
       // sendShellOutput(clientId, `[Queued] Command: ${command}`);
+      // console.log('app.whenReady().then(async() => { BEGIN calling processCommandLoop function');
       processCommandLoop(); // (do not await!)
+      // console.log('app.whenReady().then(async() => { END calling processCommandLoop function');
     });
+    // console.log('app.whenReady().then(async() => { END calling setShellCommandHandler function');
   } else {
     // Interactive nativeCLI window is disabled by configuration.
     console.log(app_msg.cinteractiveNativeCliWindowDisabledByConfig);
   }
+
+  // 3. Wait briefly to allow the shell to connect.
+  // TODO: Replace this timeout with an event-driven handshake so we only proceed once the shellHarness is truly ready.
+  await new Promise(resolve => setTimeout(resolve, 400));
+  // Rationale: This artificial delay ensures the shellHarness CLI has connected before processing the startup workflow.
+  // This should be replaced with a more robust ready-check for production use.
+
+  // console.log('app.whenReady().then(async() => { BEGIN calling applicationInit function');
+  await applicationInit();
+  // console.log('app.whenReady().then(async() => { END calling applicationInit function');
+
 });
 
 function launchShellHarness() {
