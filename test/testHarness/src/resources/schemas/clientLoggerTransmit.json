@@ -1,5 +1,6 @@
 {
   "controlFlags": {
+    "Error": true,
     "Warning": true,
     "Info": true,
     "JournalActions": true,
@@ -9,5 +10,8 @@
     "logFileConfigFlagName": "logFileEnabled",
     "logSocketTransmissionFlagName": "logToSocketTransmissionEnabled",
     "logSocketServerBroadcastFlagName": "logToSocketServerBroadcastEnabled"
+  },
+  "negativeControlFlags": {
+    "suppressDefaultConsoleOutput": true
   }
 }

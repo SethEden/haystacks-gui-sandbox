@@ -76,6 +76,7 @@ async function getXmlData(inputData, inputMetaData) {
     if (err) {
       // ERROR:
       returnData = console.log(sys.cERROR_Colon + err);
+      await loggers.consoleLog(wrd.cError, sys.cERROR_Colon + err);
       await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
       await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
       return returnData;
@@ -332,8 +333,8 @@ async function getDirectoryList(inputData, inputMetaData) {
       .map((item) => item.name);
     } catch (err) {
       // ERROR: The specified path does not exist or cannot be found:
-      console.log(msg.cErrorGetDirectoryListMessage01 + inputData);
-      console.log(msg.cerrorMessage + err.message);
+      await loggers.consoleLog(wrd.cError, msg.cErrorGetDirectoryListMessage01 + inputData);
+      await loggers.consoleLog(wrd.cError, msg.cerrorMessage + err.message);
     }
   } // End-if (inputData)
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
@@ -519,8 +520,8 @@ async function buildReleasePackage(inputData, inputMetaData) {
       returnData = true;
     } catch (err) {
       // ERROR: Zip package release failed:
-      console.log(msg.cErrorZipPackageReleaseFailed);
-      console.error(err.stack);
+      await loggers.consoleLog(wrd.cError, msg.cErrorZipPackageReleaseFailed);
+      await loggers.consoleLog(wrd.cError, err.stack);
       // eslint-disable-next-line no-undef
       process.exit(1);
     }
@@ -559,8 +560,8 @@ async function createZipArchive(inputData, inputMetaData) {
     returnData = true;
   } catch (err) {
     // ERROR: Zip package release failed
-    console.log(msg.cErrorZipPackageReleaseFailed);
-    console.error(err.stack);
+    await loggers.consoleLog(wrd.cError, msg.cErrorZipPackageReleaseFailed);
+    await loggers.consoleLog(wrd.cError, err.stack);
     // eslint-disable-next-line no-undef
     process.exit(1);
   }
@@ -663,8 +664,8 @@ async function copyFileSync(inputData, inputMetaData) {
     }
   } catch (err) {
     // ERROR: Could not copy file:
-    console.log(msg.cErrorCouldNotCopyFile + source);
-    console.log(err);
+    await loggers.consoleLog(wrd.cError, msg.cErrorCouldNotCopyFile + source);
+    await loggers.consoleLog(wrd.cError, err);
     successfulCopy = false;
   }
   returnData = successfulCopy;
@@ -723,9 +724,9 @@ async function copyFolderRecursiveSync(inputData, inputMetaData) {
       // But at least we haven't errored out, so it wasn't a failure YET.
     } catch (err) {
       // ERROR: Could not create folder:
-      console.log(msg.cErrorCouldNotCreateFolder + targetFolder);
+      await loggers.consoleLog(wrd.cError, msg.cErrorCouldNotCreateFolder + targetFolder);
       // ERROR:
-      console.log(msg.cERROR_Colon + err);
+      await loggers.consoleLog(wrd.cError, msg.cERROR_Colon + err);
     }
   } else {
     // console.log('Supposedly the path exists!');
@@ -764,9 +765,9 @@ async function copyFolderRecursiveSync(inputData, inputMetaData) {
     } // End-if (fs.lstatSync(source).isDirectory())
   } catch (err) {
     // ERROR: Could not copy folder contents:
-    console.log(msg.cErrorCouldNotCopyFolderContents + targetFolder);
+    await loggers.consoleLog(wrd.cError, msg.cErrorCouldNotCopyFolderContents + targetFolder);
     // ERROR:
-    console.log(msg.cERROR_Colon + err);
+    await loggers.consoleLog(wrd.cError, msg.cERROR_Colon + err);
     successfulCopy = false;
   }
   returnData = successfulCopy;
@@ -828,6 +829,7 @@ async function deleteFile(inputData, inputMetaData) {
           // hidden temporarily
         } else if (stderr) {
           // ERROR: There was an error attempting to delete the file:
+          // await loggers.consoleLog(wrd.cError, msg.cErrorDeleteFileMessage02 + inputData);
           console.log(msg.cErrorDeleteFileMessage02 + inputData);
         } else {
           // Successful deletion

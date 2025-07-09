@@ -83,7 +83,7 @@ async function storePluginRegistryInDataStructure(pluginRegistryData) {
     returnData = true;
   } catch (err) {
     // ERROR: There was a problem saving the registry data to the plugin registry in the d-data structure:
-    console.log(msg.cstorePluginRegistryInDataStoreMessage01 + err);
+    await loggers.consoleLog(wrd.cError, msg.cstorePluginRegistryInDataStoreMessage01 + err);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -288,25 +288,25 @@ async function registerPlugin(pluginName, pluginPath) {
         returnData = true;
       } else {
         // ERROR: The specified plugin is already registered. Plugin name:
-        console.log(msg.cErrorRegisterPluginMessage02 + pluginName);
+        await loggers.consoleLog(wrd.cError, msg.cErrorRegisterPluginMessage02 + pluginName);
       }
     } else {
       if (!pluginName) {
         // ERROR: Plugin Name is an invalid value:
-        console.log(msg.cErrorRegisterPluginMessage03 + pluginName);
+        await loggers.consoleLog(wrd.cError, msg.cErrorRegisterPluginMessage03 + pluginName);
       }
       if (!pluginPath) {
         // ERROR: Plugin Path is an invalid value:
-        console.log(msg.cErrorRegisterPluginMessage04 + pluginPath);
+        await loggers.consoleLog(wrd.cError, msg.cErrorRegisterPluginMessage04 + pluginPath);
       }
     }
   } catch (err) {
     // ERROR: Failure to register plugin:
     // pluginPath is:
     // error message:
-    console.log(msg.cErrorRegisterPluginMessage01 + pluginName);
-    console.log(msg.cpluginPathIs + pluginPath);
-    console.log(msg.cerrorMessage + err);
+    await loggers.consoleLog(wrd.cError, msg.cErrorRegisterPluginMessage01 + pluginName);
+    await loggers.consoleLog(wrd.cError, msg.cpluginPathIs + pluginPath);
+    await loggers.consoleLog(wrd.cError, msg.cerrorMessage + err);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -348,8 +348,8 @@ async function unregisterPlugin(pluginName) {
   } catch (err) {
     // ERROR: Failure to unregister plugin:
     // error message:
-    console.log(msg.cErrorUnRegisterPluginMessage01 + pluginName);
-    console.log(msg.cerrorMessage + err);
+    await loggers.consoleLog(wrd.cError, msg.cErrorUnRegisterPluginMessage01 + pluginName);
+    await loggers.consoleLog(wrd.cError, msg.cerrorMessage + err);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -380,7 +380,7 @@ async function unregisterPlugins(pluginListArray) {
         noErrorFound = await unregisterPlugin(pluginName);
       } else {
         // ERROR: The plugin name was not a valid name:
-        console.log(msg.cErrorUnregisterPluginsMessage01 + pluginName);
+        await loggers.consoleLog(wrd.cError, msg.cErrorUnregisterPluginsMessage01 + pluginName);
       }
       if (noErrorFound === false) {
         returnData = false;
@@ -479,7 +479,7 @@ async function syncPluginRegistryWithPluginRegistryPath() {
     // ERROR: Failure to synchronize the plugin registry with the list of plugins available from the plugins folder specified by the application in the plugins registry JSON file.
     // error message:
     await loggers.consoleLog(namespacePrefix + functionName, msg.cErrorSyncPluginRegistryWithPluginRegistryPathMessage01);
-    console.log(msg.cerrorMessage + err);
+    await loggers.consoleLog(wrd.cError, msg.cerrorMessage + err);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -505,8 +505,8 @@ async function unregisterAllPlugins() {
   } catch (err) {
     // ERROR: Could not unregister all of the plugins.
     // error message:
-    console.log(msg.cErrorUnregisterAllPluginsMessage01);
-    console.log(msg.cerrorMessage + err);
+    await loggers.consoleLog(wrd.cError, msg.cErrorUnregisterAllPluginsMessage01)
+    await loggers.consoleLog(wrd.cError, msg.cerrorMessage + err);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -536,8 +536,8 @@ async function savePluginRegistry() {
   } catch (err) {
     // ERROR: Failure to write out the plugin registry to the plugin path specified by the application:
     // error message:
-    console.log(msg.cErrorSavePluginRegistryMessage01);
-    console.log(msg.cerrorMessage + err);
+    await loggers.consoleLog(wrd.cError, msg.cErrorSavePluginRegistryMessage01);
+    await loggers.consoleLog(wrd.cError, msg.cerrorMessage + err);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -635,7 +635,7 @@ async function extractAndProcessPluginEntryPointURI(pluginMetaData, pluginPath) 
     returnData = pluginMainPath;
   } else {
     // ERROR: No plugin meta data or plugin path are specified:
-    console.log(msg.cextractAndProcessPluginEntryPointUriMessage04 + namespacePrefix + functionName);
+    await loggers.consoleLog(wrd.cError, msg.cextractAndProcessPluginEntryPointUriMessage04 + namespacePrefix + functionName);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -713,8 +713,8 @@ async function loadPlugin(pluginExecutionPath) {
     });
   } catch (err) {
     // ERROR: There was an error attempting to load the specified plugin:
-    console.log(msg.cloadPluginErrorMessage01 + pluginExecutionPath);
-    console.log(msg.cerrorMessage + err.message);
+    await loggers.consoleLog(wrd.cError, msg.cloadPluginErrorMessage01 + pluginExecutionPath);
+    await loggers.consoleLog(wrd.cError, msg.cerrorMessage + err.message);
     returnData = false;
   }
   // const dDataReset = await D.setData(dCommandClone); // This didn't work either!!
@@ -954,31 +954,31 @@ async function unloadPlugin(pluginName) {
   }
   if (businessRulesRemovalSuccess === false) {
     // ERROR: Failure to remove business rules for the plugin:
-    console.log(msg.cErrorUnloadPluginMessage02 + pluginName);
+    await loggers.consoleLog(wrd.cError, msg.cErrorUnloadPluginMessage02 + pluginName);
   }
   if (commandsRemovalSuccess === false) {
     // ERROR: Failure to remove commands for the plugin:
-    console.log(msg.cErrorUnloadPluginMessage03 + pluginName);
+    await loggers.consoleLog(wrd.cError, msg.cErrorUnloadPluginMessage03 + pluginName);
   }
   if (configurationDataRemovalSuccess === false) {
     // ERROR: Failure to remove configuration data for the plugin:
-    console.log(msg.cErrorUnloadPluginMessage04 + pluginName);
+    await loggers.consoleLog(wrd.cError, msg.cErrorUnloadPluginMessage04 + pluginName);
   }
   if (commandAliasesRemovalSuccess === false) {
     // ERROR: Failure to remove command aliases for the plugin:
-    console.log(msg.cErrorUnloadPluginMessage05 + pluginName);
+    await loggers.consoleLog(wrd.cError, msg.cErrorUnloadPluginMessage05 + pluginName);
   }
   if (workflowRemovalSuccess === false) {
     // ERROR: Failure to remove workflows for the plugin:
-    console.log(msg.cErrorUnloadPluginMessage06 + pluginName);
+    await loggers.consoleLog(wrd.cError, msg.cErrorUnloadPluginMessage06 + pluginName);
   }
   if (themeDataRemovalSuccess === false) {
     // ERROR: Failure to remove theme data for the plugin:
-    console.log(msg.cErrorUnloadPluginMessage07 + pluginName);
+    await loggers.consoleLog(wrd.cError, msg.cErrorUnloadPluginMessage07 + pluginName);
   }
   if (constantsValidationDataRemovalSuccess === false) {
     // ERROR: Failure to remove constants validation data for the plugin:
-    console.log(msg.cErrorUnloadPluginMessage08 + pluginName);
+    await loggers.consoleLog(wrd.cError, msg.cErrorUnloadPluginMessage08 + pluginName);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -1000,7 +1000,7 @@ async function getPluginsRegistryPath() {
     returnData = D[cfg.cpluginRegistry][wrd.cpath]
   } else {
     // ERROR: There is no defined plugin registry.
-    console.log(msg.cErrorGetPluginsRegistryPathMessage01);
+    await loggers.consoleLog(wrd.cError, msg.cErrorGetPluginsRegistryPathMessage01);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);

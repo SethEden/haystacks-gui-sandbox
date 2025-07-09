@@ -314,7 +314,7 @@ async function generateCommandAliases(inputData, inputMetaData) {
     // https://en.wikipedia.org/wiki/Lehmer_code
     returnData = await solveLehmerCode(masterArrayIndex, masterCommandWordAliasesArray);
     // Command Aliases are:
-    await console.log(msg.cCommandAliasesAre + returnData);
+    await loggers.consoleLog(wrd.cInfo, msg.cCommandAliasesAre + returnData);
   } // End-if (inputData)
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);

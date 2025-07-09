@@ -172,7 +172,7 @@ async function validatePatternsThatNeedImplementation(inputData, inputMetaData) 
           passMessage = chalk.rgb(0,0,0)(passMessage);
           passMessage = chalk.bgRgb(0,255,0)(passMessage);
         } // End-if (colorizeLogsEnabled === true)
-        console.log(passMessage);
+        await loggers.consoleLog(wrd.cInfo, passMessage);
         // constant does NOT exist:
         await loggers.consoleLog(namespacePrefix + functionName, msg.cConstantDoesNotExist + currentString);
         // Make sure we add all the strings that do not exist to a coma-separated list,
@@ -190,7 +190,7 @@ async function validatePatternsThatNeedImplementation(inputData, inputMetaData) 
           passMessage = chalk.rgb(0,0,0)(passMessage);
           passMessage = chalk.bgRgb(255,0,0)(passMessage);
         } // End-if colorizeLogsEnabled === true
-        console.log(passMessage);
+        await loggers.consoleLog(wrd.cInfo, passMessage);
         // constant does exist:
         await loggers.consoleLog(namespacePrefix + functionName, msg.cConstantDoesExist + currentString);
       }

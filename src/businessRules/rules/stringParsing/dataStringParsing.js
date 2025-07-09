@@ -338,12 +338,12 @@ async function encryptStringAes256(inputData, inputMetaData) {
       await loggers.consoleLog(namespacePrefix + functionName, msg.cEncryptionSuccessful);
     } catch (error) {
       // ERROR: Encryption failed:
-      console.log(msg.cErrorEncryptionFailed + error.message);
+      await loggers.consoleLog(wrd.cError, msg.cErrorEncryptionFailed + error.message);
       await loggers.consoleLog(namespacePrefix + functionName, msg.cErrorEncryptionFailed + error.message);
     }
   } else {
     // ERROR: Invalid input strings.
-    console.log(msg.cErrorInvalidInputStrings)
+    await loggers.consoleLog(wrd.cError, msg.cErrorInvalidInputStrings);
     await loggers.consoleLog(namespacePrefix + functionName, msg.cErrorInvalidInputStrings);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
@@ -388,12 +388,12 @@ export async function decryptStringAes256(inputData, inputMetaData) {
       await loggers.consoleLog(namespacePrefix + functionName, msg.cDecryptionSuccessful);
     } catch (error) {
       // ERROR: Decryption failed:
-      console.log(msg.cErrorEncryptionFailed + error.message);
+      await loggers.consoleLog(wrd.cError, msg.cErrorEncryptionFailed + error.message);
       await loggers.consoleLog(namespacePrefix + functionName, msg.cErrorEncryptionFailed + error.message);
     }
   } else {
     // ERROR: Invalid input strings.
-    console.log(msg.cErrorInvalidInputStrings);
+    await loggers.consoleLog(wrd.cError, msg.cErrorInvalidInputStrings);
     await loggers.consoleLog(namespacePrefix + functionName, msg.cErrorInvalidInputStrings);
   }
 
@@ -426,7 +426,7 @@ export async function obfuscateString(inputData, inputMetaData) {
     await loggers.consoleLog(namespacePrefix + functionName, msg.cObfuscationSuccessful);
   } else {
     // ERROR: Invalid input string.
-    console.log(msg.cErrorInvalidInputString);
+    await loggers.consoleLog(wrd.cError, msg.cErrorInvalidInputString);
     await loggers.consoleLog(namespacePrefix + functionName, msg.cErrorInvalidInputString);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);

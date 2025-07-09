@@ -96,7 +96,7 @@ async function commandSequencer(inputData, inputMetaData) {
     } else { // End-if (currentCommand !== false)
       // WARNING: advanced.commandSequencer: The specified command was not found, please enter a valid command and try again. <commandString>
       let errorMessage = msg.ccommandSequencerMessage1 + msg.ccommandSequencerMessage2 + bas.cSpace + commandString;
-      console.log(errorMessage);
+      await loggers.consoleLog(wrd.cError, errormessage);
       returnData[1] = errorMessage;
       commandSuccess = false;
     }
@@ -144,7 +144,7 @@ async function workflow(inputData, inputMetaData) {
     // was not found in either the system defined workflows, or client defined workflows.
     // Please enter a valid workflow name and try again.
     let errorMessage = msg.cworkflowMessage1 + workflowName + bas.cComa + msg.cworkflowMessage2 + msg.cworkflowMessage3;
-    console.log(errorMessage);
+    await loggers.consoleLog(wrd.cWarning, errorMessage);
     returnData[1] = errorMessage;
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
@@ -267,7 +267,8 @@ async function businessRule(inputData, inputMetaData) {
   } // End-if (businessRuleMetricsEnabled === true)
   if (businessRuleOutput === true) {
     // Rule output is:
-    console.log(msg.cRuleOutputIs + JSON.stringify(ruleOutput));
+    // console.log(msg.cRuleOutputIs + JSON.stringify(ruleOutput));
+    await loggers.consoleLog(wrd.cInfo, msg.cRuleOutputIs + JSON.stringify(ruleOutput));
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -370,20 +371,20 @@ async function commandGenerator(inputData, inputMetaData) {
       } else {
         // WARNING: advanced.commandGenerator: Must enter a number greater than 0, number entered:
         errorMessage = msg.ccommandGeneratorMessage3 + numberOfCommands;
-        console.log(errorMessage);
+        await loggers.consoleLog(wrd.cWarning, errorMessage);
         returnData[1] = errorMessage;
       }
     } else {
       // WARNING: advanced.commandGenerator: Number entered for the number of commands to generate is not a number:
       errorMessage = msg.ccommandGeneratorMessage4 + inputData[2];
-      console.log(errorMessage);
+      await loggers.consoleLog(wrd.cWarning, errorMessage);
       returnData[1] = errorMessage;
     }
   } else {
     // WARNING: advanced.commandGenerator: The specified command:
     // was not found, please enter a valid command and try again.
     errorMessage = msg.ccommandGeneratorMessage5 + commandString + msg.ccommandGeneratorMessage6;
-    console.log(errorMessage);
+    await loggers.consoleLog(wrd.cWarning, errorMessage);
     returnData[1] = errorMessage;
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
@@ -423,22 +424,22 @@ async function commandAliasGenerator(inputData, inputMetaData) {
   let validCommandInput = false;
   let commandAliasDataStructure = {};
   // Command can be called by passing parameters and bypass the prompt system.
-  console.log(msg.ccommandAliasGeneratorMessage1);
+  await loggers.consoleLog(wrd.cInfo, msg.ccommandAliasGeneratorMessage1);
   // EXAMPLE: {"constants":"c,const","Generator":"g,gen,genrtr","List":"l,lst"}
-  console.log(msg.ccommandAliasGeneratorMessage2);
+  await loggers.consoleLog(wrd.cInfo, msg.ccommandAliasGeneratorMessage2);
 
   if (inputData.length === 0) {
     while (validCommandName === false) {
-      console.log(msg.cCommandNamePrompt1);
-      console.log(msg.cCommandNamePrompt2);
-      console.log(msg.cCommandNamePrompt3);
-      console.log(msg.cCommandNamePrompt4);
-      console.log(msg.cCommandNamePrompt5);
+      await loggers.consoleLog(wrd.cInfo, msg.cCommandNamePrompt1);
+      await loggers.consoleLog(wrd.cInfo, msg.cCommandNamePrompt2);
+      await loggers.consoleLog(wrd.cInfo, msg.cCommandNamePrompt3);
+      await loggers.consoleLog(wrd.cInfo, msg.cCommandNamePrompt4);
+      await loggers.consoleLog(wrd.cInfo, msg.cCommandNamePrompt5);
       commandName = await ruleBroker.processRules([bas.cGreaterThan, ''], [biz.cprompt]);
       validCommandName = await ruleBroker.processRules([commandName, ''], [biz.cisValidCommandNameString]);
       if (validCommandName === false) {
         // INVALID INPUT: Please enter a valid camel-case command name.
-        console.log(msg.ccommandAliasGeneratorMessage3);
+        await loggers.consoleLog(wrd.cError, msg.ccommandAliasGeneratorMessage3);
       } // End-if (validCommandName === false)
     } // End-while (validCommandName === false)
 
@@ -449,19 +450,19 @@ async function commandAliasGenerator(inputData, inputMetaData) {
     for (const element of camelCaseCommandNameArray) {
       let commandWord = element;
       // current commandWord is:
-      console.log(msg.ccurrentCommandWordIs + commandWord);
+      await loggers.consoleLog(wrd.cInfo, msg.ccurrentCommandWordIs + commandWord);
       validCommandWordAliasList = false;
       if (commandWord !== '') {
         commandAliasDataStructure[commandWord] = {};
         while (validCommandWordAliasList === false) {
-          console.log(msg.cCommandWordAliasPrompt1);
-          console.log(msg.cCommandWordAliasPrompt2);
-          console.log(msg.cCommandWordAliasPrompt3 + bas.cSpace + commandWord);
+          await loggers.consoleLog(wrd.cInfo, msg.cCommandWordAliasPrompt1);
+          await loggers.consoleLog(wrd.cInfo, msg.cCommandWordAliasPrompt2);
+          await loggers.consoleLog(wrd.cInfo, msg.cCommandWordAliasPrompt3 + bas.cSpace + commandWord);
           commandWordAliasList = await ruleBroker.processRules([bas.cGreaterThan, ''], [biz.cprompt]);
           validCommandWordAliasList = await ruleBroker.processRules([commandWordAliasList, ''], [biz.cisStringList]);
           if (validCommandWordAliasList === false) {
             // INVALID INPUT: Please enter a valid command word alias list.
-            console.log(msg.ccommandAliasGeneratorMessage4);
+            await loggers.consoleLog(wrd.cError, msg.ccommandAliasGeneratorMessage4);
           } else if (commandWordAliasList !== '') { // As long as the user entered something we should be able to proceed!
             validCommandWordAliasList = true;
           }
@@ -476,19 +477,19 @@ async function commandAliasGenerator(inputData, inputMetaData) {
       validCommandInput = true;
     } catch (err) {
       // PARSER ERROR:
-      console.log(msg.cPARSER_ERROR + err.message);
+      await loggers.consoleLog(wrd.cError, msg.cPARSER_ERROR + err.message);
       // INVALID COMMAND INPUT: Please enter valid command data when trying to call with parameters.
-      console.log(msg.ccommandAliasGeneratorMessage5);
+      await loggers.consoleLog(wrd.cError, msg.ccommandAliasGeneratorMessage5)
       returnData[1] = msg.ccommandAliasGeneratorMessage5;
       // EXAMPLE: {"constants":"c,const","Generator":"g,gen,genrtr","List":"l,lst"}
-      console.log(msg.ccommandAliasGeneratorMessage2);
+      await loggers.consoleLog(wrd.cError, msg.ccommandAliasGeneratorMessage2);
     }
   } else {
     // INVALID COMMAND INPUT: Please enter valid command data when trying to call with parameters.
-    console.log(msg.ccommandAliasGeneratorMessage5);
+    await loggers.consoleLog(wrd.cError, msg.ccommandAliasGeneratorMessage5)
     returnData[1] = msg.ccommandAliasGeneratorMessage5;
     // EXAMPLE: {"constants":"c,const","Generator":"g,gen,genrtr","List":"l,lst"}
-    console.log(msg.ccommandAliasGeneratorMessage2);
+    await loggers.consoleLog(wrd.cError, msg.ccommandAliasGeneratorMessage2);
   }
 
   if (validCommandInput === true) {

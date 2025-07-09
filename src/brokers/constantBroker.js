@@ -387,8 +387,8 @@ async function addConstantsValidationData(constantsValidationData, contextName) 
     returnData = true;
   } catch (err) {
     // ERROR: Failure to merge the constants validation data for the type:
-    console.log(msg.cErrorAddConstantsValidationDataMessage01 + contextName);
-    console.log(msg.cERROR_Colon + err);
+    await loggers.consoleLog(wrd.cError, msg.cErrorAddConstantsValidationDataMessage01 + contextName);
+    await loggers.consoleLog(wrd.cError, msg.cERROR_Colon + err);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -417,13 +417,13 @@ async function removePluginConstantsValidationData(pluginName) {
       returnData = true;
     } catch (err) {
       // ERROR: Unable to remove the plugin constants validation data for the specified plugin:
-      console.log(msg.cremovePluginConstantsValidationDataMessage01 + pluginName);
+      await loggers.consoleLog(wrd.cError, msg.cremovePluginConstantsValidationDataMessage01 + pluginName);
       // ERROR:
-      console.log(msg.cerrorMessage + err.message);
+      await loggers.consoleLog(wrd.cError, msg.cerrorMessage + err.message);
     }
   } else {
     // ERROR: Unable to locate the plugins constants validatino data. Plugin:
-    console.log(msg.cremovePluginConstantsValidationDataMessage02 + pluginName);
+    await loggers.consoleLog(wrd.cError, msg.cremovePluginConstantsValidationDataMessage02 + pluginName);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);

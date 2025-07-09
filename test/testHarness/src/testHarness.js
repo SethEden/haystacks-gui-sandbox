@@ -67,7 +67,7 @@ let interactiveNativeCliWindow = false;
  */
 async function bootstrapApplication() {
   const functionName = bootstrapApplication.name;
-  console.log(`BEGIN ${namespacePrefix}${functionName} function`);
+  // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   rootPath = url.fileURLToPath(path.dirname(import.meta.url));
   let rootPathArray = [];
   let pathSeparator = '';
@@ -136,17 +136,17 @@ async function bootstrapApplication() {
   }
   appConfig[sys.cclientBusinessRules] = await clientRules.initClientRulesLibrary();
   appConfig[sys.cclientCommands] = await clientCommands.initClientCommandsLibrary();
-  console.log('appConfig is: ', appConfig);
+  // console.log('appConfig is: ', appConfig);
   await haystacksGui.initFramework(appConfig);
   await haystacksGui.initServerLogTransmission(broadcastShellOutput);
   interactiveNativeCliWindow = await haystacksGui.getConfigurationSetting(wrd.csystem, app_cfg.cspawnNativeCliCommandWindow);
   // interactiveNativeCliWindow is:
-  console.log('interactiveNativeCliWindow is: ' + interactiveNativeCliWindow);
+  // console.log('interactiveNativeCliWindow is: ' + interactiveNativeCliWindow);
   if (typeof interactiveNativeCliWindow === 'undefined') {
     interactiveNativeCliWindow = false;
   }
   await warden.initApplication(appConfig, interactiveNativeCliWindow);
-  console.log(`END ${namespacePrefix}${functionName} function`);
+  // console.log(`END ${namespacePrefix}${functionName} function`);
 }
 
 /**
@@ -160,7 +160,7 @@ async function bootstrapApplication() {
  */
 async function applicationInit() {
   const functionName = applicationInit.name;
-  console.log(`BEGIN ${namespacePrefix}${functionName} function`);
+  // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // let commandResult = '';
   try {
     // 1. Wait for all bootstrapping to complete
@@ -181,16 +181,16 @@ async function applicationInit() {
     // But we can try here anyway!
     programRunning = true;
     if (interactiveNativeCliWindow === true) {
-      console.log('----------------- interactiveNativeCliWindow is set to true!!');
+      // console.log('----------------- interactiveNativeCliWindow is set to true!!');
       launchInteractiveCli(); // WARNING: DO NOT await, it will block the rest of the application.
     } else {
-      console.log('----------------- interactiveNativeCliWindow is set to FALSE!!');
+      // console.log('----------------- interactiveNativeCliWindow is set to FALSE!!');
     }
   } catch (error) {
     // ERROR: Fatal error during bootstrap: 
     console.log(app_msg.cErrorFatalBootstrap, error);
   }
-  console.log(`END ${namespacePrefix}${functionName} function`);
+  // console.log(`END ${namespacePrefix}${functionName} function`);
 }
 
 /**
@@ -402,7 +402,7 @@ app.whenReady().then(async () => {
 
     setShellCommandHandler(async (command, clientId) => {
       await haystacksGui.enqueueCommand(command);
-      sendShellOutput(clientId, `[Queued] Command: ${command}`);
+      // sendShellOutput(clientId, `[Queued] Command: ${command}`);
       processCommandLoop(); // (do not await!)
     });
   } else {

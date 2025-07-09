@@ -125,7 +125,7 @@ async function promptNonBlocking(inputData, inputMetaData) {
     });
   } else {
     // ERROR: No prompt or input callback provided.
-    console.log(msg.cErrorPromptNonBlockingMessage01);
+    await loggers.consoleLog(wrd.cError, msg.cErrorPromptNonBlockingMessage01);
     await loggers.consoleLog(namespacePrefix + functionName, msg.cErrorPromptNonBlockingMessage01);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));

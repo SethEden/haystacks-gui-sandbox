@@ -29,8 +29,46 @@ const SOCKET_HOST = '127.0.0.1';
 const SOCKET_PORT = 3000;
 const MESSAGE_DELIMITER = '##END##';
 
+async function safeJsonParse(persistentBuffer) {
+  // Break buffer into message-sized chunks by delimiter
+  let messages = persistentBuffer.split(MESSAGE_DELIMITER);
+  let incomplete = messages.pop();
+  let parsed = [];
+  for (let i = 0; i < messages.length; i++) {
+    const message = messages[i].trim();
+    if (message.length > 0) {
+      let msgObj = message;
+      try {
+        msgObj = JSON.parse(message);
+
+        // If it's an object with an 'output' property that looks like JSON, parse it once more
+        if (
+          typeof msgObj === wrd.cobject &&
+          msgObj !== null &&
+          typeof msgObj.output === wrd.cstring &&
+          msgObj.output.trim().startsWith(bas.cOpenCurlyBrace)
+        ) {
+          try {
+            msgObj = JSON.parse(msgObj.output);
+          } catch {
+            // Fallback: leave as string if not valid JSON
+            msgObj = msgObj.output;
+          }
+        }
+      } catch (err) {
+        // Not JSON, just string
+      }
+      parsed.push(msgObj);
+    }
+  }
+  return { parsed, incomplete };
+}
+
 function createSocketClient() {
   const socket = net.createConnection({ host: SOCKET_HOST, port: SOCKET_PORT });
+
+  // Keep connection live
+  socket.setKeepAlive(true);
 
   const r1 = readline.createInterface({
     input: process.stdin,
@@ -58,63 +96,39 @@ function createSocketClient() {
   });
 
   // Print any output/log from the server
-  let leftover = '';
-  socket.on(wrd.cdata, (data) => {
-    console.log('data package received is: ' + data);
+  let persistentBuffer = '';
+
+  socket.on(wrd.cdata, async (data) => {
+    // console.log('data package received is: ' + data);
     // Support messages split across packets or multiple in one chunk
-    leftover += data.toString();
-    let parts = leftover.split(MESSAGE_DELIMITER);
-    leftover = parts.pop(); // Save incomplete part for next time
-    for (const part of parts) {
-      if (!part.trim()) continue;
-      try {
-        const inEventMsg = JSON.parse(part);
-    
-        // Patch: Handle new tableLog type
-        if (inEventMsg.type === sys.ctableLog) {
-          // If possible, use console.table
-          if (typeof console.table === wrd.cfunction) {
-            // Optionally, print a label and classPath
-            if (inEventMsg.classPath) {
-              process.stdout.write(`[TABLE] ${inEventMsg.classPath}${bas.cCarRetNewLin}`);
-            }
-            // Output the table
-            if (Array.isArray(inEventMsg.tableData)) {
-              if (Array.isArray(inEventMsg.columnNames) && inEventMsg.columnNames.length > 0) {
-                // Use columnNames as keys to select columns for display
-                const filteredData = inEventMsg.tableData.map(row =>
-                  inEventMsg.columnNames.reduce((acc, key) => {
-                    acc[key] = row[key];
-                    return acc;
-                  }, {})
-                );
-                console.table(filteredData, inEventMsg.columnNames);
-              } else {
-                // No columnNames? Show all fields.
-                console.table(inEventMsg.tableData);
-              }
-            } else {
-              process.stdout.write('[TABLE] (malformed table data)\n');
-            }
-          } else {
-            // Fallback for older Node: print as JSON
-            process.stdout.write(`[TABLE] ${inEventMsg.classPath || ''}\n`);
-            process.stdout.write(JSON.stringify(inEventMsg.tableData, null, 2) + bas.cCarRetNewLin);
-          }
-        }
-        // Normal outputs
-        else if (inEventMsg[wrd.coutput]) {
-          process.stdout.write(inEventMsg[wrd.coutput + bas.cCarRetNewLin]);
-        }
-        else if (inEventMsg[wrd.clog]) {
+    persistentBuffer += data.toString();
+    let { parsed, incomplete } = await safeJsonParse(persistentBuffer);
+    // console.log('parsed messages is: ', parsed);
+    persistentBuffer = incomplete || '';
+    for (const eventMsg of parsed) {
+      // console.log('eventMsg is: ', eventMsg);
+      if (typeof eventMsg === wrd.cobject && eventMsg !== null) {
+        // console.log('eventMsg is an object!');
+        // Table log (No extra parsing, just pass straight to console.table)
+        if (eventMsg.type === sys.ctableLog) {
+          // console.log('eventMsg is a table object!');
+          console.table(eventMsg.tableData, eventMsg.columnNames);
+        } else if (eventMsg[wrd.coutput]) {
+          // console.log('eventMsg is an output message object!');
+          process.stdout.write(eventMsg[wrd.coutput] + bas.cCarRetNewLin);
+        } else if (eventMsg[wrd.clog]) {
+          // console.log('eventMsg is a log message object!');
           process.stdout.write(bas.cOpenBracket + wrd.cLOG + bas.cCloseBracket + bas.cSpace + inEventMsg[wrd.clog] + bas.cCarRetNewLin);
+        } else {
+          // WARNING: We have no idea what kind of object we are dealing with!
+          console.log('WARNING: We have no idea what kind of object we are dealing with!');
         }
-      } catch (err) {
-        // Not JSON
-        process.stdout.write(part + bas.cCarRetNewLin);
+      } else if (typeof eventMsg === wrd.cstring) {
+        // console.log('eventMsg is a string.');
+        // Raw string, just print it.
+        process.stdout.write(eventMsg + bas.cCarRetNewLin);
       }
     }
-    
   });
 
   // Handle disconnects and errors

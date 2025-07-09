@@ -1,7 +1,8 @@
 {
   "controlFlags": {
     "Warning": true,
-    "Info": true
+    "Info": true,
+    "Error": true
   },
   "flagNames": {
     "logFileConfigFlagName": "logFileEnabled"

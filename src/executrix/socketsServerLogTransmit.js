@@ -61,13 +61,13 @@ function initLogTransmission(inputData) {
  */
 function transmitLog(message) {
   const functionName = transmitLog.name;
-  console.log(`BEGIN ${namespacePrefix}${functionName} function`);
-  console.log('message is: ', message);
+  // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
+  // console.log('message is: ', message);
   if (typeof broadcastFunction === wrd.cfunction) {
     // Optionally stringify if needed:
     let payload = typeof message === wrd.cstring ? message : JSON.stringify(message);
     // payload is:
-    console.log('payload is: ' + payload);
+    // console.log('payload is: ' + payload);
     try {
       broadcastFunction(payload);
     } catch (err) {

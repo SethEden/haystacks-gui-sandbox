@@ -1,5 +1,6 @@
 {
   "controlFlags": {
+    "Error": true,
     "Warning": true,
     "Info": true,
     "JournalActions": true

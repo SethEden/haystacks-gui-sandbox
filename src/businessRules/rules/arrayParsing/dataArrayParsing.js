@@ -518,7 +518,7 @@ async function getNamespacedDataObject(inputData, inputMetaData) {
         // It doesn't exist yet, so lets make it.
         namespaceDataObject[element] = {};
       } else if (!namespaceDataObject[element]) {
-        console.log(msg.cnamespaceDataObjectPathNotFound + JSON.stringify(element));
+        await loggers.consoleLog(wrd.cError, msg.cnamespaceDataObjectPathNotFound + JSON.stringify(element));
         processingValidData = false;
         break;
       }

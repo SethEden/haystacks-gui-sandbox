@@ -127,8 +127,8 @@ async function addThemeData(themeData, contextName) {
     returnData = true;
   } catch (err) {
     // ERROR: Failure to merge the theme data for:
-    console.log(msg.cErrorAddThemeDataMessage01 + contextName);
-    console.log(msg.cERROR_Colon + err);
+    await loggers.consoleLog(wrd.cError, msg.cErrorAddThemeDataMessage01 + contextName);
+    await loggers.consoleLog(wrd.cError, msg.cERROR_Colon + err);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -149,8 +149,8 @@ async function getNamedThemesFromRootPath(themesRootPath) {
   // themesRootPath is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cthemesRootPathIs + themesRootPath);
   let themesNames = [];
-  let frameorkThemesPath = path.resolve(themesRootPath);
-  themesNames = await ruleBroker.processRules([frameorkThemesPath, ''], [biz.cgetDirectoryList]);
+  let frameworkThemesPath = path.resolve(themesRootPath);
+  themesNames = await ruleBroker.processRules([frameworkThemesPath, ''], [biz.cgetDirectoryList]);
   // themesNames is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cthemesNamesIs + JSON.stringify(themesNames));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -258,13 +258,13 @@ async function removePluginThemeData(pluginName) {
       returnData = true;
     } catch (err) {
       // ERROR: Unable to remove the plugin themes for the specified plugin:
-      console.log(msg.cremovePluginThemesMessage01 + pluginName);
+      await loggers.consoleLog(wrd.cError, msg.cremovePluginThemesMessage01 + pluginName);
       // ERROR:
-      console.log(msg.cerrorMessage + err.message);
+      await loggers.consoleLog(wrd.cError, msg.cerrorMessage + err.message);
     }
   } else {
     // ERROR: Unable to locate the plugins themes data. Plugin:
-    console.log(msg.cremovePluginThemesMessage02 + pluginName);
+    await loggers.consoleLog(wrd.cError, msg.cremovePluginThemesMessage02 + pluginName);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);

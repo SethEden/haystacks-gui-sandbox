@@ -50,8 +50,8 @@ async function addPluginWorkflows(pluginName, pluginWorkflows) {
     returnData = true;
   } catch (err) {
     // ERROR: Failure to merge the plugin workflows for plugin:
-    console.log(msg.cErrorAddPluginWorkflowsMessage01 + pluginName);
-    console.log(msg.cERROR_Colon + err);
+    await loggers.consoleLog(wrd.cError, msg.cErrorAddPluginWorkflowsMessage01 + pluginName);
+    await loggers.consoleLog(wrd.cError, msg.cERROR_Colon + err);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -303,13 +303,13 @@ async function removePluginWorkflows(pluginName) {
       returnData = true;
     } catch (err) {
       // ERROR: Unable to remove the plugin workflows for the specified plugin:
-      console.log(msg.cremovePluginWorkflowsMessage01 + pluginName);
+      await loggers.consoleLog(wrd.cError, msg.cremovePluginWorkflowsMessage01 + pluginName);
       // ERROR:
-      console.log(msg.cerrorMessage + err.message);
+      await loggers.consoleLog(wrd.cError, msg.cerrorMessage + err.message);
     }
   } else {
     // ERROR: Unable to locate the plugins workflow data. Plugin:
-    console.log(msg.cremovePluginWorkflowsMessage02 + pluginName);
+    await loggers.consoleLog(wrd.cError, msg.cremovePluginWorkflowsMessage02 + pluginName);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);

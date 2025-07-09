@@ -132,8 +132,8 @@ async function addPluginCommands(pluginName, pluginCommands) {
     // console.log(namespacePrefix + functionName + bas.cColon + bas.cSpace + msg.cdCommandStackAfterMergeIs, D[wrd.cCommands]);
   } catch (err) {
     // ERROR: Failure to merge the plugin commands for plugin:
-    console.log(msg.cErrorAddPluginCommandsMessage01 + pluginName);
-    console.log(msg.cERROR_Colon + err);
+    await loggers.consoleLog(wrd.cError, msg.cErrorAddPluginCommandsMessage01 + pluginName);
+    await loggers.consoleLog(wrd.cError, msg.cERROR_Colon + err);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -167,8 +167,8 @@ async function addPluginCommandAliases(pluginName, pluginCommandAliases) {
     returnData = true;
   } catch (err) {
     // ERROR: Failure to merge the plugin command aliases for plugin:
-    console.log(msg.cErrorAddPluginCommandAliasesMessage01 + pluginName);
-    console.log(msg.cERROR_Colon + err);
+    await loggers.consoleLog(wrd.cError, msg.cErrorAddPluginCommandAliasesMessage01 + pluginName);
+    await loggers.consoleLog(wrd.cError, msg.cERROR_Colon + err);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -230,7 +230,7 @@ async function getValidCommand(commandString, commandDelimiter) {
       if (foundValidCommand === false) {
         // WARNING: The specified command:
         // does not exist, please try again!
-        console.log(msg.cWarningTheSpecifiedCommand + commandToExecute + msg.cdoesNotExistPleaseTryAgain + bas.cSpace + num.c1);
+        await loggers.consoleLog(wrd.cWarning, msg.cWarningTheSpecifiedCommand + commandToExecute + msg.cdoesNotExistPleaseTryAgain + bas.cSpace + num.c1);
       } else {
         returnData = foundValidCommand[wrd.cName];
       }
@@ -239,7 +239,7 @@ async function getValidCommand(commandString, commandDelimiter) {
     // Looks like the user entered something undefined: Pop the standard error message:
     // WARNING: The specified command:
     // does not exist, please try again!
-    console.log(msg.cWarningTheSpecifiedCommand + commandToExecute + msg.cdoesNotExistPleaseTryAgain);
+    await loggers.consoleLog(wrd.cWarning, msg.cWarningTheSpecifiedCommand + commandToExecute + msg.cdoesNotExistPleaseTryAgain);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -305,7 +305,7 @@ async function countMatchingCommandAlias(commandAliasData, commandAliasName) {
             let errorMessage = msg.cErrorCountMatchingCommandAliasMessage01 + JSON.stringify(commandAliasData);
             errorMessage = await colorizer.colorizeMessageSimple(errorMessage, blackColorArray, true);
             errorMessage = await colorizer.colorizeMessageSimple(errorMessage, redColorArray, false);
-            console.log(errorMessage);
+            await loggers.consoleLog(wrd.cError, errorMessage);
             // Its an error, but not a duplicate error, however, we need to report it some how.
             commandAliasCount = commandAliasCount + 1; // We've console logged it as best we can, we need to raise the flag anyway.
           }
@@ -711,12 +711,12 @@ async function executeCommand(commandString) {
       // This command does not exist, nothing to execute, but we don't want the application to exit.
       // An error message should have already been thrown, but we should throw another one here.
       // WARNING: Command does not exist, please enter a valid command and try again!
-      console.log(msg.cexecuteCommandMessage1);
+      await loggers.consoleLog(wrd.cWarning, msg.cexecuteCommandMessage1);
       returnData = [true, false];
     }
   } catch (err) {
-    console.log(msg.cERROR_Colon + bas.cSpace + err);
-    console.log(msg.cexecuteCommandMessage1);
+    await loggers.consoleLog(wrd.cError, msg.cERROR_Colon + bas.cSpace + err);
+    await loggers.consoleLog(wrd.cError, msg.cexecuteCommandMessage1);
     returnData = [true, false];
   }
   if (commandMetricsEnabled === true && commandToExecute !== '' && commandToExecute !== false) {
@@ -773,7 +773,7 @@ async function removePluginCommands(pluginName) {
     pluginConstantsValidationCommands = pluginConstantsValidation[sys.cpluginCommandConstantsValidation];
   } else {
     // ERROR: Constants validation data for the specified plugin was not found. Plugin:
-    console.log(msg.cremovePluginBusinessRulesMessage01 + pluginName);
+    await loggers.consoleLog(wrd.cError, msg.cremovePluginBusinessRulesMessage01 + pluginName)
   }
   if (pluginConstantsValidationCommands) {
     try {
@@ -788,12 +788,12 @@ async function removePluginCommands(pluginName) {
       returnData = true;
     } catch (err) {
       // ERROR: Failure attempting to delete the plugin commands for plugin:
-      console.log(msg.cremovePluginCommandsMessage02 + pluginName);
-      console.log(msg.cerrorMessage + err.message);
+      await loggers.consoleLog(wrd.cError, msg.cremovePluginCommandsMessage02 + pluginName);
+      await loggers.consoleLog(wrd.cError, msg.cerrorMessage + err.message);
     }
   } else {
     // ERROR: Plugin command constants validation data for the specified plugin was not found. Plugin:
-    console.log(msg.cremovePluginCommandsMessage03 + pluginName);
+    await loggers.consoleLog(wrd.cError, msg.cremovePluginCommandsMessage03 + pluginName);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -822,13 +822,13 @@ async function removePluginCommandAliases(pluginName) {
       returnData = true;
     } catch (err) {
       // ERROR: Unable to remove the plugin command aliases for the specified plugin:
-      console.log(msg.cremovePluginCommandAliasesMessage01 + pluginName);
+      await loggers.consoleLog(wrd.cError, msg.cremovePluginCommandAliasesMessage01 + pluginName);
       // ERROR:
-      console.log(msg.cerrorMessage + err.message);
+      await loggers.consoleLog(wrd.cError, msg.cerrorMessage + err.message);
     }
   } else {
     // ERROR: Unable to locate the plugins command aliases data. Plugin:
-    console.log(msg.cremovePluginCommandAliasesMessage02 + pluginName);
+    await loggers.consoleLog(wrd.cError, msg.cremovePluginCommandAliasesMessage02 + pluginName);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);

@@ -154,6 +154,7 @@ async function consoleLog(classPathControlFlag, message) {
           isFileLoggingOn: isFileLoggingOn,
           isSocketLoggingOn: isSocketLoggingOn,
           isSocketServerBroadcastOn: isSocketServerBroadcastOn,
+          negativeControlFlags: controlFlagObject.negativeControlFlags,
           classPath: classPathControlFlag
         }
         await consoleLogProcess(processLogOptions);
@@ -196,7 +197,8 @@ async function loggerSchemaGateLogic(classPathControlFlag) {
   let loggerSchema = await chiefData.getSchemaData(sys.cloggerSchema);
   let resultObject = {
     isControlFlag: false,
-    controlFlagValue: false
+    controlFlagValue: false,
+    negativeControlFlags: {}
   }
 
   if (loggerSchema && loggerSchema[sys.ccontrolFlags] && loggerSchema[sys.cflagNames]) {
@@ -209,6 +211,10 @@ async function loggerSchemaGateLogic(classPathControlFlag) {
       // The user passed something like "Warning" or "Info" that exists in the schema.
       resultObject.isControlFlag = true;
       resultObject.controlFlagValue = controlFlagsMap[classPathControlFlag] === true;
+    }
+    // Handle negativeControlFlags if present
+    if (loggerSchema.negativeControlFlags && typeof loggerSchema.negativeControlFlags === wrd.cobject) {
+      resultObject.negativeControlFlags = loggerSchema.negativeControlFlags;
     }
   }
   // console.log('resultObject is: ' + JSON.stringify(resultObject));
@@ -228,11 +234,19 @@ async function loggerSchemaGateLogic(classPathControlFlag) {
  */
 async function consoleTableLog(classPath, tableData, columnNames) {
   let functionName = consoleTableLog.name;
-  console.log(`BEGIN ${namespacePrefix}${functionName} function`);
-  console.log(`classPath is: ${classPath}`);
-  console.log(`tableData is: ${JSON.stringify(tableData)}`);
-  console.log(`columnNames is: ${JSON.stringify(columnNames)}`);
-  console.table(tableData, columnNames);
+  // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
+  // console.log(`classPath is: ${classPath}`);
+  // console.log(`tableData is: ${JSON.stringify(tableData)}`);
+  // console.log(`columnNames is: ${JSON.stringify(columnNames)}`);
+  let loggerSchema = await chiefData.getSchemaData(sys.cloggerSchema);
+  let suppressDefault = false;
+  if (loggerSchema && loggerSchema[sys.cnegativeControlFlags] &&
+  loggerSchema[sys.cnegativeControlFlags][sys.csuppressDefaultConsoleOutput] === true) {
+    suppressDefault = true;
+  }
+  if (!suppressDefault) {
+    console.table(tableData, columnNames);
+  }
   if (await configurator.getConfigurationSetting(wrd.csystem, sys.clogToSocketTransmissionEnabled) === true &&
   socketClient && typeof socketClient.send === wrd.cfunction) {
     const tableLogPayload = {
@@ -241,9 +255,9 @@ async function consoleTableLog(classPath, tableData, columnNames) {
       tableData,
       columnNames
     };
-    socketClient.send(JSON.stringify(tableLogPayload));
+    socketsServerLogTransmit.transmitLog(tableLogPayload);
   }
-  console.log(`END ${namespacePrefix}${functionName} function`);
+  // console.log(`END ${namespacePrefix}${functionName} function`);
 }
 
 /**
@@ -264,16 +278,24 @@ async function constantsValidationSummaryLog(message, passFail) {
   let blackColorArray = await colorizer.getNamedColorData(clr.cBlack, [0,0,0]);
   let greenColorArray = await colorizer.getNamedColorData(clr.cGreen, [0,255,0]);
   let redColorArray = await colorizer.getNamedColorData(clr.cRed, [255,0,0]);
+  let loggerSchema = await chiefData.getSchemaData(sys.cloggerSchema);
+  let suppressDefault = false;
+  if (loggerSchema && loggerSchema[sys.cnegativeControlFlags] &&
+  loggerSchema[sys.cnegativeControlFlags][sys.csuppressDefaultConsoleOutput] === true) {
+    suppressDefault = true;
+  }
 
   if (passFail === true) {
     if (await configurator.getConfigurationSetting(wrd.csystem, cfg.cdisplaySummaryConstantsValidationPassMessages) === true) {
       outputMessage = wrd.cPASSED + bas.cSpace + bas.cDoubleDash + bas.cSpace + message + bas.cSpace + bas.cDoubleDash + bas.cSpace + wrd.cPASSED; // `PASSED -- ${message} -- PASSED`;
       outputMessage = await colorizer.colorizeMessageSimple(outputMessage, blackColorArray, true);
       outputMessage = await colorizer.colorizeMessageSimple(outputMessage, greenColorArray, false);
-      console.log(outputMessage);
+      if (!suppressDefault) {
+        console.log(outputMessage);
+      }
       // Path: Broadcast over client socket if enabled
       if (await configurator.getConfigurationSetting(wrd.csystem, sys.clogToSocketTransmissionEnabled) === true && socketClient) {
-        socketClient.send(outputMessage);
+        socketsServerLogTransmit.transmitLog(outputMessage);
       }
     } // End-if (configurator.getConfigurationSetting(wrd.csystem, cfg.cdisplaySummaryConstantsValidationPassMessages) === true)
   } else { // passFail === false
@@ -281,10 +303,12 @@ async function constantsValidationSummaryLog(message, passFail) {
       outputMessage = wrd.cFAILED + bas.cSpace + bas.cDoubleDash + bas.cSpace + message + bas.cSpace + bas.cDoubleDash + bas.cSpace + wrd.cFAILED; // `FAILED -- ${message} -- FAILED`;
       outputMessage = await colorizer.colorizeMessageSimple(outputMessage, blackColorArray, true);
       outputMessage = await colorizer.colorizeMessageSimple(outputMessage, redColorArray, false);
-      console.log(outputMessage);
+      if (!suppressDefault) {
+        console.log(outputMessage);
+      }
       // Patch: Broadcast over client socket if enabled
       if (await configurator.getConfigurationSetting(wrd.csystem, sys.clogToSocketTransmissionEnabled) === true && socketClient) {
-        socketClient.send(outputMessage);
+        socketsServerLogTransmit.transmitLog(outputMessage);
       }
     } // End-if (configurator.getConfigurationSetting(wrd.csystem, cfg.cdisplaySummaryConstantsValidationFailMessages) === true)
   }
@@ -334,6 +358,7 @@ async function consoleLogProcess(logOptions) {
     isFileLoggingOn,
     isSocketLoggingOn,
     isSocketServerBroadcastOn,
+    negativeControlFlags = {},
     classPath
   } = logOptions;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
@@ -360,6 +385,8 @@ async function consoleLogProcess(logOptions) {
   // console.log('isSocketLoggingOn is: ' + isSocketLoggingOn);
   // isSocketServerBroadcastOn is:
   // console.log('isSocketServerBroadcastOn is: ' + isSocketServerBroadcastOn);
+  const suppressDefaultConsoleOutput = negativeControlFlags[sys.csuppressDefaultConsoleOutput] === true;
+  // console.log('suppressDefaultConsoleOutput is: ' + suppressDefaultConsoleOutput);
   // classPath is:
   // console.log('classPath is: ' + classPath);
 
@@ -372,7 +399,9 @@ async function consoleLogProcess(logOptions) {
     outputMessage = await colorizer.colorizeMessage(message, configurationNamespace, configurationName, debugFileSetting, debugFunctionSetting, false);
   }
   // If we need to apply additional isMessageValid logic, do it here!!
-  console.log(outputMessage);
+  if (!suppressDefaultConsoleOutput) {
+    console.log(outputMessage);
+  }
 
   if (isFileLoggingOn && logFile) {
     await printMessageToFile(logFile, outputMessage);

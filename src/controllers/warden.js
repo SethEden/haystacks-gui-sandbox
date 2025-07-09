@@ -816,7 +816,7 @@ async function unloadPlugin(pluginName) {
   returnData = await chiefPlugin.unloadPlugin(pluginName);
   if (returnData === false) {
     // ERROR: There was an error unloading the plugin:
-    console.log(msg.cErrorUnloadPluginMessage01 + pluginName);
+    await loggers.consoleLog(wrd.cError, msg.cErrorUnloadPluginMessage01 + pluginName);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -847,7 +847,7 @@ async function unloadPlugins(pluginNames) {
 
       } else {
         // ERROR: No plugin name specified:
-        console.log(msg.cErrorUnloadPluginsMessage01 + pluginName);
+        await loggers.consoleLog(wrd.cError, msg.cErrorUnloadPluginsMessage01 + pluginName);
         noFailureEncountered = false;
       }
     }
@@ -929,7 +929,7 @@ async function loadPluginResourceData(contextName, pluginResourcePath) {
       break;
     default:
       // ERROR: Invalid data type specified:
-      console.log(msg.cloadPluginResourceDataMessage01 + contextName);
+      await loggers.consoleLog(wrd.cError, msg.cloadPluginResourceDataMessage01 + contextName);
       break;
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));

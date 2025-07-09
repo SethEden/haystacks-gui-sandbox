@@ -45,21 +45,22 @@ const clients = new Map(); // id => socket
  */
 function sendToClient(socket, payload) {
   const functionName = sendToClient.name;
-  console.log(`BEGIN ${namespacePrefix}${functionName} function`);
-  console.log('socket is: ', socket);
-  console.log('payload is: ', payload);
+  // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
+  // console.log('socket is: ', socket);
+  // console.log('payload is: ', payload);
   // socket.write(JSON.stringify(payload) + MESSAGE_DELIMITER);
   const maxMessageLength = 840;
-  let jsonString = JSON.stringify(payload) + MESSAGE_DELIMITER;
-  console.log('jsonString is: ' + jsonString);
+  let jsonString = typeof payload === wrd.cstring ? payload : JSON.stringify(payload);
+  jsonString += MESSAGE_DELIMITER; // Always append delimiter!
+  // console.log('jsonString is: ' + jsonString);
 
   // Chunk the message if needed
   for (let i = 0; i < jsonString.length; i += maxMessageLength) {
     const chunk = jsonString.slice(i, i + maxMessageLength);
-    console.log('chunk to send is: ' + chunk);
+    // console.log('chunk to send is: ' + chunk);
     socket.write(chunk);
   }
-  console.log(`END ${namespacePrefix}${functionName} function`);
+  // console.log(`END ${namespacePrefix}${functionName} function`);
 }
 
 /**
@@ -71,10 +72,15 @@ function sendToClient(socket, payload) {
  * @date 2025/07/03
  */
 function broadcast(payload) {
+  const functionName = broadcast.name;
+  // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
+  // console.log('payload is: ', payload);
   const eventMsg = JSON.stringify(payload) + MESSAGE_DELIMITER;
+  // console.log('eventMsg is: ' + eventMsg);
   for (const sock of clients.values()) {
     sock.write(eventMsg);
   }
+  // console.log(`END ${namespacePrefix}${functionName} function`);
 }
 
 function setShellCommandHandler(callback) {
@@ -93,8 +99,11 @@ const server = net.createServer((socket) => {
   socket.on(wrd.cdata, (chunk) => {
     leftover += chunk.toString();
     let parts = leftover.split(MESSAGE_DELIMITER);
+    // console.log('parts is: ' + parts);
     leftover = parts.pop();
+    // console.log('leftover is: ' + leftover);
     for (const part of parts) {
+      // console.log('part is: ' + part);
       if (!part.trim()) continue;
       try {
         const eventMsg = JSON.parse(part);
@@ -110,7 +119,7 @@ const server = net.createServer((socket) => {
             sendToClient(socket, `WARNING: No shell command handler registered.`);
           }
         }
-        // Other client→server messages can be handled here as needed
+        // Other client→server messages, payload types can be handled here as needed
       } catch (err) {
         sendToClient(socket, `ERROR: Malformed message: ${err.message}`);
       }
@@ -140,7 +149,11 @@ function sendShellOutput(clientId, output) {
 }
 
 function broadcastShellOutput(output) {
+  const functionName = broadcastShellOutput.name;
+  // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
+  // console.log('output is: ', output);
   broadcast({ output });
+  // console.log(`END ${namespacePrefix}${functionName} function`);
 }
 
 server.listen(PORT, HOST, () => {

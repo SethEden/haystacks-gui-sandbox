@@ -58,7 +58,7 @@ async function convertColors(inputData, inputMetaData) {
     let ruleOutput = await ruleBroker.processRules([currentColorHexValue, [bas.cHash, '']], [biz.creplaceCharacterWithCharacter, biz.chex2rgbConversion]);
     // ruleOutput is:
     await loggers.consoleLog(namespacePrefix + functionName, msg.cruleOutputIs + ruleOutput);
-    console.log(currentColorName + bas.cComa + currentColorHexValue + bas.cComa + ruleOutput[0] + bas.cComa + ruleOutput[1] + bas.cComa + ruleOutput[2]);
+    await loggers.consoleLog(wrd.cInfo, currentColorName + bas.cComa + currentColorHexValue + bas.cComa + ruleOutput[0] + bas.cComa + ruleOutput[1] + bas.cComa + ruleOutput[2]);
     returnData[1].push(ruleOutput);
   } // End-for (const element of colorKeys)
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));

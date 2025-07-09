@@ -133,8 +133,8 @@ async function validateConstants(inputData, inputMetaData) {
         } else {
           // WARNING: The specified validation type is not available, please enter a valid type and try again. Type not recognized:
           // Constants validation types are:
-          console.log(msg.cWarningUserEnteredConstantsValidationDataTypeMessage01 + userEnteredValidationType);
-          console.log(msg.cWarningUserEnteredConstantsValidationDataTypeMessage02 + validConstantsValidationUserTypes.join(bas.cComa + bas.cSpace));
+          await loggers.consoleLog(wrd.cWarning, msg.cWarningUserEnteredConstantsValidationDataTypeMessage01 + userEnteredValidationType);
+          await loggers.consoleLog(wrd.cWarning, msg.cWarningUserEnteredConstantsValidationDataTypeMessage02 + validConstantsValidationUserTypes.join(bas.cComa + bas.cSpace));
         }
       } // End-for (let validationTypesKey in validationTypesInputArray)
 
@@ -146,9 +146,9 @@ async function validateConstants(inputData, inputMetaData) {
         validUserEntry = true;
       } else {
         // WARNING: No valid constants validation types were entered.
-        console.log(msg.cWarningUserEnteredConstantsValidationDataTypeMessage03);
+        await loggers.consoleLog(wrd.cWarning, msg.cWarningUserEnteredConstantsValidationDataTypeMessage03);
         // Constants validation types are:
-        console.log(msg.cWarningUserEnteredConstantsValidationDataTypeMessage02 + validConstantsValidationUserTypes.join(bas.cComa + bas.cSpace));
+        await loggers.consoleLog(wrd.cWarning, msg.cWarningUserEnteredConstantsValidationDataTypeMessage02 + validConstantsValidationUserTypes.join(bas.cComa + bas.cSpace));
       }
     } else {
       // User didn't enter any parameters at all....just run it all!
@@ -198,7 +198,7 @@ async function validateConstants(inputData, inputMetaData) {
       // Phase1 Constants Validation
       // BEGIN Phase 1 Constants Validation
       await loggers.consoleLog(namespacePrefix + functionName, msg.cBeginPhase1ConstantsValidation);
-      console.log(msg.cBeginPhase1ConstantsValidation);
+      await loggers.consoleLog(wrd.cInfo, msg.cBeginPhase1ConstantsValidation);
       // First scan through each file and validate that the constants defined in the constants code file are also contained in the validation file.
       for (let key1 in validationArray) {
         let constantsPath = validationArray[key1];
@@ -212,7 +212,7 @@ async function validateConstants(inputData, inputMetaData) {
       // Phase 2 Constants Validation
       // BEGIN Phase 2 Constants Validation
       await loggers.consoleLog(namespacePrefix + functionName, msg.cBeginPhase2ConstantsValidation);
-      console.log(msg.cBeginPhase2ConstantsValidation);
+      await loggers.consoleLog(wrd.cInfo, msg.cBeginPhase2ConstantsValidation);
       // Now verify that the values of the constants are what they are expected to be by using the constants validation data to validate.
       for (let key2 in validationArray) {
         phase2Results[key2] = await ruleBroker.processRules([key2, ''], [biz.cvalidateConstantsDataValues]);
@@ -275,7 +275,7 @@ async function validateConstants(inputData, inputMetaData) {
     } // End-if (validUserEntry)
   } else {
     // The enableConstantsValidation flag is disabled. Enable this flag in the configuration settings to activate this command.
-    console.log(msg.ccconstantsGeneratorMessage3 + msg.cconstantsGeneratorMessage4);
+    await loggers.consoleLog(wrd.cError, msg.cconstantsGeneratorMessage3 + msg.cconstantsGeneratorMessage4);
     await configurator.setConfigurationSetting(wrd.csystem, cfg.cpassAllConstantsValidation, false);
     returnData[1] = false;
   }
@@ -366,9 +366,9 @@ async function validateCommandAliases(inputData, inputMetaData) {
         // Just ignore it!
       } else {
         // WARNING: The specified validation type is not available, please enter a valid type and try again. Type not recognized:
-        console.log(msg.cWarningUserEnteredConstantsValidationDataTypeMessage01 + userEnteredValidationType);
+        await loggers.consoleLog(wrd.cWarning, msg.cWarningUserEnteredConstantsValidationDataTypeMessage01 + userEnteredValidationType);
         // Command Aliases validation types are:
-        console.log(msg.cWarningUserEnteredCommandAliasesValidationDataTypeMessage02 + validCommandAliasesValidationUserTypes.join(bas.cComa + bas.cSpace));
+        await loggers.consoleLog(wrd.cWarning, msg.cWarningUserEnteredCommandAliasesValidationDataTypeMessage02 + validCommandAliasesValidationUserTypes.join(bas.cComa + bas.cSpace));
       }
     } // End-for (let validationTypesKey in validationTypesInputArray)
 
@@ -380,9 +380,9 @@ async function validateCommandAliases(inputData, inputMetaData) {
       validUserEntry = true;
     } else {
       // WARNING: No valid command aliases validation types were entered.
-      console.log(msg.cWarningUserEnteredCommandAliasesValidationDataTypeMessage03);
+      await loggers.consoleLog(wrd.cWarning, msg.cWarningUserEnteredCommandAliasesValidationDataTypeMessage03);
       // Command Aliases validation types are:
-      console.log(msg.cWarningUserEnteredCommandAliasesValidationDataTypeMessage02 + validCommandAliasesValidationUserTypes.join(bas.cComa + bas.cSpace));
+      await loggers.consoleLog(wrd.cWarning, msg.cWarningUserEnteredCommandAliasesValidationDataTypeMessage02 + validCommandAliasesValidationUserTypes.join(bas.cComa + bas.cSpace));
     }
   } else {
     // User didn't enter any parameters at all....just run it all!
@@ -439,14 +439,14 @@ async function validateCommandAliases(inputData, inputMetaData) {
 
     // Now do the validation from the flattened array of command aliases data.
     // Begin command aliases validation
-    console.log(msg.cBeginCommandAliasesValidationMessage);
+    await loggers.consoleLog(wrd.cInfo, msg.cBeginCommandAliasesValidationMessage);
     for (let key1 in allCommandAliasesToValidate[0]) {
       // key1 is:
       await loggers.consoleLog(namespacePrefix + functionName, msg.ckey1Is + key1);
       let currentCommand = allCommandAliasesToValidate[0][key1];
       // currentCommand is:
       await loggers.consoleLog(namespacePrefix + functionName, msg.ccurrentCommandIs + JSON.stringify(currentCommand));
-      console.log(msg.ccurrentCommandIs + currentCommand[wrd.cName]);
+      await loggers.consoleLog(wrd.cInfo, msg.ccurrentCommandIs + currentCommand[wrd.cName]);
       let aliasList = currentCommand[wrd.cAliases];
       // aliasList is:
       await loggers.consoleLog(namespacePrefix + functionName, msg.caliasListIs + aliasList);
@@ -464,12 +464,12 @@ async function validateCommandAliases(inputData, inputMetaData) {
           let duplicateAliasCountMessage = msg.cduplicateAliasCountIs + duplicateAliasCount;
           duplicateAliasCountMessage = await colorizer.colorizeMessageSimple(duplicateAliasCountMessage, blackColorArray, true);
           duplicateAliasCountMessage = await colorizer.colorizeMessageSimple(duplicateAliasCountMessage, redColorArray, false);
-          console.log(duplicateAliasCountMessage);
+          await loggers.consoleLog(wrd.cInfo, duplicateAliasCountMessage);
           // duplicate command alias is:
           let duplicateAliasCommandMessage = msg.cduplicateCommandAliasIs + currentAlias;
           duplicateAliasCommandMessage = await colorizer.colorizeMessageSimple(duplicateAliasCommandMessage, blackColorArray, true);
           duplicateAliasCommandMessage = await colorizer.colorizeMessageSimple(duplicateAliasCommandMessage, redColorArray, false);
-          console.log(duplicateAliasCommandMessage);
+          await loggers.consoleLog(wrd.cInfo, duplicateAliasCommandMessage);
 
           passedAllCommandAliasesDuplicateCheck = false;
           returnData[1] = false;
@@ -481,7 +481,7 @@ async function validateCommandAliases(inputData, inputMetaData) {
     } // End-for (let key1 in allCommandAliasesToValidate[0])
     if (passedAllCommandAliasesDuplicateCheck === true) {
       // PASSED: All duplicate command aliases validation tests!
-      console.log(msg.cvalidateCommandAliasesMessage1);
+      await loggers.consoleLog(wrd.cInfo, msg.cvalidateCommandAliasesMessage1);
       returnData[1] = true;
     } // End-if (passedAllCommandAliasesDuplicateCheck === true)
   } else {
@@ -577,9 +577,9 @@ async function validateWorkflows(inputData, inputMetaData) {
         // Just ignore it!
       } else {
         // WARNING: The specified validation type is not available, please enter a valid type and try again. Type not recognized:
-        console.log(msg.cWarningUserEnteredConstantsValidationDataTypeMessage01 + userEnteredValidationType);
+        await loggers.consoleLog(wrd.cWarning, msg.cWarningUserEnteredConstantsValidationDataTypeMessage01 + userEnteredValidationType);
         // Workflows validation types are:
-        console.log(msg.cWarningUserEnteredWorkflowsValidationDataTypeMessage02 + validWorkflowsValidationUserTypes.join(bas.cComa + bas.cSpace));
+        await loggers.consoleLog(wrd.cWarning, msg.cWarningUserEnteredWorkflowsValidationDataTypeMessage02 + validWorkflowsValidationUserTypes.join(bas.cComa + bas.cSpace));
       }
     } // End-for (let validationTypesKey in validationTypesInputArray)
 
@@ -591,9 +591,9 @@ async function validateWorkflows(inputData, inputMetaData) {
       validUserEntry = true;
     } else {
       // WARNING: No valid workflow validation types were entered.
-      console.log(msg.cWarningUserEnteredWorkflowsValidationDataTypeMessage03);
+      await loggers.consoleLog(wrd.cWarning, msg.cWarningUserEnteredWorkflowsValidationDataTypeMessage03);
       // Workflows validation types are:
-      console.log(msg.cWarningUserEnteredWorkflowsValidationDataTypeMessage02 + validWorkflowsValidationUserTypes.join(bas.cComa + bas.cSpace));
+      await loggers.consoleLog(wrd.cWarning, msg.cWarningUserEnteredWorkflowsValidationDataTypeMessage02 + validWorkflowsValidationUserTypes.join(bas.cComa + bas.cSpace));
     }
   } else {
     // User didn't enter any parameters at all....just run it all!
@@ -629,13 +629,13 @@ async function validateWorkflows(inputData, inputMetaData) {
     // allWorkflowsToValidate is: 2
     await loggers.consoleLog(namespacePrefix + functionName, msg.callWorkflowsToValidate + num.c2 + bas.cSpace + JSON.stringify(allWorkflowsToValidate));
     // Begin workflows validation
-    console.log(msg.cBeginWorkflowsValidationMessage);
+    await loggers.consoleLog(wrd.cInfo, msg.cBeginWorkflowsValidationMessage);
     for (let workflowKey in allWorkflowsToValidate) {
       numberOfDuplicatesFound = 0;
       let workflowName = allWorkflowsToValidate[workflowKey];
       // workflowName is:
       await loggers.consoleLog(namespacePrefix + functionName, msg.cworkflowNameIs + workflowName);
-      console.log(msg.cworkflowNameIs + workflowName);
+      await loggers.consoleLog(wrd.cInfo, msg.cworkflowNameIs + workflowName);
       for (const element of allWorkflowsToValidate) {
         let secondTierWorkflowName = element;
         // secondTierWorkflowName is:
@@ -649,13 +649,13 @@ async function validateWorkflows(inputData, inputMetaData) {
         let duplicateWorkflowCountMessage = msg.cDuplicateWorkflowCountIs + numberOfDuplicatesFound;
         duplicateWorkflowCountMessage = await colorizer.colorizeMessageSimple(duplicateWorkflowCountMessage, blackColorArray, true);
         duplicateWorkflowCountMessage = await colorizer.colorizeMessageSimple(duplicateWorkflowCountMessage, redColorArray, false);
-        console.log(duplicateWorkflowCountMessage);
+        await loggers.consoleLog(wrd.cInfo, duplicateWorkflowCountMessage);
 
         // Duplicate workflow name is:
         let duplicateWorkflowMessage = msg.cDuplicateWorkflowNameIs + workflowName;
         duplicateWorkflowMessage = await colorizer.colorizeMessageSimple(duplicateWorkflowMessage, blackColorArray, true);
         duplicateWorkflowMessage = await colorizer.colorizeMessageSimple(duplicateWorkflowMessage, redColorArray, false);
-        console.log(duplicateWorkflowMessage);
+        await loggers.consoleLog(wrd.cInfo, duplicateWorkflowMessage);
 
         passedAllWorkflowDuplicateCheck = false;
         returnData[1] = false;
@@ -669,7 +669,7 @@ async function validateWorkflows(inputData, inputMetaData) {
 
   if (passedAllWorkflowDuplicateCheck === true) {
     // PASSED: All duplicate workflow validation tests!
-    console.log(msg.cvalidateWorkflowsMessage01);
+    await loggers.consoleLog(wrd.cInfo, msg.cvalidateWorkflowsMessage01);
     returnData[1] = true;
   } // End-if (passedAllWorkflowDuplicateCheck === true)
   await configurator.setConfigurationSetting(wrd.csystem, cfg.cpassedAllWorkflowDuplicateChecks, passedAllWorkflowDuplicateCheck);
@@ -754,9 +754,9 @@ async function runAllValidations(inputData, inputMetaData) {
         // Just ignore it
       } else {
         // WARNING: The specified validation type is not available, please enter a valid type and try again. Type not recognized:
-        console.log(msg.cWarningUserEnteredConstantsValidationDataTypeMessage01 + userEnteredValidationType);
+        await loggers.consoleLog(wrd.cWarning, msg.cWarningUserEnteredConstantsValidationDataTypeMessage01 + userEnteredValidationType);
         // Validation types are:
-        console.log(msg.cWarningUserEnteredValidationDateTypeMessage02 + validValidationUserTypes.join(bas.cComa + bas.cSpace));
+        await loggers.consoleLog(wrd.cWarning, msg.cWarningUserEnteredValidationDateTypeMessage02 + validValidationUserTypes.join(bas.cComa + bas.cSpace));
       }
     } // End-for (let validationTypesKey in validationTypesInputArray)
 
@@ -768,9 +768,9 @@ async function runAllValidations(inputData, inputMetaData) {
       validUserEntry = true;
     } else {
       // WARNING: No valid validation types were entered.
-      console.log(msg.cWarningUserEnteredValidationDataTypeMessage03);
-      // All validation types are:
-      console.log(msg.cWarningUserEnteredValidationDataTypeMessage02 + validValidationUserTypes.join(bas.cComa + bas.cSpace));
+      await loggers.consoleLog(wrd.cWarning, msg.cWarningUserEnteredValidationDataTypeMessage03);
+      // Validation types are:
+      await loggers.consoleLog(wrd.cWarning, msg.cWarningUserEnteredValidationDataTypeMessage02 + validValidationUserTypes.join(bas.cComa + bas.cSpace));
     }
   } else {
     // User didn't enter any parameters at all....just run it all!
@@ -779,7 +779,7 @@ async function runAllValidations(inputData, inputMetaData) {
     validUserEntry = true;
   }
 
-  // vaidationTypesConfirmedList is:
+  // validationTypesConfirmedList is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cvalidationTypesConfirmedListIs + validationTypesConfirmedList);
 
   if (validUserEntry === true) {
@@ -793,7 +793,7 @@ async function runAllValidations(inputData, inputMetaData) {
     }
     // Now add them to the front of the command queue in reverse order, so they will get executed next.
     // Running all validations
-    console.log(msg.cRunningAllValidationsMessage);
+    await loggers.consoleLog(wrd.cInfo, msg.cRunningAllValidationsMessage);
     await queue.enqueueFront(sys.cCommandQueue, workflowsValidationCommandToQueue);
     await queue.enqueueFront(sys.cCommandQueue, commandAliasesValidationCommandToQueue);
     await queue.enqueueFront(sys.cCommandQueue, constantsValidationCommandToQueue);

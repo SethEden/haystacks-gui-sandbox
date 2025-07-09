@@ -189,7 +189,7 @@ async function addWindowToWindowsOps(inputData, inputMetaData) {
     returnData = true;
   } else {
     // ERROR: Unable to store window object to windowsOps:
-    console.log(msg.cErrorUnableToStoreWindowObjectWindowsOps + inputData);
+    await loggers.consoleLog(wrd.cError, msg.cErrorUnableToStoreWindowObjectWindowsOps + inputData);
     await loggers.consoleLog(namespacePrefix + functionName, msg.cErrorUnableToStoreWindowObjectWindowsOps + inputData);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
@@ -347,7 +347,7 @@ async function createWindowRule(inputData, inputMetaData) {
         await attachWindowEventListeners(inputMetaData, win);
       } else {
         // ERROR: Cannot store the window object for operations:
-        console.log(msg.cErrorCannotStoreWindowObjectOperations + inputMetaData);
+        await loggers.consoleLog(wrd.cError, msg.cErrorCannotStoreWindowObjectOperations + inputMetaData);
         await loggers.consoleLog(namespacePrefix + functionName, msg.cErrorCannotStoreWindowObjectOperations + inputMetaData);
       }
   } // End-if (inputData && inputMetaData)

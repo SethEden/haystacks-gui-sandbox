@@ -68,7 +68,7 @@ async function languageToAlphabet(inputData, inputMetaData) {
     }
   } else {
     // Invalid input string, default to English alphabet
-    console.log(msg.cErrorInvalidInputString);
+    await loggers.consoleLog(wrd.cError, msg.cErrorInvalidInputString);
     await loggers.consoleLog(namespacePrefix + functionName, msg.cErrorInvalidInputString);
     returnData = await getEnglishAlphabet('', '');
   }

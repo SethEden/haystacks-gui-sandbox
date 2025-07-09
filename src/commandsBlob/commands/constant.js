@@ -42,78 +42,78 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.ccommandsBlob + bas.cDot
  * @date 2022/03/30
  */
 async function constantsGenerator(inputData, inputMetaData) {
-   let functionName = constantsGenerator.name;
-   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
-   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
-   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
-   let returnData = [true, []];
-   let errorMessage = '';
-   if (await configurator.getConfigurationSetting(wrd.csystem, cfg.cenableConstantsValidation) === true) {
-     let validEntry = false;
-     let userDefinedConstant = '';
-     let constantsFulfillmentSystemRule = [biz.cconstantsFulfillmentSystem];
-     let recombineArrayInputRule = [biz.crecombineStringArrayWithSpaces];
+  const functionName = constantsGenerator.name;
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
+  let returnData = [true, []];
+  let errorMessage = '';
+  if (await configurator.getConfigurationSetting(wrd.csystem, cfg.cenableConstantsValidation) === true) {
+    let validEntry = false;
+    let userDefinedConstant = '';
+    let constantsFulfillmentSystemRule = [biz.cconstantsFulfillmentSystem];
+    let recombineArrayInputRule = [biz.crecombineStringArrayWithSpaces];
 
-     if (inputData.length === 0) {
-       while (validEntry === false) {
-         console.log(msg.cConstantPrompt1);
-         console.log(msg.cConstantPrompt2);
-         console.log(msg.cConstantPrompt3);
-         userDefinedConstant = await ruleBroker.processRules([bas.cGreaterThan, ''], [biz.cprompt]);
-         validEntry = await ruleBroker.processRules([userDefinedConstant, ''], [biz.cisConstantValid]);
-         if (validEntry === false) {
-           // INVALID INPUT: Please enter a valid constant value that contains more than 4 characters.
-           console.log(msg.cconstantsGeneratorMessage1);
-         } // End-if (validEntry === false)
-       } // End-while (validEntry === false)
-     } else if (inputData.length === 2) {
-       userDefinedConstant = inputData[1];
-     } else {
-       // We need to recombine all of the array elements after the 0-th element into a single string with spaces in between.
-       userDefinedConstant = await ruleBroker.processRules([inputData, ''], [recombineArrayInputRule]);
-     }
-     // userDefinedConstant is:
-     await loggers.consoleLog(namespacePrefix + functionName, msg.cuserDefinedConstantIs + userDefinedConstant);
+    if (inputData.length === 0) {
+      while (validEntry === false) {
+        await loggers.consoleLog(wrd.cInfo, msg.cConstantPrompt1);
+        await loggers.consoleLog(wrd.cInfo, msg.cConstantPrompt2);
+        await loggers.consoleLog(wrd.cInfo, msg.cConstantPrompt3);
+        userDefinedConstant = await ruleBroker.processRules([bas.cGreaterThan, ''], [biz.cprompt]);
+        validEntry = await ruleBroker.processRules([userDefinedConstant, ''], [biz.cisConstantValid]);
+        if (validEntry === false) {
+          // INVALID INPUT: Please enter a valid constant value that contains more than 4 characters.
+          await loggers.consoleLog(wrd.cError, msg.cconstantsGeneratorMessage1);
+        } // End-if (validEntry === false)
+      } // End-while (validEntry === false)
+    } else if (inputData.length === 2) {
+      userDefinedConstant = inputData[1];
+    } else {
+      // We need to recombine all of the array elements after the 0-th element into a single string with spaces in between.
+      userDefinedConstant = await ruleBroker.processRules([inputData, ''], [recombineArrayInputRule]);
+    }
+    // userDefinedConstant is:
+    await loggers.consoleLog(namespacePrefix + functionName, msg.cuserDefinedConstantIs + userDefinedConstant);
 
-     // First lets check if the constant is already defined, so we can warn the user.
-     // NOTE: It could be that the developer is just looking to optimize the existing constant,
-     // but if not, a warning to the user would be a good idea!
-     let doesConstantExist = await ruleBroker.processRules([userDefinedConstant, ''], [biz.cdoesConstantExist]);
-     if (doesConstantExist === true) {
-       let constantType = await ruleBroker.processRules([userDefinedConstant, false], [biz.cgetConstantType]);
-       // WARNING: The constant has already been defined in the following library(ies):
-       console.log(msg.cconstantsGeneratorMessage2 + constantType);
-     } // End-if (doesConstantExist === true)
-     userDefinedConstant = userDefinedConstant.trim();
-     let wordCount = await ruleBroker.processRules([userDefinedConstant, ''], [biz.cgetWordCountInString]);
-     // wordCount is:
-     await loggers.consoleLog(namespacePrefix + functionName, msg.cwordCountIs + wordCount);
-     // Now begin the fulfillment algorithm.
-     if (wordCount > 1) {
-       let wordsArray = await ruleBroker.processRules([userDefinedConstant, ''], [biz.cgetWordsArrayFromString]);
-       for (const element of wordsArray) {
-         let optimizedWordConstantDefinition = await ruleBroker.processRules([element.trim(), element.trim()], [constantsFulfillmentSystemRule]);
-         // Optimized constant definition for word:
-         console.log(msg.cOptimizedConstantDefinitionForWord + bas.cc + element + bas.cSpace + bas.cEqual + bas.cSpace +
+    // First lets check if the constant is already defined, so we can warn the user.
+    // NOTE: It could be that the developer is just looking to optimize the existing constant,
+    // but if not, a warning to the user would be a good idea!
+    let doesConstantExist = await ruleBroker.processRules([userDefinedConstant, ''], [biz.cdoesConstantExist]);
+    if (doesConstantExist === true) {
+      let constantType = await ruleBroker.processRules([userDefinedConstant, false], [biz.cgetConstantType]);
+      // WARNING: The constant has already been defined in the following library(ies):
+      await loggers.consoleLog(wrd.cWarning, msg.cconstantsGeneratorMessage2 + constantType);
+    } // End-if (doesConstantExist === true)
+    userDefinedConstant = userDefinedConstant.trim();
+    let wordCount = await ruleBroker.processRules([userDefinedConstant, ''], [biz.cgetWordCountInString]);
+    // wordCount is:
+    await loggers.consoleLog(namespacePrefix + functionName, msg.cwordCountIs + wordCount);
+    // Now begin the fulfillment algorithm.
+    if (wordCount > 1) {
+      let wordsArray = await ruleBroker.processRules([userDefinedConstant, ''], [biz.cgetWordsArrayFromString]);
+      for (const element of wordsArray) {
+        let optimizedWordConstantDefinition = await ruleBroker.processRules([element.trim(), element.trim()], [constantsFulfillmentSystemRule]);
+        // Optimized constant definition for word:
+        await loggers.consoleLog(wrd.cInfo, msg.cOptimizedConstantDefinitionForWord + bas.cc + element + bas.cSpace + bas.cEqual + bas.cSpace +
           optimizedWordConstantDefinition);
-          returnData[1].push(optimizedWordConstantDefinition);
+        returnData[1].push(optimizedWordConstantDefinition);
        } // End-for (const element of wordsArray)
-     } else { // There is only a single word to process.
+    } else { // There is only a single word to process.
       returnData[1] = await ruleBroker.processRules([userDefinedConstant, userDefinedConstant], [constantsFulfillmentSystemRule])
       // output a proper line of code:
       // export const csomething = wrd.csome + wrd.cthing; // something
-      console.log(wrd.cexport + bas.cSpace + gen.cconst + bas.cSpace + bas.cc + userDefinedConstant + bas.cSpace + bas.cEqual + bas.cSpace +
-        returnData[1] + bas.cSemiColon + bas.cSpace + bas.cDoubleForwardSlash + bas.cSpace + userDefinedConstant);
-     }
-   } else {
-     // The enableConstantsValidation flag is disabled. Enable this flag in the configuration settings to activate this command.
-     errorMessage = msg.cconstantsGeneratorMessage3 + msg.cconstantsGeneratorMessage4;
-     console.log(errorMessage);
-     returnData[1] = errorMessage;
-   }
-   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
-   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
-   return returnData;
+      await loggers.consoleLog(wrd.cInfo, wrd.cexport + bas.cSpace + gen.cconst + bas.cSpace + bas.cc + userDefinedConstant + bas.cSpace + bas.cEqual + bas.cSpace +
+        returnData[1] + bas.cSemiColon + bas.cSpace + bas.cDoubleForwardSlash + bas.cSpace + userDefinedConstant)
+    }
+  } else {
+    // The enableConstantsValidation flag is disabled. Enable this flag in the configuration settings to activate this command.
+    errorMessage = msg.cconstantsGeneratorMessage3 + msg.cconstantsGeneratorMessage4;
+    await loggers.consoleLog(wrd.cInfo, errorMessage);
+    returnData[1] = errorMessage;
+  }
+  await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+  return returnData;
 }
 
 /**
@@ -141,14 +141,14 @@ async function constantsGeneratorList(inputData, inputMetaData) {
      let userDefinedConstantList = '';
      if (inputData.length === 0) {
        while (validEntry === false) {
-         console.log(msg.cConstantsListPrompt1);
-         console.log(msg.cConstantsListPrompt2);
-         console.log(msg.cConstantsListPrompt3);
+         await loggers.consoleLog(wrd.cInfo, msg.cConstantsListPrompt1);
+         await loggers.consoleLog(wrd.cInfo, msg.cConstantsListPrompt2);
+         await loggers.consoleLog(wrd.cInfo, msg.cConstantsListPrompt3);
          userDefinedConstantList = await ruleBroker.processRules([bas.cGreaterThan, ''], [biz.cprompt]);
          validEntry = await ruleBroker.processRules([userDefinedConstantList, ''], [biz.cisConstantValid]);
          if (validEntry === false) {
            // INVALID INPUT: Please enter a valid constant list.
-           console.log(msg.cconstantsGeneratorListMessage1);
+           await loggers.consoleLog(wrd.cError, msg.cconstantsGeneratorListMessage1);
          }
        } // End-while (validEntry === false)
      } else if (inputData.length === 2) {
@@ -197,7 +197,7 @@ async function constantsGeneratorList(inputData, inputMetaData) {
    } else {
      // The enableConstantsValidation flag is disabled. Enable this flag in the configuration settings to activate this command.
      errorMessage = msg.cconstantsGeneratorMessage3 + msg.cconstantsGeneratorMessage4;
-     console.log(errorMessage);
+     await loggers.consoleLog(wrd.cError, errorMessage);
      returnData[1] = errorMessage;
    }
    await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
@@ -230,14 +230,14 @@ async function constantsPatternRecognizer(inputData, inputMetaData) {
     let commonPatternsArray = [];
     if (inputData.length === 0) {
       while (validEntry === false) {
-        console.log(msg.cConstantsListPatternSearchPrompt1);
-        console.log(msg.cConstantsListPatternSearchPrompt2);
-        console.log(msg.cConstantsListPatternSearchPrompt3);
+        await loggers.consoleLog(wrd.cInfo, msg.cConstantsListPatternSearchPrompt1);
+        await loggers.consoleLog(wrd.cInfo, msg.cConstantsListPatternSearchPrompt2);
+        await loggers.consoleLog(wrd.cInfo, msg.cConstantsListPatternSearchPrompt3);
         userDefinedConstantList = await ruleBroker.processRules([bas.cGreaterThan, ''], [biz.cprompt]);
         validEntry = await ruleBroker.processRules([userDefinedConstantList, ''], [biz.cisConstantValid]);
         if (validEntry === false) {
           // INVALID INPUT: Please enter a valid constant list.
-          console.log(msg.cconstantsGeneratorListMessage1);
+          await loggers.consoleLog(wrd.cError, msg.cconstantsGeneratorListMessage1);
         } // End-if (validEntry === false)
       } // End-while (validEntry === false)
     } else if (inputData.length === 2) {
@@ -277,7 +277,7 @@ async function constantsPatternRecognizer(inputData, inputMetaData) {
   } else {
     // The enableConstantsValidation flag is disabled. Enable this flag in the configuration settings to activate this command.
     errorMessage = msg.cconstantsGeneratorMessage3 + msg.cconstantsGeneratorMessage4;
-    console.log(errorMessage);
+    await loggers.consoleLog(wrd.cError, errorMessage);
     returnData[1] = errorMessage;
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
@@ -307,17 +307,17 @@ async function evaluateConstant(inputData, inputMetaData) {
   if (inputData && inputData.length > 1) {
     if (await ruleBroker.processRules([inputData[1], ''], [biz.cdoesConstantExist]) === true) {
       returnData[1] = await ruleBroker.processRules([inputData[1], ''], [biz.cgetConstantActualValue]);
-      console.log(inputData[1] + bas.cSpace + bas.cEqual + bas.cSpace + returnData[1]);
+      await loggers.consoleLog(wrd.cInfo, inputData[1] + bas.cSpace + bas.cEqual + bas.cSpace + returnData[1]);
     } else {
       // The constant does not exist:
       errorMessage = msg.cTheConstantDoesNotExist + inputData[1];
-      console.log(errorMessage);
+      await loggers.consoleLog(wrd.cError, errorMessage);
       returnData[1] = errorMessage;
     }
   } else {
     // ERROR: No constant value entered, please enter a constant name to evaluate.
     errorMessage = msg.cevaluateConstantMessage01;
-    console.log(errorMessage);
+    await loggers.consoleLog(wrd.cError, errorMessage);
     returnData[1] = errorMessage;
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));

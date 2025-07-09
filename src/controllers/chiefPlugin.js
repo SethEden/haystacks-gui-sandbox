@@ -331,7 +331,7 @@ async function loadAllPluginsMetaData(pluginsPaths) {
   } else {
     // ERROR: No plugin paths provided, please provide paths and try again.
     let errorMessage = msg.cErrorLoadAllPluginsMetaDataMessage01;
-    console.log(errorMessage); // Make sure to output the error!
+    await loggers.consoleLog(wrd.cError, errorMessage); // Make sure to output the error!
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -378,7 +378,7 @@ async function loadAllPluginsExecutionPaths(pluginsMetaData, pluginsPaths) {
   } else {
     // ERROR: No plugin meta data was found. Please ensure the correct path is provided and try again.
     let errorMessage = msg.cErrorLoadAllPluginsExecutionPathsMessage01;
-    console.log(errorMessage); // Make sure to output the error!
+    await loggers.consoleLog(wrd.cError, errorMessage); // Make sure to output the error!
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -425,17 +425,17 @@ async function loadAllPlugins(pluginsExecutionPaths, pluginsMetaData) {
           if (pluginReturnedData) {
             returnData[pluginMetaData[wrd.cname]] = pluginReturnedData
             // loaded plugin:
-            console.log(msg.cloadedPlugin + pluginMetaData[wrd.cname]);
+            await loggers.consoleLog(wrd.cInfo, msg.cloadedPlugin + pluginMetaData[wrd.cname]);
           } else {
             // There was an error attempting to load the plugin:
-            console.log(msg.cErrorLoadingPlugin + pluginExecutionPath);
+            await loggers.consoleLog(wrd.cError, msg.cErrorLoadingPlugin + pluginExecutionPath);
           }
         } catch (err) {
           // Failed to load the plugin:
-          console.log(msg.cERROR_Colon + namespacePrefix + functionName + msg.cloadAllPluginsMessage01 + pluginMetaData[wrd.cname]);
+          await loggers.consoleLog(wrd.cError, msg.cERROR_Colon + namespacePrefix + functionName + msg.cloadAllPluginsMessage01 + pluginMetaData[wrd.cname]);
           // plugin entry point path:
-          console.log(msg.cloadAllPluginsMessage02 + pluginExecutionPath);
-          console.log(msg.cERROR_Colon + err);
+          await loggers.consoleLog(wrd.cError, msg.cloadAllPluginsMessage02 + pluginExecutionPath);
+          await loggers.consoleLog(wrd.cError, msg.cERROR_Colon + err);
           stack.push(sys.cpluginsLoaded, [pluginMetaData[wrd.cname], false]);
         }
         // Push to a stack that we have successfully loaded the currently named plugin,
@@ -443,16 +443,16 @@ async function loadAllPlugins(pluginsExecutionPaths, pluginsMetaData) {
         stack.push(sys.cpluginsLoaded, [pluginMetaData[wrd.cname], true]);
       } else {
         // Failed to load the plugin:
-        console.log(msg.cERROR_Colon + namespacePrefix + functionName + msg.cloadAllPluginsMessage01 + pluginMetaData[wrd.cname]);
+        await loggers.consoleLog(wrd.cError, msg.cERROR_Colon + namespacePrefix + functionName + msg.cloadAllPluginsMessage01 + pluginMetaData[wrd.cname]);
         // plugin entry point path:
-        console.log(msg.cloadAllPluginsMessage02 + pluginExecutionPath);
+        await loggers.consoleLog(wrd.cError, msg.cloadAllPluginsMessage02 + pluginExecutionPath);
         stack.push(sys.cpluginsLoaded, [pluginMetaData[wrd.cname], false]);
       }
       index = index + 1;
     } // End-for (let pluginExecutionPath in pluginsExecutionPaths)
   } else {
     // ERROR: No plugin execution paths or plugins metaData was specified:
-    console.log(msg.cloadAllPluginsMessage03 + namespacePrefix + functionName);
+    await loggers.consoleLog(wrd.cError, msg.cloadAllPluginsMessage03 + namespacePrefix + functionName);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -487,7 +487,7 @@ async function integrateAllPluginsData(allPluginsData) {
     } // End-for (const key in allPluginsData)
   } else {
     // ERROR: Invalid data input, unable to integrate all plugin data.
-    console.log(msg.cErrorIntegrateAllPluginsDataMessage01);
+    await loggers.consoleLog(wrd.cError, msg.cErrorIntegrateAllPluginsDataMessage01);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -524,56 +524,56 @@ async function integratePluginData(pluginName, pluginData) {
         businessRulesIntegrationResult = await pluginBroker.integratePluginBusinessRules(pluginName, pluginData[wrd.cdata][sys.cpluginBusinessRules]);
       } else {
         // ERROR: No plugin business rules data was loaded for the plugin:
-        console.log(msg.cErrorIntegratePluginDataMessage02 + pluginName);
+        await loggers.consoleLog(wrd.cError, msg.cErrorIntegratePluginDataMessage02 + pluginName);
       }
       if (pluginData[wrd.cdata][sys.cpluginCommands] !== undefined) {
         commandsIntegrationResult = await pluginBroker.integratePluginCommands(pluginName, pluginData[wrd.cdata][sys.cpluginCommands]);
       } else {
         // ERROR: No plugin commands data was loaded for the plugin:
-        console.log(msg.cErrorIntegratePluginDataMessage03 + pluginName);
+        await loggers.consoleLog(wrd.cError, msg.cErrorIntegratePluginDataMessage03 + pluginName);
       }
       if (pluginData[wrd.cdata][wrd.cconfiguration] !== undefined) {
         configurationDataIntegrationResult = await pluginBroker.integratePluginConfigurationData(pluginName, pluginData[wrd.cdata][wrd.cconfiguration]);
       } else {
         // ERROR: No plugin configuration data was loaded for the plugin:
-        console.log(msg.cErrorIntegratePluginDataMessage04 + pluginName);
+        await loggers.consoleLog(wrd.cError, msg.cErrorIntegratePluginDataMessage04 + pluginName);
       }
       if (pluginData[wrd.cdata][sys.cCommandsAliases] !== undefined) {
         commandAliasesIntegrationResult = await pluginBroker.integratePluginCommandAliases(pluginName, pluginData[wrd.cdata][sys.cCommandsAliases]);
       } else {
         // ERROR: No plugin command aliases data was loaded for the plugin:
-        console.log(msg.cErrorIntegratePluginDataMessage05 + pluginName);
+        await loggers.consoleLog(wrd.cError, msg.cErrorIntegratePluginDataMessage05 + pluginName);
       }
       if (pluginData[wrd.cdata][sys.cCommandWorkflows] !== undefined) {
         workflowsIntegrationResult = await pluginBroker.integratePluginWorkflows(pluginName, pluginData[wrd.cdata][sys.cCommandWorkflows]);
       } else {
         // ERROR: No plugin workflows data was loaded for the plugin:
-        console.log(msg.cErrorIntegratePluginDataMessage06 + pluginName);
+        await loggers.consoleLog(wrd.cError, msg.cErrorIntegratePluginDataMessage06 + pluginName);
       }
       if (pluginData[wrd.cdata][sys.cpluginConstantsValidationData] !== undefined) {
         constantsValidationDataIntegrationResult = await chiefConstant.addConstantsValidationData(pluginData[wrd.cdata][sys.cpluginConstantsValidationData],
           wrd.cPlugin + bas.cColon + pluginName);
       } else {
         // ERROR: No plugin constants validation data was loaded for the plugin:
-        console.log(msg.cErrorIntegratePluginDataMessage07 + pluginName);
+        await loggers.consoleLog(wrd.cError, msg.cErrorIntegratePluginDataMessage07 + pluginName);
       }
       if (pluginData[wrd.cdata][wrd.cThemes] !== undefined) {
         themeDataIntegrationResult = await chiefTheme.addThemeData(pluginData[wrd.cdata][wrd.cThemes], wrd.cPlugin + bas.cColon + pluginName);
       } else {
         // ERROR: No plugin themes data was loaded for the plugin:
-        console.log(msg.cErrorIntegratePluginDataMessage08 + pluginName);
+        await loggers.consoleLog(wrd.cError, msg.cErrorIntegratePluginDataMessage08 + pluginName);
       }
     } else {
       // ERROR: No plugin data was loaded at all for the plugin:
-      console.log(msg.cErrorIntegratePluginDataMessage09 + pluginName);
+      await loggers.consoleLog(wrd.cError, msg.cErrorIntegratePluginDataMessage09 + pluginName);
     }
   } else {
     // ERROR: Invalid input, either the plugin name or plugin data was undefined. Please provide valid data and try again.
-    console.log(msg.cErrorIntegratePluginDataMessage01);
+    await loggers.consoleLog(wrd.cError, msg.cErrorIntegratePluginDataMessage01);
     // pluginName is:
-    console.log(msg.cpluginNameIs + pluginName);
+    await loggers.consoleLog(wrd.cError, msg.cpluginNameIs + pluginName);
     // pluginData is:
-    console.log(msg.cpluginDataIs + JSON.stringify(pluginData));
+    await loggers.consoleLog(wrd.cError, msg.cpluginDataIs + JSON.stringify(pluginData));
   }
   if (businessRulesIntegrationResult === true &&
     commandsIntegrationResult === true &&

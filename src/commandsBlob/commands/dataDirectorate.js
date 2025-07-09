@@ -74,7 +74,7 @@ async function printDataHive(inputData, inputMetaData) {
       // END i-th iteration:
       await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_ithIteration + i);
     } // End-for (let i = 0; i < dataHivePathArray.length; i++)
-    console.log(inputData[1] + bas.cSpace + msg.ccontentsAre + JSON.stringify(leafDataHiveElement));
+    await loggers.consoleLog(wrd.cInfo, inputData[1] + bas.cSpace + msg.ccontentsAre + JSON.stringify(leafDataHiveElement));
     if (printDataHiveToLogFileConfigSetting === true) {
       await loggers.printMessageToFile(logFilePathAndName, inputData[1] + bas.cSpace + msg.ccontentsAre + JSON.stringify(leafDataHiveElement));
     }
@@ -82,14 +82,14 @@ async function printDataHive(inputData, inputMetaData) {
   } else {
     if (D[inputData[1]] !== undefined) {
       // contents are:
-      console.log(inputData[1] + bas.cSpace + msg.ccontentsAre + JSON.stringify(D[inputData[1]]));
+      await loggers.consoleLog(wrd.cInfo, inputData[1] + bas.cSpace + msg.ccontentsAre + JSON.stringify(D[inputData[1]]));
       if (printDataHiveToLogFileConfigSetting === true) {
         await loggers.printMessageToFile(logFilePathAndName, inputData[1] + bas.cSpace + msg.ccontentsAre + JSON.stringify(D[inputData[1]]));
       }
       returnData[1] = D[inputData[1]];
     } else {
       // contents of D are:
-      console.log(msg.ccontentsOfDare + JSON.stringify(D));
+      await loggers.consoleLog(wrd.cInfo, msg.ccontentsOfDare + JSON.stringify(D));
       if (printDataHiveToLogFileConfigSetting === true) {
         await loggers.printMessageToFile(logFilePathAndName, msg.ccontentsOfDare + JSON.stringify(D));
       }
@@ -150,11 +150,11 @@ async function printDataHiveAttributes(inputData, inputMetaData) {
           if (dataEntry) {
             if (attributeName.toLowerCase() === wrd.centity) {
               // entity is:
-              console.log(msg.centryIs + JSON.stringify(dataEntry));
+              await loggers.consoleLog(wrd.cInfo, msg.centryIs + JSON.stringify(dataEntry));
             } else {
               if (dataEntry[attributeName]) {
                 // attributeValue is:
-                console.log(msg.cattributeValueIs + dataEntry[attributeName]);
+                await loggers.consoleLog(wrd.cInfo, msg.cattributeValueIs + dataEntry[attributeName]);
                 returnData[1].push(dataEntry[attributeName]);
               } // End-if (dataEntry[attributeName])
             }
@@ -162,18 +162,18 @@ async function printDataHiveAttributes(inputData, inputMetaData) {
         } // End-for (const element of leafDataHiveElement)
       } else {
         let leafDataHiveElementKeys2 = Object.keys(leafDataHiveElement);
-        leafDataHiveElementKeys2.forEach((key2) => {
+        leafDataHiveElementKeys2.forEach(async (key2) => {
           if (attributeName.toLowerCase() === wrd.ckey) {
             // key2 is:
-            console.log(msg.ckey2Is + key2);
+            await loggers.consoleLog(wrd.cInfo, msg.ckey2Is + key2);
           } else if (attributeName.toLowerCase() === wrd.centity) {
             // entity is:
-            console.log(msg.centityIs + JSON.stringify(leafDataHiveElement[key2]));
+            await loggers.consoleLog(wrd.cInfo, msg.centityIs + JSON.stringify(leafDataHiveElement[key2]));
           } else {
             let dataEntry2 = leafDataHiveElement[key2];
             if (dataEntry2) {
               // attributeValue is:
-              console.log(msg.cattributeValueIs + dataEntry2[attributeName]);
+              await loggers.consoleLog(wrd.cInfo, msg.cattributeValueIs + dataEntry2[attributeName]);
               returnData[1].push(dataEntry2[attributeName]);
             } // End-if (dataEntry2)
           }
@@ -183,13 +183,13 @@ async function printDataHiveAttributes(inputData, inputMetaData) {
       // This is the case that the user has probably just specified a single data hive
       // that might not have specific attribute names such as the configuration data.
       errorMessage = msg.cprintDataHiveAttributesMessage1 + msg.cprintDataHiveAttributesMessage2;
-      console.log(errorMessage);
+      await loggers.consoleLog(wrd.cError, errorMessage);
       returnData[1] = errorMessage;
     }
   } else { // End-if (inputData && inputData.length > 1)
     // ERROR: Please enter a valid name.space.attributeName for the system to print out attribute data from.
     errorMessage = msg.cprintDataHiveAttributesMessage3;
-    console.log(errorMessage);
+    await loggers.consoleLog(wrd.cError, errorMessage);
     returnData[1] = errorMessage;
   } // End-else condition if (inputData && inputData.length > 1)
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
@@ -275,12 +275,12 @@ async function changeSetting(inputData, inputMetaData) {
   } else {
     // ERROR: changeSetting command, invalid entry:
     errorMessage = msg.cchangeSettingError01 + JSON.stringify(inputData);
-    console.log(errorMessage);
+    await loggers.consoleLog(wrd.cError, errorMessage);
     returnData[1] = errorMessage;
     // Please enter a fully qualified path to a data property in the system,
-    console.log(msg.cchangeSettingError02);
+    await loggers.consoleLog(wrd.cError, msg.cchangeSettingError02);
     // and a value that you would like to assign to that data property.
-    console.log(msg.cchangeSettingError03);
+    await loggers.consoleLog(wrd.cError, msg.cchangeSettingError03);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);

@@ -102,10 +102,10 @@ async function changeConfigurationSetting(inputData, inputMetaData) {
     // ERROR: Invalid entry, please enter a valid configuration namespace to change,
     // and a value to assign to the configuration setting.
     errorMessage = msg.cchangeConfigurationSettingMessage01 + msg.cchangeConfigurationSettingMessage02;
-    console.log(errorMessage);
+    await loggers.consoleLog(wrd.cError, errorMessage);
     returnData[1] = errorMessage;
     // EXAMPLE: changeConfigurationSetting debugSetting.businessRules.rules.arrayParsing.commandArrayParsing.solveLehmerCode true
-    console.log(msg.cchangeConfigurationSettingMessage03);
+    await loggers.consoleLog(wrd.cError, msg.cchangeConfigurationSettingMessage03);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -134,7 +134,7 @@ async function listConfigurationThemes(inputData, inputMetaData) {
   await loggers.consoleLog(namespacePrefix + functionName, msg.cframeworkThemesPathIs + frameworkThemesPath);
   let themesList = await themeBroker.getNamedThemesFromRootPath(frameworkThemesPath);
   // themesList is:
-  console.log(msg.cthemesListIs + JSON.stringify(themesList));
+  await loggers.consoleLog(wrd.cInfo, msg.cthemesListIs + JSON.stringify(themesList));
   returnData[1] = themesList;
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -181,25 +181,25 @@ async function changeDebugConfigurationTheme(inputData, inputMetaData) {
       if (themeLoadedSuccessfully === false) {
         // ERROR: There was an error applying the selected theme to the active debug settings configuration.
         errorMessage = msg.cchangeDebugConfigurationThemeMessage01;
-        console.log(errorMessage);
+        await loggers.consoleLog(wrd.cError, errorMessage);
         returnData[1] = errorMessage;
       } // End-if (themeLoadedSuccessfully === false)
     } else {
       // ERROR: The specified theme name was not found in the current list of supported themes.
       errorMessage = msg.cchangeDebugConfigurationThemeMessage02;
-      console.log(errorMessage);
+      await loggers.consoleLog(wrd.cError, errorMessage);
       returnData[1] = errorMessage;
       // You can find the available themes at the following path location:
-      console.log(msg.cchangeDebugConfigurationThemeMessage03 +
+      await loggers.consoleLog(wrd.cError, msg.cchangeDebugConfigurationThemeMessage03 +
         await configurator.getConfigurationSetting(wrd.csystem, cfg.cframeworkThemesPath));
     }
   } else {
     // ERROR: Invalid entry, please enter a theme name you would like the debug settings to switch to when logging debug statements.
     errorMessage = msg.cchangeDebugConfigurationThemeMessage04
-    console.log(errorMessage);
+    await loggers.consoleLog(wrd.cError, errorMessage);
     returnData[1] = errorMessage;
     // EXAMPLE: changeDebugConfigurationTheme Skywalker
-    console.log(msg.cchangeDebugConfigurationThemeMessage05);
+    await loggers.consoleLog(wrd.cError, msg.cchangeDebugConfigurationThemeMessage05);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);

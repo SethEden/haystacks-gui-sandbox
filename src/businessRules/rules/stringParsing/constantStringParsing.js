@@ -50,7 +50,7 @@ async function validateConstantsDataValidation(inputData, inputMetaData) {
   let processed = false;
   if (inputData && inputMetaData) {
     // Scanning constants phase 1 validation data for file:
-    console.log(msg.cScanningConstantsValidationPhase1Message + inputData);
+    await loggers.consoleLog(wrd.cInfo, msg.cScanningConstantsValidationPhase1Message + inputData);
     let inputFilePath = path.resolve(inputData);
     const fileContents = await ruleParsing.processRulesInternal([inputFilePath, ''], [biz.cloadAsciiFileFromPath]);
     // fileContents are:
@@ -87,7 +87,7 @@ async function validateConstantsDataValidation(inputData, inputMetaData) {
                 passMessage = chalk.rgb(0,0,0)(passMessage);
                 passMessage = chalk.bgRgb(0,255,0)(passMessage);
               } // End-if (colorizeLogsEnabled === true)
-              console.log(qualifiedConstantsFilename + bas.cColon + bas.cSpace + passMessage);
+              await loggers.consoleLog(wrd.cInfo, qualifiedConstantsFilename + bas.cColon + bas.cSpace + passMessage);
             } // End-if (await configurator.getConfigurationSetting(wrd.csystem, cfg.cdisplayIndividualConstantsValidationPassMessages) === true)
           } else { // Else-clause if (foundConstant === true)
             if (await configurator.getConfigurationSetting(wrd.csystem, cfg.cdisplayIndividualCosntantsValidationFailMessages) === true) {
@@ -102,14 +102,14 @@ async function validateConstantsDataValidation(inputData, inputMetaData) {
                 let pluginConstantNamespaceArray = inputMetaData.split(bas.cColon);
                 pluginName = pluginConstantNamespaceArray[0] + bas.cColon;
               }
-              console.log(pluginName + qualifiedConstantsFilename + bas.cColon + bas.cSpace + failMessage);
+              await loggers.consoleLog(wrd.cInfo, pluginName + qualifiedConstantsFilename + bas.cColon + bas.cSpace + failMessage);
               let suggestedLineOfCode = await determineSuggestedConstantsValidationLineOfCode(lineArray[2], qualifiedConstantsPrefix);
               if (suggestedLineOfCode !== '') {
                 if (colorizeLogsEnabled === true) {
                   suggestedLineOfCode = chalk.rgb(0,0,0)(suggestedLineOfCode);
                   suggestedLineOfCode = chalk.bgRgb(255,0,0)(suggestedLineOfCode);
                 } // End-if (colorizeLogsEnabled === true)
-                console.log(msg.cSuggestedLineOfCodeIs + suggestedLineOfCode);
+                await loggers.consoleLog(wrd.cInfo, msg.cSuggestedLineOfCodeIs + suggestedLineOfCode);
               } // End-if (suggestedLineOfCode !== '')
             } // End-if (await configurator.getConfigurationSetting(wrd.csystem, cfg.cdisplayIndividualCosntantsValidationFailMessages) === true)
             foundAFailure = true;
@@ -118,7 +118,7 @@ async function validateConstantsDataValidation(inputData, inputMetaData) {
       } else {
         // ERROR: line is null or undefined:
         // file is:
-        console.log(msg.cErrorLineIsNullOrUndefined + lineKey + msg.cSpaceFileIs + inputData);
+        await loggers.consoleLog(wrd.cError, msg.cErrorLineIsNullOrUndefined + lineKey + msg.cSpaceFileIs + inputData);
       }
       // END processing a line
       await loggers.consoleLog(namespacePrefix + functionName, msg.cEndProcessingLine);
@@ -202,7 +202,7 @@ async function determineSuggestedConstantsValidationLineOfCode(inputData, inputM
       // 'ERROR: Attempted to generate a suggested line of code to validate the constant, ' +
       // 'but the constant is not formatted correctly, it should begin with a lower case "c". ' +
       // 'Please reformat the constant correctly so a line of code can be generated for you.'
-      console.log(msg.cDetermineSuggestedConstantsValidationLineOfCodeErrorMessage1 +
+      await loggers.consoleLog(wrd.cError, msg.cDetermineSuggestedConstantsValidationLineOfCodeErrorMessage1 +
         msg.cDetermineSuggestedConstantsValidationLineOfCodeErrorMessage2 +
         msg.cDetermineSuggestedConstantsValidationLineOfCodeErrorMessage3 +
         msg.cDetermineSuggestedConstantsValidationLineOfCodeErrorMessage4 +
@@ -251,7 +251,7 @@ async function validateConstantsDataValidationLineItemName(inputData, inputMetaD
       } // End-for (const element of constantNamespaceObject)
     } else {
       // ERROR: Unable to find the constant namespace among all the constants validation data:
-      console.log(msg.cvalidateConstantsDataValidationLineItemNameErrorMessage1 + inputData);
+      await loggers.consoleLog(wrd.cError, msg.cvalidateConstantsDataValidationLineItemNameErrorMessage1 + inputData);
     }
   } // End-if (inputData && inputMetaData)
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
@@ -1095,7 +1095,7 @@ async function validateConstantsDataValues(inputData, inputMetaData) {
   if (inputData) {
     let colorizeLogsEnabled = await configurator.getConfigurationSetting(wrd.csystem, cfg.cenableColorizedConsoleLogs);
     // Scanning constants phase 2 validation data for:
-    console.log(msg.cScanningConstantsValidationPhase2Message + inputData);
+    await loggers.consoleLog(wrd.cInfo, msg.cScanningConstantsValidationPhase2Message + inputData);
     let constantNamespaceObject = await getConstantsValidationNamespaceObject(inputData, '');
     // constantNamespaceObject is:
     await loggers.consoleLog(namespacePrefix + functionName, msg.cconstantNamespaceObjectIs + JSON.stringify(constantNamespaceObject));
@@ -1115,7 +1115,7 @@ async function validateConstantsDataValues(inputData, inputMetaData) {
               passMessage = chalk.rgb(0,0,0)(passMessage);
               passMessage = chalk.bgRgb(0,255,0)(passMessage);
             } // End-if (colorizeLogsEnabled === true)
-            console.log(passMessage);
+            await loggers.consoleLog(wrd.cInfo, passMessage);
           } // End-if (configurator.getConfigurationSetting(wrd.csystem, cfg.cdisplayIndividualConstantsValidationPassMessages) === true)
         } else {
           // FAIL
@@ -1129,7 +1129,7 @@ async function validateConstantsDataValues(inputData, inputMetaData) {
               passMessage = chalk.rgb(0,0,0)(passMessage);
               passMessage = chalk.bgRgb(255,0,0)(passMessage);
             } // End-if (colorizeLogsEnabled === true)
-            console.log(passMessage);
+            await loggers.consoleLog(wrd.cInfo, passMessage);
           } // End-if (configurator.getConfigurationSetting(wrd.csystem, cfg.cdisplayIndividualConstantsValidationFailMessages) === true)
         }
       } else { // Else-clause if (validationLineItem)
@@ -1140,7 +1140,7 @@ async function validateConstantsDataValues(inputData, inputMetaData) {
           passMessage = chalk.rgb(0,0,0)(passMessage);
           passMessage = chalk.bgRgb(255,0,0)(passMessage);
         } // End-if (colorizeLogsEnabled === true)
-        console.log(passMessage);
+        await loggers.consoleLog(wrd.cInfo, passMessage);
       } // End else-clause if (validationLineItem)
     } // End-for (const element of D[sys.cConstantsValidationData][inputData])
   } // End-if (inputData)

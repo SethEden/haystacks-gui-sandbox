@@ -55,12 +55,12 @@ async function echoCommand(inputData, inputMetaData) {
   let errorMessage = '';
   if (inputData) {
     inputData.shift();
-    console.log(inputData.join(bas.cSpace));
+    await loggers.consoleLog(wrd.cInfo, inputData.join(bas.cSpace));
     returnData[1] = inputData.join(bas.cSpace);
   } else {
     // Nothing to echo.
     errorMessage = msg.cNothingToEcho;
-    console.log(errorMessage);
+    await loggers.consoleLog(wrd.cError, errorMessage);
     returnData[1] = errorMessage;
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
@@ -124,7 +124,7 @@ async function version(inputData, inputMetaData) {
   } else {
     configVersion = await configurator.getConfigurationSetting(wrd.csystem, sys.cApplicationVersionNumber);
   }
-  console.log(configVersion);
+  await loggers.consoleLog(wrd.cInfo, configVersion);
   returnData[1] = configVersion;
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -165,7 +165,7 @@ async function about(inputData, inputMetaData) {
   } else {
     configDescription = await configurator.getConfigurationSetting(wrd.csystem, sys.cApplicationDescription);
   }
-  console.log(configDescription);
+  await loggers.consoleLog(wrd.cInfo, configDescription);
   returnData[1] = configDescription;
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -220,9 +220,9 @@ async function name(inputData, inputMetaData) {
   }
   if (useFancyFont === true) {
     figletFont = await configurator.getConfigurationSetting(wrd.csystem, cfg.cfigletFont);
-    console.log(figlet.textSync(reportedName, {font: figletFont, horizontalLayout: wrd.cfull}));
+    await loggers.consoleLog(wrd.cInfo, figlet.textSync(reportedName, {font: figletFont, horizontalLayout: wrd.cfull}));
   } else {
-    console.log(reportedName);
+    await loggers.consoleLog(wrd.cInfo, reportedName);
   }
   returnData[1] = reportedName;
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
@@ -405,7 +405,7 @@ async function help(inputData, inputMetaData) {
             // ERROR: The command namespace was not found.
             // Please make sure you have entered the correct name and try again.
             errorMessage = msg.chelpCommandMessage01 + bas.cSpace + msg.chelpCommandMessage02;
-            console.log(errorMessage);
+            await loggers.consoleLog(wrd.cError, errorMessage);
           } else {
             // NOW call getAllCommandAliasData with the above found data!
             await loggers.consoleLog(namespacePrefix + functionName, msg.chelpCommandMessage03);
@@ -587,7 +587,7 @@ async function workflowHelp(inputData, inputMetaData) {
             // ERROR: The workflow namespace was not found.
             // Please make sure you have entered the correct name and try again.
             errorMessage = msg.cworkflowHelpCommandMessage01 + bas.cSpace + msg.chelpCommandMessage02;
-            console.log(errorMessage);
+            await loggers.consoleLog(wrd.cError, errorMessage);
           } else {
             // NOW call getAllWorkflows with the above found data!
             await loggers.consoleLog(namespacePrefix + functionName, msg.cworkfowHelpMessage03);
@@ -639,7 +639,7 @@ async function printCommands(inputData, inputMetaData) {
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
   let returnData = [true, []];
-  console.log(msg.ccommandsAre, D[wrd.cCommands]);
+  await loggers.consoleLog(wrd.cInfo, msg.ccommandsAre, D[wrd.cCommands]);
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
   return returnData;
@@ -661,7 +661,7 @@ async function printBusinessRules(inputData, inputMetaData) {
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
   let returnData = [true, []];
-  console.log(msg.cbusinessRulesAre, D[sys.cbusinessRules]);
+  await loggers.consoleLog(wrd.cInfo, msg.cbusinessRulesAre, D[sys.cbusinessRules]);
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
   return returnData;
@@ -688,16 +688,16 @@ async function printUserCommandsLog(inputData, inputMetaData) {
       let userEnteredCommandLogArray = await stack.getStackContents(sys.cUserEnteredCommandLog);
       let userEnteredCommandLog = userEnteredCommandLogArray.join(bas.cComa + bas.cNewLine + bas.cCarriageReturn);
       returnData[1] = userEnteredCommandLog;
-      console.log(userEnteredCommandLog);
+      await loggers.consoleLog(wrd.cInfo, userEnteredCommandLog);
     } else {
       // User commands log is empty.
-      console.log(msg.cUserCommandsLogIsEmpty);
+      await loggers.consoleLog(wrd.cInfo, msg.cUserCommandsLogIsEmpty);
       returnData[1] = '';
     }
   } else {
     // NOTE: The user entered command log setting is not enabled.
     // Change the setting logUserEnteredCommands to enable user entered command log data to be captured for printing.
-    console.log(msg.cprintUserCommandLogMessage01 + bas.cSpace + msg.cprintUserCommandLogMessage02);
+    await loggers.consoleLog(wrd.cInfo, msg.cprintUserCommandLogMessage01 + bas.cSpace + msg.cprintUserCommandLogMessage02);
     returnData[1] = false;
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
@@ -726,16 +726,16 @@ async function printAllCommandsLog(inputData, inputMetaData) {
       let allCommandsLogArray = await stack.getStackContents(sys.cSystemCommandLog);
       let allCommandsLog = allCommandsLogArray.join(bas.cComa + bas.cNewLine + bas.cCarriageReturn);
       returnData[1] = allCommandsLog;
-      console.log(allCommandsLog);
+      await loggers.consoleLog(wrd.cInfo, allCommandsLog);
     } else {
       // All commands log is empty.
-      console.log(msg.cAllCommandsLogIsEmpty);
+      await loggers.consoleLog(wrd.cInfo, msg.cAllCommandsLogIsEmpty);
       returnData[1] = '';
     }
   } else {
     // NOTE: The command log setting is not enabled.
     // Change the setting logAllCommands to enable command log data to be captured for printing.
-    console.log(msg.cprintAllCommandLogMessage01 + bas.cSpace + msg.cprintAllCommandLogMessage02);
+    await loggers.consoleLog(wrd.cInfo, msg.cprintAllCommandLogMessage01 + bas.cSpace + msg.cprintAllCommandLogMessage02);
     returnData[1] = false;
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
@@ -764,12 +764,12 @@ async function clearUserCommandsLog(inputData, inputMetaData) {
       returnData[1] = await stack.clearStack(sys.cUserEnteredCommandLog);
     } else {
       // NOTE: User commands log clearing setting is not enabled.
-      console.log(msg.cclearUserCommandsLogMessage01);
+      await loggers.consoleLog(wrd.cInfo, msg.cclearUserCommandsLogMessage01);
       returnData[1] = false;
     }
   } else {
     // NOTE: The user entered command log setting is not enabled.
-    console.log(msg.cprintUserCommandLogMessage01);
+    await loggers.consoleLog(wrd.cInfo, msg.cprintUserCommandLogMessage01);
     returnData[1] = false;
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
@@ -798,12 +798,12 @@ async function clearAllCommandsLog(inputData, inputMetaData) {
       returnData[1] = await stack.clearStack(sys.cSystemCommandLog);
     } else {
       // NOTE: All commands log clearing setting is not enabled.
-      console.log(msg.cclearAllCommandsLogMessage01);
+      await loggers.consoleLog(wrd.cInfo, msg.cclearAllCommandsLogMessage01);
       returnData[1] = false;
     }
   } else {
     // NOTE: The command log setting is not enabled.
-    console.log(msg.cprintAllCommandLogMessage01);
+    await loggers.consoleLog(wrd.cInfo, msg.cprintAllCommandLogMessage01);
     returnData[1] = false;
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));

@@ -733,7 +733,7 @@ async function storeSchemaData(schemaDataObject) {
     returnData = true; // Success storing schemas
   } else {
     // ERROR: Invalid schemaDataObject: Missing schemas key
-    console.log(msg.cErrorInvalidSchemaDataObjectMissingSchemasKey);
+    await loggers.consoleLog(wrd.cError, msg.cErrorInvalidSchemaDataObjectMissingSchemasKey);
     await loggers.consoleLog(namespacePrefix + functionName, msg.cErrorInvalidSchemaDataObjectMissingSchemasKey);
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
@@ -762,7 +762,7 @@ async function getSchema(schemaName) {
         returnData = D[wrd.cSchemas][schemaName];
       } catch (err) {
         // ERROR: Invalid schema name. Schema does not exist: 
-        console.log(msg.cErrorGetSchemaMessage01 + schemaName);
+        await loggers.consoleLog(wrd.cError, msg.cErrorGetSchemaMessage01 + schemaName);
         returnData = false;
       }
     } else {
@@ -1183,18 +1183,18 @@ async function removePluginConfigurationData(pluginName) {
       returnData = true;
     } catch (err) {
       // ERROR: Unable to remove the plugin configuration data for the specified plugin:
-      console.log(msg.cremovePluginConfigurationDataMessage01 + pluginName);
+      await loggers.consoleLog(wrd.cError, msg.cremovePluginConfigurationDataMessage01 + pluginName);
       // ERROR:
-      console.log(msg.cerrorMessage + err.message);
+      await loggers.consoleLog(wrd.cError, msg.cerrorMessage + err.message);
     }
   } else {
     if (!allPluginsConfigurationData) {
       // ERROR: Unable to locate the plugins configuration data. Plugin:
-      console.log(msg.cremovePluginConfigurationDataMessage02 + pluginName);
+      await loggers.consoleLog(wrd.cError, msg.cremovePluginConfigurationDataMessage02 + pluginName);
     }
     if (!allPluginsDebugSettings) {
       // ERROR: Unable to locate the plugins configuration debug settings data. Plugin:
-      console.log(msg.cremovePluginConfigurationDataMessage03 + pluginName);
+      await loggers.consoleLog(wrd.cError, msg.cremovePluginConfigurationDataMessage03 + pluginName);
     }
   }
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
