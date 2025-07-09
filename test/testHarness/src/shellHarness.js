@@ -6,6 +6,8 @@
  * All messages are pipes back to the main process using an inter-process communication channel - IPC.
  * This code is designed to be executed from a secondary spawned child process.
  * This is a DUMB TERMINAL ONLY!!
+ * @requires module:application.constants
+ * @requires module:application.message.constants
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
  * @requires {@link https://nodejs.org/api/net.html|net}
  * @requires {@link https://nodejs.org/api/readline.html|readline}
@@ -16,7 +18,8 @@
  */
 
 // Internal imports
-
+import * as apc from '../../testHarness/src/constants/application.constants.js';
+import * as app_msg from '../../testHarness/src/constants/application.message.constants.js';
 // External imports
 import hayConst from '@haystacks/constants';
 import net from 'net';
@@ -78,7 +81,8 @@ function createSocketClient() {
 
   // Prompt when connected
   socket.on(wrd.cconnect, () => {
-    console.log('[shellHarness] Connected to Haystacks GUI server. Type commands below:');
+    // Connected to Haystacks GUI server. Type commands below:
+    console.log(apc.cshellHarnessLabel + app_msg.cconnectedToHastacksGuiServerCommandsBelow);
     r1.prompt();
   });
 
@@ -121,7 +125,7 @@ function createSocketClient() {
           process.stdout.write(bas.cOpenBracket + wrd.cLOG + bas.cCloseBracket + bas.cSpace + inEventMsg[wrd.clog] + bas.cCarRetNewLin);
         } else {
           // WARNING: We have no idea what kind of object we are dealing with!
-          console.log('WARNING: We have no idea what kind of object we are dealing with!');
+          console.log(app_msg.cWarningUnknownMessageType);
         }
       } else if (typeof eventMsg === wrd.cstring) {
         // console.log('eventMsg is a string.');
@@ -133,11 +137,13 @@ function createSocketClient() {
 
   // Handle disconnects and errors
   socket.on(wrd.cclose, () => {
-    console.log('[shellHarness] Disconnected from server.');
+    // Disconnected from server.
+    console.log(apc.cshellHarnessLabel + app_msg.cdisconnectedFromServer);
     process.exit(0);
   });
   socket.on(wrd.cerror, (err) => {
-    console.error('[shellHarness] Socket error: ', err.message);
+    // Socket error:
+    console.error(apc.cshellHarnessLabel + app_msg.csocketError, err.message);
     process.exit(1);
   });
 

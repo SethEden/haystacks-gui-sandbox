@@ -47,6 +47,7 @@ import path from 'path';
 
 const {bas, biz, cmd, gen, msg, sys, wrd} = hayConst;
 let rootPath = '';
+let pathSeparator = '';
 let baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
 // application.testHarness.
 const namespacePrefix = wrd.capplication + bas.cDot + baseFileName + bas.cDot;
@@ -70,7 +71,6 @@ async function bootstrapApplication() {
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   rootPath = url.fileURLToPath(path.dirname(import.meta.url));
   let rootPathArray = [];
-  let pathSeparator = '';
   if (rootPath.includes(bas.cBackSlash) === true) {
     pathSeparator = bas.cBackSlash;
   } else if (rootPath.includes(bas.cForwardSlash) === true) {
@@ -79,6 +79,7 @@ async function bootstrapApplication() {
   rootPathArray = rootPath.split(pathSeparator);
   rootPathArray.pop(); // remove any bin or src folder from the path.
   rootPath = rootPathArray.join(pathSeparator);
+  // console.log('rootPath is: ' + rootPath);
   let appConfig = {};
   if (NODE_ENV === wrd.cdevelopment) {
     appConfig = {
@@ -323,29 +324,29 @@ async function mainPromptLoop() {
   // Only prompt if program is running and the queue is empty
   if (!programRunning) {
     // programRunning is false. Returning.
-    await haystacksGui.consoleLog(namespacePrefix, functionName, 'programRunning is false. Returning.');
+    await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.cmainPromptLoopMessage01);
     shouldReturnEarly = true;
   } else {
     // Checking if command queue is empty...
-    await haystacksGui.consoleLog(namespacePrefix, functionName, 'Checking if command queue is empty...');
+    await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.cmainPromptLoopMessage02);
     await haystacksGui.isCommandQueueEmpty().then(async (isEmpty) => {
       // isCommandQueueEmpty: 
-      await haystacksGui.consoleLog(namespacePrefix, functionName, 'isCommandQueueEmpty: ' + isEmpty);
+      await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.cmainPromptLoopMessage03 + isEmpty);
       if (isEmpty) {
         // Prompting user (non-blocking)...
-        await haystacksGui.consoleLog(namespacePrefix, functionName, 'Prompting user (non-blocking)...');
+        await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.cmainPromptLoopMessage04);
         haystacksGui.executeBusinessRules([bas.cGreaterThan, (answer) => {
           // User entered: 
-          haystacksGui.consoleLog(namespacePrefix, functionName, 'User entered: ' + answer);
+          haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.cmainPromptLoopMessage05 + answer);
           haystacksGui.enqueueCommand(answer).then(() => {
             // Command enqueued, starting processCommandLoop...
-            haystacksGui.consoleLog(namespacePrefix, functionName, 'Command enqueued, starting processCommandLoop...');
+            haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.cmainPromptLoopMessage06);
             processCommandLoop();
           });
         }], [biz.cpromptNonBlocking]);
       } else {
         // Commands pending, processing queue...
-        await haystacksGui.consoleLog(namespacePrefix, functionName, 'Commands pending, processing queue...');
+        await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.cmainPromptLoopMessage07);
         processCommandLoop();
       }
       await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cEND_Function);
@@ -373,7 +374,7 @@ async function processCommandLoop() {
   // Process the next command in the queue (safe to await)
   while (!(await haystacksGui.isCommandQueueEmpty())) {
     // Processing next command in queue...
-    await haystacksGui.consoleLog(namespacePrefix, functionName, 'Processing next command in queue...');
+    await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.cprocessCommandLoopMessage01);
     const commandResult = await haystacksGui.processCommandQueue();
     // commandResult is:
     // await haystacksGui.consoleLog(namespacePrefix, functionName, 'commandResult is: ' + JSON.stringify(commandResult));
@@ -381,14 +382,14 @@ async function processCommandLoop() {
     // Exit if commanded to
     if (commandResult && commandResult[exitConditionArrayIndex] === false) {
       // Exit condition met, ending processCommandLoop.
-      await haystacksGui.consoleLog(namespacePrefix, functionName, 'Exit condition met, ending processCommandLoop.');
+      await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.cprocessCommandLoopMessage02);
       programRunning = false;
       return;
     }
   }
   // Now the queue is empty, so go back to prompting
   // Command queue is empty, calling mainPromptLoop...
-  await haystacksGui.consoleLog(namespacePrefix, functionName, 'Command queue is empty, calling mainPromptLoop...');
+  await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.cprocessCommandLoopMessage03);
   mainPromptLoop();
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cEND_Function);
 }
@@ -397,7 +398,8 @@ let programRunning = false;
 app.whenReady().then(async () => {
   await applicationInit();
   if (interactiveNativeCliWindow === true) {
-    console.log('Launching interactive native CLI shell window.');
+    // Launching interactive native CLI shell window.
+    console.log(app_msg.claunchingInteractiveNativeCliShellWindow);
     launchShellHarness();
 
     setShellCommandHandler(async (command, clientId) => {
@@ -406,17 +408,25 @@ app.whenReady().then(async () => {
       processCommandLoop(); // (do not await!)
     });
   } else {
-    console.log('Interactive nativeCLI window is disabled by configuration.');
+    // Interactive nativeCLI window is disabled by configuration.
+    console.log(app_msg.cinteractiveNativeCliWindowDisabledByConfig);
   }
 });
 
 function launchShellHarness() {
-  const shellHarnessPath = path.resolve('./test/testHarness/src/shellHarness.js');
-  spawn('cmd.exe', [
-    '/c', 'start', 'cmd.exe', '/k', 'node', shellHarnessPath
+  let shellHarnessPath = '';
+  if (NODE_ENV === wrd.cdevelopment) {
+    shellHarnessPath = path.resolve(rootPath + apc.cAppDevPath + apc.cShellHarnessName + gen.cDotjs);
+  } else if (NODE_ENV === wrd.cproduction) {
+    shellHarnessPath = path.resolve(rootPath + apc.cAppProdPath + apc.cShellHarnessName + gen.cDotjs);
+  } else {
+    shellHarnessPath = path.resolve(rootPath + apc.cAppDevPath + apc.cShellHarnessName + gen.cDotjs);
+  }
+  spawn(gen.ccmd + gen.cDotexe, [
+    bas.cForwardSlash + bas.cc, wrd.cstart, gen.ccmd + gen.cDotexe, bas.cForwardSlash + bas.ck, wrd.cnode, shellHarnessPath
   ], {
     cwd: process.cwd(),
     detached: true,
-    stdio: 'ignore'
+    stdio: wrd.cignore
   });
 }

@@ -13,7 +13,7 @@ import * as app_sys from './application.system.constants.js';
 
 // External imports
 import hayConst from '@haystacks/constants';
-const {bas, msg, num, phn, sys, wrd} = hayConst;
+const {bas, gen, msg, num, phn, sys, wrd} = hayConst;
 
 // Client String Parsing
 export const cclientStringParsingDotCustomEcho = wrd.cclient + wrd.cString + wrd.cParsing + bas.cDot + wrd.ccustom + wrd.cEcho; // clientStringParsing.customEcho
@@ -69,6 +69,22 @@ export const cmostPopularNumberMessage27 = wrd.ctemp + wrd.cArray + num.c2 + bas
 export const cmostPopularNumberMessage28 = wrd.cEND + bas.cSpace + wrd.citeration + bas.cSpace + bas.ci + bas.cSpace + bas.cEqual + bas.cSpace; // END iteration i =
 export const cmostPopularNumberMessage29 = wrd.cEND + bas.cSpace + num.cthird + bas.cSpace + wrd.cfor + bas.cDash + wrd.cloop; // END third for-loop
 export const cmostPopularNumberMessage30 = wrd.cINVALID + bas.cSpace + wrd.cENTRY + bas.cColon + bas.cSpace + wrd.cPlease + bas.cSpace + wrd.center + bas.cSpace + wrd.csome + bas.cSpace + wrd.cvalid + bas.cSpace + wrd.cnumbers + bas.cDot; // INVALID ENTRY: Please enter some valid numbers.
+export const cmainPromptLoopMessage01 = wrd.cprogramming + wrd.cRunning + bas.cSpace + wrd.cis + bas.cSpace + gen.cfalse + bas.cDot + bas.cSpace + wrd.cReturning + bas.cDot; // programmingRunning is false. Returning.
+export const cmainPromptLoopMessage02 = wrd.cChecking + bas.cSpace + wrd.cif + bas.cSpace + wrd.ccommand + bas.cSpace + wrd.cqueue + bas.cSpace + wrd.cis + bas.cSpace + wrd.cempty + bas.cDot.repeat(3); // Checking if command queue is empty...
+export const cmainPromptLoopMessage03 = wrd.cis + wrd.cCommand + wrd.cQueue + wrd.cEmpty + bas.cColon + bas.cSpace; // isCommandQueueEmpty:
+export const cmainPromptLoopMessage04 = wrd.cPrompting + bas.cSpace + wrd.cuser + bas.cSpace + bas.cOpenParenthesis + phn.cnon + bas.cDash + wrd.cblocking + bas.cCloseParenthesis + bas.cDot.repeat(3); // Prompting user (non-blocking)...
+export const cmainPromptLoopMessage05 = wrd.cUser + bas.cSpace + wrd.centered + bas.cColon + bas.cSpace; // User entered:
+export const cmainPromptLoopMessage06 = wrd.cCommand + bas.cSpace + wrd.cenqueued + bas.cComa + bas.cSpace + wrd.cstarting + bas.cSpace + wrd.cprocess + wrd.cCommand + wrd.cLoop + bas.cDot.repeat(3); // Command enqueued, starting processCommandLoop...
+export const cmainPromptLoopMessage07 = wrd.cCommands + bas.cSpace + wrd.cpending + bas.cComa + bas.cSpace + wrd.cprocessing + bas.cSpace + wrd.cqueue + bas.cDot.repeat(3); // Commands pending, processing queue...
+export const cprocessCommandLoopMessage01 = wrd.cProcessing + bas.cSpace + wrd.cnext + bas.cSpace + wrd.ccommand + bas.cSpace + wrd.cin + bas.cSpace + wrd.cqueue + bas.cDot.repeat(3); // Processing next command in queue...
+export const cprocessCommandLoopMessage02 = wrd.cExit + bas.cSpace + wrd.ccondition + bas.cSpace + wrd.cmet + bas.cComa + bas.cSpace + wrd.cending + bas.cSpace + wrd.cprocess + wrd.cCommand + wrd.cLoop + bas.cDot; // Exit condition met, ending processCommandLoop.
+export const cprocessCommandLoopMessage03 = wrd.cCommand + bas.cSpace + wrd.cqueue + bas.cSpace + wrd.cis + bas.cSpace + wrd.cempty + bas.cComa + bas.cSpace + wrd.ccalling + bas.cSpace + wrd.cmain + wrd.cPrompt + wrd.cLoop + bas.cDot.repeat(3); // Command queue is empty, calling mainPromptLoop...
+export const claunchingInteractiveNativeCliShellWindow = wrd.cLaunching + bas.cSpace + wrd.cinteractive + bas.cSpace + wrd.cnative + bas.cSpace + gen.cCLI + bas.cSpace + wrd.cshell + bas.cSpace + wrd.cwindow + bas.cDot; // Launching interactive native CLI shell window.
+export const cinteractiveNativeCliWindowDisabledByConfig = wrd.cInteractive + bas.cSpace + wrd.cnative + gen.cCLI + bas.cSpace + wrd.cwindow + bas.cSpace + wrd.cis + bas.cSpace + wrd.cdisabled + bas.cSpace + wrd.cby + bas.cSpace + wrd.cconfiguration + bas.cDot; // Interactive nativeCLI window is disabled by configuration.
+export const cconnectedToHastacksGuiServerCommandsBelow = wrd.cConnected + bas.cSpace + wrd.cto + bas.cSpace + wrd.cHaystacks + bas.cSpace + gen.cGUI + bas.cSpace + wrd.cserver + bas.cDot + bas.cSpace + wrd.cType + bas.cSpace + wrd.ccommands + bas.cSpace + wrd.cbelow + bas.cColon + bas.cSpace; // Connected to Haystacks GUI server. Type commands below:
+export const cWarningUnknownMessageType = msg.cWARNING_Colon + wrd.cWe + bas.cSpace + wrd.chave + bas.cSpace + wrd.cno + bas.cSpace + wrd.cidea + bas.cSpace + wrd.cwhat + bas.cSpace + wrd.ckind + bas.cSpace + wrd.cof + bas.cSpace + wrd.cobject + bas.cSpace + wrd.cwe + bas.cSpace + wrd.care + bas.cSpace + wrd.cdealing + bas.cSpace + wrd.cwith + bas.cExclamation; // WARNING: We have no idea what kind of object we are dealing with!
+export const cdisconnectedFromServer = wrd.cDisconnected + bas.cSpace + wrd.cfrom + bas.cSpace + wrd.cserver + bas.cDot; // Disconnected from server.
+export const csocketError = wrd.cSocket + bas.cSpace + wrd.cerror + bas.cColon + bas.cSpace; // Socket error:
 
 export const cisAlmostPalindromeInvalidEntry = wrd.cINVALID + bas.cSpace + wrd.cENTRY + bas.cColon + bas.cSpace + wrd.cPlease + bas.cSpace + wrd.center + bas.cSpace + wrd.csome + bas.cSpace + wrd.cvalid + bas.cSpace + wrd.cstring + bas.cDot; // INVALID ENTRY: Please enter some valid string.
 export const cstringInputIs = wrd.cstring + wrd.cInput + sys.cSpaceIsColonSpace; // stringInput is:
