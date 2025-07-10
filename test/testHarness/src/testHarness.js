@@ -43,7 +43,7 @@ import hayConst from '@haystacks/constants';
 import { app, ipcMain, screen } from 'electron';
 import url from 'url';
 import dotenv from 'dotenv';
-import { spawn } from 'child_process';
+import { spawn, exec } from 'child_process';
 import path from 'path';
 
 const {bas, biz, cmd, gen, msg, sys, wrd} = hayConst;
@@ -60,6 +60,7 @@ dotenv.config();
 const {NODE_ENV} = process.env;
 let exitConditionArrayIndex = 0;
 let interactiveNativeCliWindow = false;
+const shellWindowTitle = apc.cApplicationName + wrd.cShell;
 
 /**
  * @function bootstrapApplication
@@ -427,9 +428,54 @@ async function shutdownAll() {
   // 3. Close sockets
   await socketsServer.shutdownSocketServer();
 
+  // 4. Kill the shell window completely
+  // TODO: Right now this is basically working for Windows, once we go to a production ready system
+  // TODO: Implement a cross-platform shut-down solution that works for all CLI windows (bash,powershell,cmd,linux shell,etc)
+  await killShellWindowByTitle(shellWindowTitle);
+
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cEND_Function);
   // 4. Process exit
   process.exit(0);
+}
+
+/**
+ * @function killShellWindowByTitle
+ * @description Attempts to forcibly close (terminate) a shell window by its title using the OS `taskkill` command.
+ * Primarily designed for Windows environments where CLI windows are spawned with a unique title.
+ * This function logs the attempt, outcome, and is structured to allow future expansion for cross-platform support.
+ * The function executes asynchronously and returns a boolean indicating whether the termination attempt was successful.
+ * @param {string} windowTitle The exact title of the shell window to be terminated (as passed to the window on creation).
+ * @returns {Promise<boolean>} Returns a promise that resolves to true if the window was killed successfully, false otherwise.
+ * @author Seth Hollingsead
+ * @date 2025/07/09
+ * @NOTE On Windows, uses `taskkill /FI "WINDOWTITLE eq <title>" /T /F`.
+ * On other platforms, TODO: implement cross-platform process termination logic.
+ * @example const closed = await killShellWindowByTitle("HaystacksShell");
+ * if (closed) { ... }
+ */
+async function killShellWindowByTitle(windowTitle) {
+  const functionName = killShellWindowByTitle.name;
+  // await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cBEGIN_Function);
+  console.log(`BEGIN ${namespacePrefix}${functionName} function`);
+  // windowTitle is:
+  // await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.cwindowTitleIs + windowTitle);
+  console.log(app_msg.cwindowTitleIs + windowTitle);
+  let returnData = false;
+  return new Promise((resolve) => {
+    exec(`taskkill /FI "WINDOWTITLE eq ${windowTitle}" /T /F`, (err, stdout, stderr) => {
+      let returnData = false;
+      if (err) {
+        console.log('Error closing shell window:', err);
+      } else {
+        console.log('Shell window closed.');
+        returnData = true;
+      }
+      // haystacksGui.consoleLog(namespacePrefix, functionName, msg.creturnDataIs + returnData);
+      // haystacksGui.consoleLog(namespacePrefix, functionName, msg.cEND_Function);
+      console.log(`END ${namespacePrefix}${functionName} function`);
+      resolve(returnData);
+    });
+  });
 }
 
 let programRunning = false;
@@ -499,6 +545,8 @@ app.on('window-all-closed', async () => {
  */
 function launchShellHarness() {
   let shellHarnessPath = '';
+  // shellWindowTitle is:
+  // console.log('shellWindowTitle is: ' + shellWindowTitle);
   if (NODE_ENV === wrd.cdevelopment) {
     shellHarnessPath = path.resolve(rootPath + apc.cAppDevPath + apc.cShellHarnessName + gen.cDotjs);
   } else if (NODE_ENV === wrd.cproduction) {
@@ -507,7 +555,12 @@ function launchShellHarness() {
     shellHarnessPath = path.resolve(rootPath + apc.cAppDevPath + apc.cShellHarnessName + gen.cDotjs);
   }
   shellProcess = spawn(gen.ccmd + gen.cDotexe, [
-    bas.cForwardSlash + bas.cc, wrd.cstart, gen.ccmd + gen.cDotexe, bas.cForwardSlash + bas.ck, wrd.cnode, shellHarnessPath
+    // bas.cForwardSlash + bas.cc, wrd.cstart, `"${shellWindowTitle}"`, bas.cForwardSlash + bas.ck, wrd.cnode, shellHarnessPath // Fails silently
+    // bas.cForwardSlash + bas.cc, wrd.cstart, shellWindowTitle, bas.cForwardSlash + bas.ck, wrd.cnode, shellHarnessPath // Errors out cannot find TestHarness_Shell.exe
+
+    // Works perfectly, but window title is: C:\Windows\system32\cmd.exe - node C:\Proj\haystacks-gui=sandbox\test\testHarness\src\shellHarness.js
+    // bas.cForwardSlash + bas.cc, wrd.cstart, gen.ccmd + gen.cDotexe, bas.cForwardSlash + bas.ck, wrd.cnode, shellHarnessPath
+    bas.cForwardSlash + bas.cc, wrd.cstart, `"${shellWindowTitle}"`, gen.ccmd + gen.cDotexe, bas.cForwardSlash + bas.ck, wrd.cnode, shellHarnessPath
   ], {
     cwd: process.cwd(),
     detached: true,

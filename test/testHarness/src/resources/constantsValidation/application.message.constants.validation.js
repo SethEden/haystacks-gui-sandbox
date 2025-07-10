@@ -43,6 +43,7 @@ export const applicationMessageConstantsValidation = [
   {Name: 'cclientLoggerSchemaIs', Actual: app_msg.cclientLoggerSchemaIs, Expected: 'clientLoggerSchema is: '},
   {Name: 'cappConfigIs', Actual: app_msg.cappConfigIs, Expected: 'appConfig is: '},
   {Name: 'ctransmitLogsIs', Actual: app_msg.ctransmitLogsIs, Expected: 'transmitLogs is: '},
+  {Name: 'cwindowTitleIs', Actual: app_msg.cwindowTitleIs, Expected: 'windowTitle is: '},
 
   {Name: 'cmostPopularNumberMessage01', Actual: app_msg.cmostPopularNumberMessage01, Expected: 'BEGIN first for-loop'},
   {Name: 'cmostPopularNumberMessage02', Actual: app_msg.cmostPopularNumberMessage02, Expected: 'BEGIN nested for-loop i = '},

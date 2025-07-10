@@ -39,6 +39,7 @@ export const cclientLoggerToUseIs = wrd.cclient + wrd.cLogger + wrd.cTo + wrd.cU
 export const cclientLoggerSchemaIs = wrd.cclient + wrd.cLogger + wrd.cSchema + sys.cSpaceIsColonSpace; // clientLoggerSchema is:
 export const cappConfigIs = wrd.capp + wrd.cConfig + sys.cSpaceIsColonSpace; // appConfig is:
 export const ctransmitLogsIs = wrd.ctransmit + wrd.cLogs + sys.cSpaceIsColonSpace; // transmitLogs is:
+export const cwindowTitleIs = wrd.cwindow + wrd.cTitle + sys.cSpaceIsColonSpace; // windowTitle is:
 
 export const cmostPopularNumberMessage01 = wrd.cBEGIN + bas.cSpace + num.cfirst + bas.cSpace + wrd.cfor + bas.cDash + wrd.cloop; // BEGIN first for-loop
 export const cmostPopularNumberMessage02 = wrd.cBEGIN + bas.cSpace + wrd.cnested + bas.cSpace + wrd.cfor + bas.cDash + wrd.cloop + bas.cSpace + bas.ci + bas.cSpace + bas.cEqual + bas.cSpace; // BEGIN nested for-loop i =

@@ -11,6 +11,7 @@
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
  * @requires {@link https://nodejs.org/api/net.html|net}
  * @requires {@link https://nodejs.org/api/readline.html|readline}
+ * @requires {@link https://nodejs.org/api/child_process.html|child_process}
  * @requires {@link https://www.npmjs.com/package/path|path}
  * @author Seth Hollingsead
  * @date 2025/07/01
@@ -24,6 +25,7 @@ import * as app_msg from '../../testHarness/src/constants/application.message.co
 import hayConst from '@haystacks/constants';
 import net from 'net';
 import readline from 'readline';
+import { exec } from 'child_process';
 import path from 'path';
 
 const {bas, msg, sys, wrd} = hayConst;
@@ -31,6 +33,9 @@ const {bas, msg, sys, wrd} = hayConst;
 const SOCKET_HOST = '127.0.0.1';
 const SOCKET_PORT = 3000;
 const MESSAGE_DELIMITER = '##END##';
+// TODO: Make sure to modernize this controlling it from the testHarness spawn command rather than here!
+// TODO: Make the window size tied into the window configuration system for maximum configurability!
+exec('mode con: cols=211 lines=50');
 
 /**
  * @function safeJsonParse
