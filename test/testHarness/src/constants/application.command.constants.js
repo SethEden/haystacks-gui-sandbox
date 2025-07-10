@@ -11,11 +11,12 @@
 
 // External imports
 import hayConst from '@haystacks/constants';
-const {num, wrd} = hayConst;
+const {bas, num, wrd} = hayConst;
 
 // ********************************
 // ApplicationSystem Commands in order
 // ********************************
+export const cinstructions = wrd.cinstructions; // instructions
 export const capplicationHelp = wrd.capplication + wrd.cHelp; // applicationHelp
 export const capplicationWorkflowHelp = wrd.capplication + wrd.cWorkflow + wrd.cHelp; // applicationWorkflowHelp
 
@@ -42,3 +43,8 @@ export const ccommand07 = wrd.ccommand + num.c0 + num.c7; // command07
 export const ccommand08 = wrd.ccommand + num.c0 + num.c8; // command08
 export const ccommand09 = wrd.ccommand + num.c0 + num.c9; // command09
 export const ccommand10 = wrd.ccommand + num.c10; // command10
+
+// ********************************
+// Application Workflows in order
+// ********************************
+export const cApplicationStartupWorkflow = wrd.cWorkflow + bas.cSpace + wrd.capplication + wrd.cStartup; // Workflow applicationStartup

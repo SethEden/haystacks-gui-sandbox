@@ -32,6 +32,31 @@ const SOCKET_HOST = '127.0.0.1';
 const SOCKET_PORT = 3000;
 const MESSAGE_DELIMITER = '##END##';
 
+/**
+ * @function safeJsonParse
+ * @description Safely parses a persistent buffer of delimited message strings into discrete JSON objects or plain strings,
+ * handling fragmented and/or concatenated messages that may occur due to TCP chunking. This function is designed
+ * to robustly reconstruct and extract multiple complete messages from an incoming buffer (split by MESSAGE_DELIMITER),
+ * while also handling cases where the 'output' field of a parsed object contains a nested JSON string.
+ * Features:
+ * - Splits the input buffer into segments using MESSAGE_DELIMITER.
+ * - Returns all successfully parsed complete messages (as objects or strings) in the `parsed` array.
+ * - Returns any remaining incomplete message fragment in the `incomplete` string (for buffer persistence).
+ * - If a message is an object with an 'output' property that itself appears to be JSON, parses it one level deeper.
+ * - Silently falls back to plain string for any non-JSON or malformed messages (never throws).
+ * Use Cases:
+ * - Safely reconstructing application-layer messages in a TCP socket stream that may arrive in incomplete or batched chunks.
+ * - Defensive against protocol changes, bad network conditions, or malformed output payloads.
+ * @param {string} persistentBuffer - The cumulative input buffer (including both new and leftover data).
+ * @returns {object} An object of shape `{ parsed: Array, incomplete: string }` where `parsed` contains fully reconstructed message objects/strings,
+ * and `incomplete` holds any partial trailing message to be retained for future input.
+ * @date 2025/07/08
+ * @author Seth Hollingsead
+ * @notes
+ * - Always call this function before processing any received TCP data; append new data to the buffer first.
+ * - Any message with an 'output' property that itself is JSON will be automatically parsed one extra level.
+ * - Tolerant of malformed or partial data—no exceptions will be thrown.
+ */
 async function safeJsonParse(persistentBuffer) {
   // Break buffer into message-sized chunks by delimiter
   let messages = persistentBuffer.split(MESSAGE_DELIMITER);
@@ -67,6 +92,30 @@ async function safeJsonParse(persistentBuffer) {
   return { parsed, incomplete };
 }
 
+/**
+ * @function createSocketClient
+ * @description Initializes and manages a socket client connection to the Haystacks Electron CLI server (via TCP).
+ * This function establishes a persistent connection using Node’s `net` module, sets up a CLI prompt for interactive user input,
+ * and handles the sending/receiving of command and output messages between the shell harness and the server.
+ * Features:
+ * - Connects to the configured SOCKET_HOST and SOCKET_PORT.
+ * - Implements keep-alive to maintain the connection as long as possible.
+ * - Uses readline to provide a CLI prompt; each entered line is sent to the server as a JSON command (with delimiter).
+ * - Receives server output, supports safe/robust JSON parsing of potentially chunked or combined messages.
+ * - Correctly reconstructs and displays incoming logs, table outputs, generic output, or shutdown signals from the server.
+ * - Gracefully handles user-triggered exits (`exit` command or Ctrl+C), server disconnects, or socket errors.
+ * This is the entrypoint for the interactive shell window/harness process,
+ * acting as the glue between user keyboard input and framework server logic.
+ * @return {void}
+ * @author Seth Hollingsead
+ * @date 2025/07/03
+ * @notes
+ * - The function manages its own event loop; do not await or chain after this call.
+ * - Message chunking and parsing must match server protocol (`MESSAGE_DELIMITER`).
+ * - Exits the process on error, disconnect, or user-initiated exit to avoid zombie clients.
+ * - All resource cleanup (readline, socket) is handled internally.
+ * - Extensible: new message types can be added in the main socket `data` handler. (Consider refactoring into a schema at some point.)
+ */
 function createSocketClient() {
   const socket = net.createConnection({ host: SOCKET_HOST, port: SOCKET_PORT });
 
@@ -123,6 +172,10 @@ function createSocketClient() {
         } else if (eventMsg[wrd.clog]) {
           // console.log('eventMsg is a log message object!');
           process.stdout.write(bas.cOpenBracket + wrd.cLOG + bas.cCloseBracket + bas.cSpace + inEventMsg[wrd.clog] + bas.cCarRetNewLin);
+        } else if (eventMsg[wrd.ctype] === sys.cshutdown) {
+          // shutting down, goodbye.
+          process.stdout.write(app_msg.cshuttingDownGoodbye);
+          process.exit(0);
         } else {
           // WARNING: We have no idea what kind of object we are dealing with!
           console.log(app_msg.cWarningUnknownMessageType);

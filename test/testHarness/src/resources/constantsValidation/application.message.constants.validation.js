@@ -25,6 +25,9 @@ export const applicationMessageConstantsValidation = [
   // Application Test Harness
   {Name: 'cargumentDrivenInterfaceIs', Actual: app_msg.cargumentDrivenInterfaceIs, Expected: 'argumentDrivenInterface is: '},
 
+  // Instructions
+  {Name: 'cinstructionsMessage00', Actual: app_msg.cinstructionsMessage00, Expected: 'Instructions to end user: '},
+
   // Messages
   {Name: 'ccomparisonIterationIs', Actual: app_msg.ccomparisonIterationIs, Expected: 'comparison iteration is: '},
   {Name: 'cstartingPointIs', Actual: app_msg.cstartingPointIs, Expected: 'startingPoint is: '},
@@ -87,6 +90,7 @@ export const applicationMessageConstantsValidation = [
   {Name: 'cWarningUnknownMessageType', Actual: app_msg.cWarningUnknownMessageType, Expected: 'WARNING: We have no idea what kind of object we are dealing with!'},
   {Name: 'cdisconnectedFromServer', Actual: app_msg.cdisconnectedFromServer, Expected: 'Disconnected from server.'},
   {Name: 'csocketError', Actual: app_msg.csocketError, Expected: 'Socket error: '},
+  {Name: 'cshuttingDownGoodbye', Actual: app_msg.cshuttingDownGoodbye, Expected: 'shutting down, goodbye.'},
 
   {Name: 'cisAlmostPalindromeInvalidEntry', Actual: app_msg.cisAlmostPalindromeInvalidEntry, Expected: 'INVALID ENTRY: Please enter some valid string.'},
   {Name: 'cstringInputIs', Actual: app_msg.cstringInputIs, Expected: 'stringInput is: '},

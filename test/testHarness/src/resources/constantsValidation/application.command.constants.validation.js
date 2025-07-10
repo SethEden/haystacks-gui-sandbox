@@ -22,6 +22,7 @@ export const applicationCommandConstantsValidation = [
   // ********************************
   // ApplicationSystem Commands in order
   // ********************************
+  {Name: 'cinstructions', Actual: app_cmd.cinstructions, Expected: 'instructions'},
   {Name: 'capplicationHelp', Actual: app_cmd.capplicationHelp, Expected: 'applicationHelp'},
   {Name: 'capplicationWorkflowHelp', Actual: app_cmd.capplicationWorkflowHelp, Expected: 'applicationWorkflowHelp'},
 
@@ -47,5 +48,10 @@ export const applicationCommandConstantsValidation = [
   {Name: 'ccommand07', Actual: app_cmd.ccommand07, Expected: 'command07'},
   {Name: 'ccommand08', Actual: app_cmd.ccommand08, Expected: 'command08'},
   {Name: 'ccommand09', Actual: app_cmd.ccommand09, Expected: 'command09'},
-  {Name: 'ccommand10', Actual: app_cmd.ccommand10, Expected: 'command10'}
+  {Name: 'ccommand10', Actual: app_cmd.ccommand10, Expected: 'command10'},
+
+  // ********************************
+  // Application Workflows in order
+  // ********************************
+  {Name: 'cApplicationStartupWorkflow', Actual: app_cmd.cApplicationStartupWorkflow, Expected: 'Workflow applicationStartup'}
 ];

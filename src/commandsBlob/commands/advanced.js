@@ -96,7 +96,7 @@ async function commandSequencer(inputData, inputMetaData) {
     } else { // End-if (currentCommand !== false)
       // WARNING: advanced.commandSequencer: The specified command was not found, please enter a valid command and try again. <commandString>
       let errorMessage = msg.ccommandSequencerMessage1 + msg.ccommandSequencerMessage2 + bas.cSpace + commandString;
-      await loggers.consoleLog(wrd.cError, errormessage);
+      await loggers.consoleLog(wrd.cError, errorMessage);
       returnData[1] = errorMessage;
       commandSuccess = false;
     }

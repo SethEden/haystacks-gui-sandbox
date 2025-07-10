@@ -28,6 +28,7 @@
 // Internal imports
 import clientRules from './businessRules/clientRulesLibrary.js';
 import clientCommands from './commands/clientCommandsLibrary.js';
+import * as app_cmd from './constants/application.command.constants.js';
 import * as app_cfg from './constants/application.configuration.constants.js';
 import * as apc from './constants/application.constants.js';
 import * as app_msg from './constants/application.message.constants.js';
@@ -35,7 +36,7 @@ import * as app_sys from './constants/application.system.constants.js';
 import warden from './controllers/warden.js';
 import allAppCV from './resources/constantsValidation/allApplicationConstantsValidationMetadata.js';
 // --- NEW: Import sockets server glue so we can wire up CLI <-> haystacksGui ---
-import { setShellCommandHandler, sendShellOutput, broadcastShellOutput } from './childProcess/socketsServer.js';
+import socketsServer from './childProcess/socketsServer.js';
 // External imports
 import haystacksGui from '../../../src/main.js';
 import hayConst from '@haystacks/constants';
@@ -46,6 +47,7 @@ import { spawn } from 'child_process';
 import path from 'path';
 
 const {bas, biz, cmd, gen, msg, sys, wrd} = hayConst;
+let shellProcess;
 let rootPath = '';
 let pathSeparator = '';
 let baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
@@ -139,7 +141,7 @@ async function bootstrapApplication() {
   appConfig[sys.cclientCommands] = await clientCommands.initClientCommandsLibrary();
   console.log('appConfig is: ', appConfig);
   await haystacksGui.initFramework(appConfig);
-  await haystacksGui.initServerLogTransmission(broadcastShellOutput);
+  await haystacksGui.initServerLogTransmission(socketsServer.broadcastShellOutput);
   interactiveNativeCliWindow = await haystacksGui.getConfigurationSetting(wrd.csystem, app_cfg.cspawnNativeCliCommandWindow);
   // interactiveNativeCliWindow is:
   console.log('interactiveNativeCliWindow is: ' + interactiveNativeCliWindow);
@@ -252,7 +254,7 @@ async function launchInteractiveCli() {
   }
   // argumentDrivenInterface is:
   await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.cargumentDrivenInterfaceIs + argumentDrivenInterface);
-  await haystacksGui.enqueueCommand(cmd.cStartupWorkflow);
+  await haystacksGui.enqueueCommand(app_cmd.cApplicationStartupWorkflow);
   // NOTE: We are processing the argument driven interface first that way even if we are not in an argument driven interface,
   // arguments can still be passed in and they will be executed first, after the startup workflow is complete.
   //
@@ -380,6 +382,7 @@ async function processCommandLoop() {
     if (commandResult && commandResult[exitConditionArrayIndex] === false) {
       // Exit condition met, ending processCommandLoop.
       await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.cprocessCommandLoopMessage02);
+      await shutdownAll();
       programRunning = false;
       return;
     }
@@ -389,6 +392,44 @@ async function processCommandLoop() {
   await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.cprocessCommandLoopMessage03);
   mainPromptLoop();
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cEND_Function);
+}
+
+/**
+ * @function shutdownAll
+ * @description Orchestrates a complete, coordinated shutdown of all application components,
+ * including the Electron windows, child shell processes, socket servers, and all active client connections.
+ * This function ensures that all application processes, resources, and connections are cleanly terminated,
+ * leaving no orphaned processes, open sockets, or lingering CLI windows.
+ * It should be called in response to any application-wide exit event,
+ * such as "exit" commands in the CLI, main window close events, or other programmatic shutdown triggers.
+ * The sequence of operations is:
+ * 1. Request Electron app to quit (which closes all windows).
+ * 2. Kill the child shellHarness process, if running.
+ * 3. Shut down the sockets server, notifying all clients to exit.
+ * 4. Log shutdown completion and terminate the main process.
+ * @returns {void}
+ * @author Seth Hollingsead
+ * @date 2025/07/09
+ */
+async function shutdownAll() {
+  const functionName = shutdownAll.name;
+  await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cBEGIN_Function);
+  // 1. Tell Electron to close windows
+  if (app && typeof app.quit === wrd.cfunction) {
+    app.quit();
+  }
+
+  // 2. Send shutdown message to shellHarness (if running)
+  if (typeof shellProcess !== 'undefined' && shellProcess && !shellProcess.killed) {
+    shellProcess.kill();
+  }
+
+  // 3. Close sockets
+  await socketsServer.shutdownSocketServer();
+
+  await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cEND_Function);
+  // 4. Process exit
+  process.exit(0);
 }
 
 let programRunning = false;
@@ -405,15 +446,15 @@ app.whenReady().then(async () => {
     launchShellHarness();
     // console.log('app.whenReady().then(async() => { END calling launchShellHarness function');
 
-    // console.log('app.whenReady().then(async() => { BEGIN calling setShellCommandHandler function');
-    setShellCommandHandler(async (command, clientId) => {
+    // console.log('app.whenReady().then(async() => { BEGIN calling socketsServer.setShellCommandHandler function');
+    socketsServer.setShellCommandHandler(async (command, clientId) => {
       await haystacksGui.enqueueCommand(command);
-      // sendShellOutput(clientId, `[Queued] Command: ${command}`);
+      // socketsServer.sendShellOutput(clientId, `[Queued] Command: ${command}`);
       // console.log('app.whenReady().then(async() => { BEGIN calling processCommandLoop function');
       processCommandLoop(); // (do not await!)
       // console.log('app.whenReady().then(async() => { END calling processCommandLoop function');
     });
-    // console.log('app.whenReady().then(async() => { END calling setShellCommandHandler function');
+    // console.log('app.whenReady().then(async() => { END calling socketsServer.setShellCommandHandler function');
   } else {
     // Interactive nativeCLI window is disabled by configuration.
     console.log(app_msg.cinteractiveNativeCliWindowDisabledByConfig);
@@ -421,16 +462,41 @@ app.whenReady().then(async () => {
 
   // 3. Wait briefly to allow the shell to connect.
   // TODO: Replace this timeout with an event-driven handshake so we only proceed once the shellHarness is truly ready.
-  await new Promise(resolve => setTimeout(resolve, 400));
+  await new Promise(resolve => setTimeout(resolve, 500));
   // Rationale: This artificial delay ensures the shellHarness CLI has connected before processing the startup workflow.
   // This should be replaced with a more robust ready-check for production use.
 
   // console.log('app.whenReady().then(async() => { BEGIN calling applicationInit function');
   await applicationInit();
   // console.log('app.whenReady().then(async() => { END calling applicationInit function');
-
 });
 
+app.on('window-all-closed', async () => {
+  await shutdownAll();
+});
+
+/**
+ * @function launchShellHarness
+ * @description Launches the external Shell Harness CLI process in a new native command window,
+ * providing an interactive command-line interface for the Haystacks GUI application.
+ * The function determines the appropriate shell harness script path based on the current environment
+ * (development or production), then spawns a detached child process using the Windows `cmd.exe` shell.
+ * The child process is started in a new window and does not block the main application.
+ * Features:
+ * - Resolves the shell harness script location according to NODE_ENV.
+ * - Uses Node's `spawn` with `detached: true` and `stdio: 'ignore'` for non-blocking execution.
+ * - Ensures a separate native shell window is opened for interactive CLI, supporting Windows environments.
+ * - Sets global reference `shellProcess` to the spawned process for later management (e.g., shutdown).
+ * Use Cases:
+ * - To provide end users with a native CLI shell alongside the Electron GUI for hybrid automation/testing workflows.
+ * - For launching and managing a dedicated shell harness process in enterprise environments.
+ * @return {void}
+ * @author Seth Hollingsead
+ * @date 2025/07/09
+ * @notes
+ * - Designed for use on Windows (cmd.exe). If cross-platform support is needed, refactor to detect and launch the appropriate shell.
+ * - Always stores the process handle in the global `shellProcess` variable for shutdown and lifecycle control.
+ */
 function launchShellHarness() {
   let shellHarnessPath = '';
   if (NODE_ENV === wrd.cdevelopment) {
@@ -440,7 +506,7 @@ function launchShellHarness() {
   } else {
     shellHarnessPath = path.resolve(rootPath + apc.cAppDevPath + apc.cShellHarnessName + gen.cDotjs);
   }
-  spawn(gen.ccmd + gen.cDotexe, [
+  shellProcess = spawn(gen.ccmd + gen.cDotexe, [
     bas.cForwardSlash + bas.cc, wrd.cstart, gen.ccmd + gen.cDotexe, bas.cForwardSlash + bas.ck, wrd.cnode, shellHarnessPath
   ], {
     cwd: process.cwd(),

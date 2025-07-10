@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CommandWorkflows>
+  <Workflow Name="applicationStartup" Value="commandSequencer name,application,true version about instructions applicationHelp"/>
   <Workflow Name="workflow1" Value="commandSequencer echoCommand customEchoCommand"/>
   <Workflow Name="workflow2" Value="commandSequencer customEchoCommand echoCommand"/>
   <Workflow Name="bossPanicWorkflow1" Value="bossPanic 0 100 20 15"/>

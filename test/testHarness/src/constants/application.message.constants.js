@@ -21,6 +21,9 @@ export const cclientStringParsingDotCustomEcho = wrd.cclient + wrd.cString + wrd
 // Application Test Harness
 export const cargumentDrivenInterfaceIs = wrd.cargument + wrd.cDriven + wrd.cInterface + sys.cSpaceIsColonSpace; // argumentDrivenInterface is:
 
+// Instructions
+export const cinstructionsMessage00 = wrd.cInstructions + bas.cSpace + wrd.cto + bas.cSpace + wrd.cend + bas.cSpace + wrd.cuser + bas.cColon; // Instructions to end user:
+
 // Messages
 export const ccomparisonIterationIs = wrd.ccomparison + bas.cSpace + wrd.citeration + sys.cSpaceIsColonSpace; // comparison iteration is:
 export const cstartingPointIs = wrd.cstarting + wrd.cPoint + sys.cSpaceIsColonSpace; // startingPoint is:
@@ -85,6 +88,7 @@ export const cconnectedToHastacksGuiServerCommandsBelow = wrd.cConnected + bas.c
 export const cWarningUnknownMessageType = msg.cWARNING_Colon + wrd.cWe + bas.cSpace + wrd.chave + bas.cSpace + wrd.cno + bas.cSpace + wrd.cidea + bas.cSpace + wrd.cwhat + bas.cSpace + wrd.ckind + bas.cSpace + wrd.cof + bas.cSpace + wrd.cobject + bas.cSpace + wrd.cwe + bas.cSpace + wrd.care + bas.cSpace + wrd.cdealing + bas.cSpace + wrd.cwith + bas.cExclamation; // WARNING: We have no idea what kind of object we are dealing with!
 export const cdisconnectedFromServer = wrd.cDisconnected + bas.cSpace + wrd.cfrom + bas.cSpace + wrd.cserver + bas.cDot; // Disconnected from server.
 export const csocketError = wrd.cSocket + bas.cSpace + wrd.cerror + bas.cColon + bas.cSpace; // Socket error:
+export const cshuttingDownGoodbye = wrd.cshutting + bas.cSpace + wrd.cdown + bas.cComa + bas.cSpace + wrd.cgood + wrd.cbye + bas.cDot; // shutting down, goodbye.
 
 export const cisAlmostPalindromeInvalidEntry = wrd.cINVALID + bas.cSpace + wrd.cENTRY + bas.cColon + bas.cSpace + wrd.cPlease + bas.cSpace + wrd.center + bas.cSpace + wrd.csome + bas.cSpace + wrd.cvalid + bas.cSpace + wrd.cstring + bas.cDot; // INVALID ENTRY: Please enter some valid string.
 export const cstringInputIs = wrd.cstring + wrd.cInput + sys.cSpaceIsColonSpace; // stringInput is:

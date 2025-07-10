@@ -3,6 +3,7 @@
  * @module applicationSystem
  * @description Contains all client application system commands for execution of the client application with basic application system operations.
  * @requires module:application.constants
+ * @requires module:application.message.constants
  * @requires {@link https://www.npmjs.com/package/@haystacks/async|@haystacks/async}
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
  * @requires {@link https://www.npmjs.com/package/path|path}
@@ -13,6 +14,7 @@
 
 // Internal imports
 import * as apc from '../../constants/application.constants.js';
+import * as app_msg from '../../constants/application.message.constants.js';
 // External imports
 import haystacksGui from '../../../../../src/main.js';
 import hayConst from '@haystacks/constants';
@@ -22,6 +24,30 @@ const {bas, cmd, msg, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
 // application.testHarness.commands.clientCommands.applicationSystem.
 const namespacePrefix = wrd.capplication + bas.cDot + apc.cApplicationName + bas.cDot + wrd.ccommands + bas.cDot + wrd.cclient + wrd.cCommands + bas.cDot + baseFileName + bas.cDot;
+
+/**
+ * @function instructions
+ * @description Provides instructions to the end user on what steps they need to perform to get up and running and interface with the system.
+ * @param {string} inputData Not used for this command.
+ * @param {string} inputMetaData Not used for this command.
+ * @return {array<boolean,string>} An array with a boolean True or False value to indicate if the application should exit or not exit, followed by an empty string.
+ * @author Seth Hollingsead
+ * @date 2025/07/09
+ */
+async function instructions(inputData, inputMetaData) {
+  const functionName = instructions.name;
+  await haystacks.consoleLog(namespacePrefix, functionName, msg.cBEGIN_Function);
+  await haystacks.consoleLog(namespacePrefix, functionName, msg.cinputDataIs + inputData);
+  await haystacks.consoleLog(namespacePrefix, functionName, msg.cinputMetaDataIs + inputMetaData);
+  let returnData = [true, ''];
+
+  // Instructions to end user:
+  console.log(app_msg.cinstructionsMessage00)
+  // ....More instructions ADD HERE!
+  await haystacks.consoleLog(namespacePrefix, functionName, msg.creturnDataIs + JSON.stringify(returnData));
+  await haystacks.consoleLog(namespacePrefix, functionName, msg.cEND_Function);
+  return returnData;
+}
 
 /**
  * @function applicationHelp
@@ -70,6 +96,7 @@ async function applicationWorkflowHelp(inputData, inputMetaData) {
 }
 
 export default {
+  instructions,
   applicationHelp,
   applicationWorkflowHelp
 }
