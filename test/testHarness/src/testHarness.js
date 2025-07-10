@@ -48,6 +48,8 @@ import path from 'path';
 
 const {bas, biz, cmd, gen, msg, sys, wrd} = hayConst;
 let shellProcess;
+let shellProcessPID;
+let shellProcessParentPID;
 let rootPath = '';
 let pathSeparator = '';
 let baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
@@ -61,6 +63,10 @@ const {NODE_ENV} = process.env;
 let exitConditionArrayIndex = 0;
 let interactiveNativeCliWindow = false;
 const shellWindowTitle = apc.cApplicationName + wrd.cShell;
+
+process.on('exit', code => console.log('[process] exit', code));
+process.on('uncaughtException', err => console.error('[process] uncaughtException', err));
+process.on('unhandledRejection', reason => console.error('[process] unhandledRejection', reason));
 
 /**
  * @function bootstrapApplication
@@ -415,10 +421,7 @@ async function processCommandLoop() {
 async function shutdownAll() {
   const functionName = shutdownAll.name;
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cBEGIN_Function);
-  // 1. Tell Electron to close windows
-  if (app && typeof app.quit === wrd.cfunction) {
-    app.quit();
-  }
+  
 
   // 2. Send shutdown message to shellHarness (if running)
   if (typeof shellProcess !== 'undefined' && shellProcess && !shellProcess.killed) {
@@ -431,11 +434,26 @@ async function shutdownAll() {
   // 4. Kill the shell window completely
   // TODO: Right now this is basically working for Windows, once we go to a production ready system
   // TODO: Implement a cross-platform shut-down solution that works for all CLI windows (bash,powershell,cmd,linux shell,etc)
-  await killShellWindowByTitle(shellWindowTitle);
+  console.log('Listing all CMD windows with titles:');
+  // await listCmdWindows();
+  console.log(`Attempting to kill windows with title containing: ${shellWindowTitle}`);
+  const killed = await killShellWindowByTitle(shellWindowTitle);
+  if (killed) {
+    console.log(`[shutdownAll] Successfully killed window titled: ${shellWindowTitle}`);
+  } else {
+    console.log(`[shutdownAll] No window with title "${shellWindowTitle}" found or killed`);
+  }
+  console.log('[shutdownAll] Finished killShellWindowByTitle');
 
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cEND_Function);
+
+  // 1. Tell Electron to close windows
+  if (app && typeof app.quit === wrd.cfunction) {
+    app.quit();
+  }
+
   // 4. Process exit
-  process.exit(0);
+  // process.exit(0);
 }
 
 /**
@@ -460,22 +478,187 @@ async function killShellWindowByTitle(windowTitle) {
   // windowTitle is:
   // await haystacksGui.consoleLog(namespacePrefix, functionName, app_msg.cwindowTitleIs + windowTitle);
   console.log(app_msg.cwindowTitleIs + windowTitle);
-  let returnData = false;
-  return new Promise((resolve) => {
-    exec(`taskkill /FI "WINDOWTITLE eq ${windowTitle}" /T /F`, (err, stdout, stderr) => {
-      let returnData = false;
-      if (err) {
-        console.log('Error closing shell window:', err);
-      } else {
-        console.log('Shell window closed.');
-        returnData = true;
-      }
-      // haystacksGui.consoleLog(namespacePrefix, functionName, msg.creturnDataIs + returnData);
-      // haystacksGui.consoleLog(namespacePrefix, functionName, msg.cEND_Function);
-      console.log(`END ${namespacePrefix}${functionName} function`);
-      resolve(returnData);
+  // ATTEMPT 1: Silent crash, or powershell command never finished!
+  // return new Promise((resolve) => {
+  //   const psCmd = `powershell -Command "Get-Process | Where-Object { $_.MainWindowTitle } | Select-Object Id,ProcessName,MainWindowTitle | ConvertTo-Json"`;
+  //   console.log(`[${functionName}] Executing PowerShell: ${psCmd}`);
+  //   exec(psCmd, (err, stdout, stderr) => {
+  //     if (err) {
+  //       console.error(`[${functionName}] PowerShell error:`, err);
+  //       resolve(false);
+  //       return;
+  //     }
+  //     if (stderr && stderr.trim().length > 0) {
+  //       console.warn(`[${functionName}] PowerShell stderr:`, stderr.trim());
+  //     }
+  //     if (!stdout || stdout.trim().length === 0) {
+  //       console.error(`[${functionName}] PowerShell produced no output!`);
+  //       resolve(false);
+  //       return;
+  //     }
+  //     let windows;
+  //     try {
+  //       windows = JSON.parse(stdout);
+  //     } catch (parseErr) {
+  //       console.error(`[${functionName}] Could not parse PowerShell output:`, parseErr);
+  //       console.error(`[${functionName}] Raw output was: <<<${stdout}>>>`);
+  //       resolve(false);
+  //       return;
+  //     }
+  //     // Normalize to array
+  //     if (!Array.isArray(windows)) windows = [windows];
+  //     console.log(`[${functionName}] Got ${windows.length} windows to scan.`);
+
+  //     let foundAny = false;
+  //     windows.forEach(proc => {
+  //       console.log(`[${functionName}] Scanning: PID=${proc.Id}, Name=${proc.ProcessName}, Title="${proc.MainWindowTitle}"`);
+  //       if (proc.MainWindowTitle && proc.MainWindowTitle.includes(windowTitle)) {
+  //         foundAny = true;
+  //         console.log(`[${functionName}] MATCH: Terminating PID: ${proc.Id} Title: "${proc.MainWindowTitle}"`);
+  //         exec(`taskkill /PID ${proc.Id} /T /F`, (killErr, killStdout, killStderr) => {
+  //           if (killErr) {
+  //             console.error(`[${functionName}] Error killing PID ${proc.Id}:`, killErr);
+  //           } else {
+  //             console.log(`[${functionName}] KILL RESULT for PID ${proc.Id}:`, killStdout.trim());
+  //           }
+  //           if (killStderr && killStderr.trim().length > 0) {
+  //             console.warn(`[${functionName}] taskkill stderr for PID ${proc.Id}:`, killStderr.trim());
+  //           }
+  //         });
+  //       }
+  //     });
+  //     if (!foundAny) {
+  //       console.warn(`[${functionName}] No windows found matching "${windowTitle}".`);
+  //     }
+  //     console.log(`---- [${functionName}] EXITING ----`);
+  //     resolve(foundAny);
+  //   });
+  // });
+
+  // Attempt 2 with more async-awaits...doesn't work!
+  // return new Promise((resolve) => {
+  //   const psCmd = `powershell -Command "Get-Process | Where-Object { $_.MainWindowTitle } | Select-Object Id,ProcessName,MainWindowTitle | ConvertTo-Json"`;
+  //   console.log('[killShellWindowByTitle] Executing PowerShell:', psCmd);
+  //   exec(psCmd, (err, stdout) => {
+  //     if (err) {
+  //       console.error('[killShellWindowByTitle] PowerShell error:', err);
+  //       resolve(false);
+  //       return;
+  //     }
+  //     let windows;
+  //     try {
+  //       windows = JSON.parse(stdout);
+  //     } catch (parseErr) {
+  //       console.error('[killShellWindowByTitle] Could not parse PowerShell output:', parseErr, 'Raw:', stdout);
+  //       resolve(false);
+  //       return;
+  //     }
+  //     if (!Array.isArray(windows)) windows = [windows];
+  //     let foundAny = false;
+  //     let pending = 0;
+  //     windows.forEach(proc => {
+  //       if (proc.MainWindowTitle && proc.MainWindowTitle.includes(windowTitle)) {
+  //         foundAny = true;
+  //         pending++;
+  //         console.log(`[killShellWindowByTitle] Terminating window PID: ${proc.Id} Title: ${proc.MainWindowTitle}`);
+  //         exec(`taskkill /PID ${proc.Id} /T /F`, (killErr, killStdout, killStderr) => {
+  //           if (killErr) {
+  //             console.error(`[killShellWindowByTitle] Error killing PID ${proc.Id}:`, killErr);
+  //           } else {
+  //             console.log(`[killShellWindowByTitle]`, killStdout.trim());
+  //           }
+  //           pending--;
+  //           // Resolve once all kills complete
+  //           if (pending === 0) {
+  //             resolve(foundAny);
+  //           }
+  //         });
+  //       }
+  //     });
+  //     if (!foundAny) resolve(false);
+  //   });
+  // });
+
+  // Attempt 3 - first try with all promises and a promises.all at the end!!
+  // First, wrap PowerShell process-listing in a Promise.
+  const psCmd = `powershell -Command "Get-Process | Where-Object { $_.MainWindowTitle } | Select-Object Id,ProcessName,MainWindowTitle | ConvertTo-Json"`;
+  console.log(`[${functionName}] About to execute PowerShell: ${psCmd}`);
+
+  const getWindows = () =>
+    new Promise((resolve, reject) => {
+      console.log(`[${functionName}] ENTER getWindows promise`);
+      exec(psCmd, (err, stdout, stderr) => {
+        console.log(`[${functionName}] PowerShell exec callback fired.`);
+        if (err) {
+          console.error(`[${functionName}] PowerShell exec error:`, err);
+          reject(err);
+          return;
+        }
+        if (stderr && stderr.trim().length > 0) {
+          console.warn(`[${functionName}] PowerShell exec stderr:`, stderr.trim());
+        }
+        console.log(`[${functionName}] PowerShell stdout length: ${stdout.length}`);
+        let windows;
+        try {
+          windows = JSON.parse(stdout);
+          console.log(`[${functionName}] Parsed JSON window list: ${Array.isArray(windows) ? windows.length : 'single object'}`);
+        } catch (e) {
+          console.error(`[${functionName}] JSON parse error:`, e, '\nRaw output:\n', stdout);
+          reject(e);
+          return;
+        }
+        if (!Array.isArray(windows)) windows = [windows];
+        console.log(`[${functionName}] Resolved getWindows with ${windows.length} entries.`);
+        resolve(windows);
+      });
     });
-  });
+
+  try {
+    console.log(`[${functionName}] Awaiting getWindows...`);
+    const windows = await getWindows();
+    console.log(`[${functionName}] getWindows returned ${windows.length} windows.`);
+
+    const matches = windows.filter(w =>
+      w.MainWindowTitle && w.MainWindowTitle.includes(windowTitle)
+    );
+    console.log(`[${functionName}] Matches found: ${matches.length}`);
+
+    if (matches.length === 0) {
+      console.warn(`[${functionName}] No matching windows found with title including: "${windowTitle}"`);
+      console.log(`==== END ${namespacePrefix}${functionName} (no matches) ====\n`);
+      return false;
+    }
+
+    // Build an array of kill promises
+    const killPromises = matches.map(proc => new Promise(killRes => {
+      console.log(`[${functionName}] Attempting to kill PID: ${proc.Id}, Title: "${proc.MainWindowTitle}"`);
+      const killCmd = `taskkill /PID ${proc.Id} /T /F`;
+      console.log(`[${functionName}] Running: ${killCmd}`);
+      exec(killCmd, (kErr, kStdout, kStderr) => {
+        if (kErr) {
+          console.error(`[${functionName}] taskkill error for PID ${proc.Id}:`, kErr);
+        } else {
+          console.log(`[${functionName}] taskkill output for PID ${proc.Id}:\n${kStdout.trim()}`);
+        }
+        if (kStderr && kStderr.trim()) {
+          console.warn(`[${functionName}] taskkill stderr for PID ${proc.Id}:`, kStderr.trim());
+        }
+        killRes();
+      });
+    }));
+
+    // Await all kill promises
+    console.log(`[${functionName}] Awaiting Promise.all for ${killPromises.length} kills...`);
+    await Promise.all(killPromises);
+    console.log(`[${functionName}] All taskkill promises resolved.`);
+
+    console.log(`==== END ${namespacePrefix}${functionName} (success) ====\n`);
+    return true;
+  } catch (err) {
+    console.error(`[${functionName}] FATAL ERROR:`, err);
+    console.log(`==== END ${namespacePrefix}${functionName} (fail) ====\n`);
+    return false;
+  }
 }
 
 let programRunning = false;
@@ -566,4 +749,7 @@ function launchShellHarness() {
     detached: true,
     stdio: wrd.cignore
   });
+
+  // Capture the PIDs
+  shellProcessPID = shellProcess.pid;
 }
