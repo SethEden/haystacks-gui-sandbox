@@ -22,7 +22,7 @@ export const cclientStringParsingDotCustomEcho = wrd.cclient + wrd.cString + wrd
 export const cargumentDrivenInterfaceIs = wrd.cargument + wrd.cDriven + wrd.cInterface + sys.cSpaceIsColonSpace; // argumentDrivenInterface is:
 
 // Instructions
-export const cinstructionsMessage00 = wrd.cInstructions + bas.cSpace + wrd.cto + bas.cSpace + wrd.cend + bas.cSpace + wrd.cuser + bas.cColon; // Instructions to end user:
+export const cinstructionsMessage00 = wrd.cInstructions + bas.cSpace + wrd.cto + bas.cSpace + wrd.cend + bas.cSpace + wrd.cuser + bas.cColon + bas.cSpace; // Instructions to end user:
 
 // Messages
 export const ccomparisonIterationIs = wrd.ccomparison + bas.cSpace + wrd.citeration + sys.cSpaceIsColonSpace; // comparison iteration is:
@@ -41,6 +41,7 @@ export const cappConfigIs = wrd.capp + wrd.cConfig + sys.cSpaceIsColonSpace; // 
 export const ctransmitLogsIs = wrd.ctransmit + wrd.cLogs + sys.cSpaceIsColonSpace; // transmitLogs is:
 export const cwindowTitleIs = wrd.cwindow + wrd.cTitle + sys.cSpaceIsColonSpace; // windowTitle is:
 export const cinteractiveNativeCliWindowIs = wrd.cinteractive + wrd.cNative + gen.cCli + wrd.cWindow + sys.cSpaceIsColonSpace; // interactiveNativeCliWindow is:
+export const cbatFilePathIs = gen.cbat + wrd.cFile + wrd.cPath + sys.cSpaceIsColonSpace; // batFilePath is:
 
 export const cmostPopularNumberMessage01 = wrd.cBEGIN + bas.cSpace + num.cfirst + bas.cSpace + wrd.cfor + bas.cDash + wrd.cloop; // BEGIN first for-loop
 export const cmostPopularNumberMessage02 = wrd.cBEGIN + bas.cSpace + wrd.cnested + bas.cSpace + wrd.cfor + bas.cDash + wrd.cloop + bas.cSpace + bas.ci + bas.cSpace + bas.cEqual + bas.cSpace; // BEGIN nested for-loop i =

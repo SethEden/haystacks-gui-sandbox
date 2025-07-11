@@ -28,6 +28,8 @@ export const cWorkflowsCommonPath = wrd.cworkflows + bas.cForwardSlash; // workf
 export const cThemesCommonPath = wrd.cthemes + bas.cForwardSlash; // themes/
 export const cSchemasCommonPath = wrd.cschemas + bas.cForwardSlash; // schemas/
 export const cReleasePath = wrd.crelease + bas.cForwardSlash; // release/
+export const cscriptsPath = bas.cForwardSlash + wrd.cscripts + bas.cForwardSlash; // /scripts/
+export const cshellHarnessBathFile = wrd.claunch + bas.cDash + wrd.cshell + wrd.cHarness; // launch-shellHarness
 
 // Full Dev paths
 export const cFullDevResourcesPath = cAppDevPath + cResourcesCommonPath; // /src/resources/

@@ -45,6 +45,7 @@ export const applicationMessageConstantsValidation = [
   {Name: 'ctransmitLogsIs', Actual: app_msg.ctransmitLogsIs, Expected: 'transmitLogs is: '},
   {Name: 'cwindowTitleIs', Actual: app_msg.cwindowTitleIs, Expected: 'windowTitle is: '},
   {Name: 'cinteractiveNativeCliWindowIs', Actual: app_msg.cinteractiveNativeCliWindowIs, Expected: 'interactiveNativeCliWindow is: '},
+  {Name: 'cbatFilePathIs', Actual: app_msg.cbatFilePathIs, Expected: 'batFilePath is: '},
 
   {Name: 'cmostPopularNumberMessage01', Actual: app_msg.cmostPopularNumberMessage01, Expected: 'BEGIN first for-loop'},
   {Name: 'cmostPopularNumberMessage02', Actual: app_msg.cmostPopularNumberMessage02, Expected: 'BEGIN nested for-loop i = '},

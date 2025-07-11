@@ -638,14 +638,31 @@ function launchShellHarness() {
   } else {
     shellHarnessPath = path.resolve(rootPath + apc.cAppDevPath + apc.cShellHarnessName + gen.cDotjs);
   }
+  let batFilePath = path.resolve(rootPath + apc.cscriptsPath + apc.cshellHarnessBathFile + gen.cDotbat);
+  // batFilePath is:
+  console.log(app_msg.cbatFilePathIs + batFilePath);
 
   // Working without buffer.
+  // shellProcess = spawn(gen.ccmd + gen.cDotexe, [
+  //   bas.cForwardSlash + bas.cc, wrd.cstart, `"${shellWindowTitle}"`, gen.ccmd + gen.cDotexe, bas.cForwardSlash + bas.ck, wrd.cnode, shellHarnessPath
+  // ], {
+  //   cwd: process.cwd(),
+  //   detached: true,
+  //   stdio: wrd.cignore,
+  //   shell: true
+  // });
+
+  // executing bat file
   shellProcess = spawn(gen.ccmd + gen.cDotexe, [
-    bas.cForwardSlash + bas.cc, wrd.cstart, `"${shellWindowTitle}"`, gen.ccmd + gen.cDotexe, bas.cForwardSlash + bas.ck, wrd.cnode, shellHarnessPath
+    bas.cForwardSlash + bas.cc,
+    wrd.cstart,
+    `"${shellWindowTitle}"`,
+    batFilePath
   ], {
-    cwd: process.cwd(),
+    cwd: path.resolve(rootPath + apc.cAppDevPath),
     detached: true,
-    stdio: wrd.cignore
+    stdio: wrd.cignore,
+    shell: true
   });
 
   // 1st attempt to reset buffer:

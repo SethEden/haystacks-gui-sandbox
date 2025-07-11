@@ -34,6 +34,8 @@ export const applicationConstantsValidation = [
   {Name: 'cThemesCommonPath', Actual: apc.cThemesCommonPath, Expected: 'themes/'},
   {Name: 'cSchemasCommonPath', Actual: apc.cSchemasCommonPath, Expected: 'schemas/'},
   {Name: 'cReleasePath', Actual: apc.cReleasePath, Expected: 'release/'},
+  {Name: 'cscriptsPath', Actual: apc.cscriptsPath, Expected: '/scripts/'},
+  {Name: 'cshellHarnessBathFile', Actual: apc.cshellHarnessBathFile, Expected: 'launch-shellHarness'},
 
   // Full Dev Paths
   {Name: 'cFullDevResourcesPath', Actual: apc.cFullDevResourcesPath, Expected: '/src/resources/'},
