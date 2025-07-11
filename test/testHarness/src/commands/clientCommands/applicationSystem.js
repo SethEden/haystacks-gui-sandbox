@@ -36,16 +36,16 @@ const namespacePrefix = wrd.capplication + bas.cDot + apc.cApplicationName + bas
  */
 async function instructions(inputData, inputMetaData) {
   const functionName = instructions.name;
-  await haystacks.consoleLog(namespacePrefix, functionName, msg.cBEGIN_Function);
-  await haystacks.consoleLog(namespacePrefix, functionName, msg.cinputDataIs + inputData);
-  await haystacks.consoleLog(namespacePrefix, functionName, msg.cinputMetaDataIs + inputMetaData);
+  await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cBEGIN_Function);
+  await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cinputDataIs + inputData);
+  await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cinputMetaDataIs + inputMetaData);
   let returnData = [true, ''];
 
   // Instructions to end user:
-  console.log(app_msg.cinstructionsMessage00)
+  await haystacksGui.consoleLog(wrd.cInfo, '', app_msg.cinstructionsMessage00);
   // ....More instructions ADD HERE!
-  await haystacks.consoleLog(namespacePrefix, functionName, msg.creturnDataIs + JSON.stringify(returnData));
-  await haystacks.consoleLog(namespacePrefix, functionName, msg.cEND_Function);
+  await haystacksGui.consoleLog(namespacePrefix, functionName, msg.creturnDataIs + JSON.stringify(returnData));
+  await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cEND_Function);
   return returnData;
 }
 

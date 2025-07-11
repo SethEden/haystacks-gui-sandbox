@@ -90,7 +90,7 @@
   "debugFunctions|debugSetting.application.testHarness.shutdownAll@FunctionFontBackgroundColor": "Default",
   "debugFunctions|debugSetting.application.testHarness.shutdownAll@MessageFontBackgroundColor": "Default",
   "debugFunctions|debugSetting.application.testHarness.shutdownAll@DataFontBackgroundColor": "Default",
-  "debugFunctions|debugSetting.application.testHarness.killShellWindowByTitle": true,
+  "debugFunctions|debugSetting.application.testHarness.killShellWindowByTitle": false,
   "debugFunctions|debugSetting.application.testHarness.killShellWindowByTitle@ModuleFontStyle": "Default",
   "debugFunctions|debugSetting.application.testHarness.killShellWindowByTitle@FunctionFontStyle": "Default",
   "debugFunctions|debugSetting.application.testHarness.killShellWindowByTitle@MessageFontStyle": "Default",

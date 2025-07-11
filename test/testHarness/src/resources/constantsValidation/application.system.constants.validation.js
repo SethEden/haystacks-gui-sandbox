@@ -21,6 +21,8 @@ import * as app_sys from '../../constants/application.system.constants.js';
 export const applicationSystemConstantsValidation = [
   {Name: 'cclientLoggerTransmit', Actual: app_sys.cclientLoggerTransmit, Expected: 'clientLoggerTransmit'},
   {Name: 'cclientLoggerNoTransmit', Actual: app_sys.cclientLoggerNoTransmit, Expected: 'clientLoggerNoTransmit'},
+  {Name: 'cshutdownAll', Actual: app_sys.cshutdownAll, Expected: 'shutdownAll'},
+  {Name: 'cwindowAllClosedEvent', Actual: app_sys.cwindowAllClosedEvent, Expected: 'window-all-closed'},
 
   // Constants Validation
   {Name: 'cresolvedConstantsPath_Application', Actual: app_sys.cresolvedConstantsPath_Application, Expected: 'resolvedConstantsPath_Application'},

@@ -44,6 +44,7 @@ export const applicationMessageConstantsValidation = [
   {Name: 'cappConfigIs', Actual: app_msg.cappConfigIs, Expected: 'appConfig is: '},
   {Name: 'ctransmitLogsIs', Actual: app_msg.ctransmitLogsIs, Expected: 'transmitLogs is: '},
   {Name: 'cwindowTitleIs', Actual: app_msg.cwindowTitleIs, Expected: 'windowTitle is: '},
+  {Name: 'cinteractiveNativeCliWindowIs', Actual: app_msg.cinteractiveNativeCliWindowIs, Expected: 'interactiveNativeCliWindow is: '},
 
   {Name: 'cmostPopularNumberMessage01', Actual: app_msg.cmostPopularNumberMessage01, Expected: 'BEGIN first for-loop'},
   {Name: 'cmostPopularNumberMessage02', Actual: app_msg.cmostPopularNumberMessage02, Expected: 'BEGIN nested for-loop i = '},
@@ -92,6 +93,10 @@ export const applicationMessageConstantsValidation = [
   {Name: 'cdisconnectedFromServer', Actual: app_msg.cdisconnectedFromServer, Expected: 'Disconnected from server.'},
   {Name: 'csocketError', Actual: app_msg.csocketError, Expected: 'Socket error: '},
   {Name: 'cshuttingDownGoodbye', Actual: app_msg.cshuttingDownGoodbye, Expected: 'shutting down, goodbye.'},
+  {Name: 'cshutdownAllMessage01', Actual: app_msg.cshutdownAllMessage01, Expected: 'Attempting to kill windows with title containing: '},
+  {Name: 'cshutdownAllMessage02', Actual: app_msg.cshutdownAllMessage02, Expected: 'Successfully killed window titled: '},
+  {Name: 'cshutdownAllMessage03', Actual: app_msg.cshutdownAllMessage03, Expected: 'No window with title found or killed: '},
+  {Name: 'cshutdownAllMessage04', Actual: app_msg.cshutdownAllMessage04, Expected: 'Finished killShellWindowByTitle'},
 
   {Name: 'cisAlmostPalindromeInvalidEntry', Actual: app_msg.cisAlmostPalindromeInvalidEntry, Expected: 'INVALID ENTRY: Please enter some valid string.'},
   {Name: 'cstringInputIs', Actual: app_msg.cstringInputIs, Expected: 'stringInput is: '},

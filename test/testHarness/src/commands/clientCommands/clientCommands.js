@@ -43,7 +43,7 @@ async function customEchoCommand(inputData, inputMetaData) {
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cinputMetaDataIs + inputMetaData);
   let returnData = [true, ''];
   returnData[1] = inputData + namespacePrefix + functionName;
-  console.log(returnData[1]);
+  await haystacksGui.consoleLog(wrd.cInfo, '', returnData[1]);
   await haystacksGui.consoleLog(namespacePrefix, functionName, JSON.stringify(returnData));
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cEND_Function);
   return returnData;
@@ -99,7 +99,7 @@ async function bossPanic(inputData, inputMetaData) {
   let coloredLinesMaxLength = 20;
   let fastTypingOutput = false;
   let speedTypingPerformanceIndex = 100; // Default to a fast typing speed.
-  let systemColorLogsEnabled = await haystacks.getConfigurationSetting(wrd.csystem, cfg.cenableColorizedConsoleLogs);
+  let systemColorLogsEnabled = await haystacksGui.getConfigurationSetting(wrd.csystem, cfg.cenableColorizedConsoleLogs);
 
   // Rather than doing the above, I'll just call the business rule to generate a random number between 1 and 100.
   // Then I can call the string generator to generate a random string of characters to match that length.
@@ -131,7 +131,7 @@ async function bossPanic(inputData, inputMetaData) {
       }
     } // End-if (inputData.length > 4)
     if (inputData.length > 5) {
-      fastTypingOutput = await haystacks.executeBusinessRules([inputData[5], ''], [biz.cstringToBoolean]);
+      fastTypingOutput = await haystacksGui.executeBusinessRules([inputData[5], ''], [biz.cstringToBoolean]);
     }
     if (inputData.length > 6) {
       speedTypingPerformanceIndex = parseInt(inputData[6]);
@@ -143,26 +143,26 @@ async function bossPanic(inputData, inputMetaData) {
   // eslint-disable-next-line no-constant-condition
   while (true) { // Start the infinite loop
     if (noColoredLineCount <= 0 && enableColoredLine === false) {
-      noColoredLineCount = await haystacks.executeBusinessRules([num.c1, [noColoredLinesMaxLength, false, false]], [biz.crandomlyGenerateNumberInRange]);
+      noColoredLineCount = await haystacksGui.executeBusinessRules([num.c1, [noColoredLinesMaxLength, false, false]], [biz.crandomlyGenerateNumberInRange]);
       enableColoredLine = true;
     }
     if (coloredLineCount <= 0 && enableColoredLine === true) {
-      coloredLineCount = await haystacks.executeBusinessRules([num.c2, [coloredLinesMaxLength, false, false]], [biz.crandomlyGenerateNumberInRange]);
+      coloredLineCount = await haystacksGui.executeBusinessRules([num.c2, [coloredLinesMaxLength, false, false]], [biz.crandomlyGenerateNumberInRange]);
       enableColoredLine = false;
     }
-    stringLength = await haystacks.executeBusinessRules([num.c1, [lineLength, false, false]], [biz.crandomlyGenerateNumberInRange]);
+    stringLength = await haystacksGui.executeBusinessRules([num.c1, [lineLength, false, false]], [biz.crandomlyGenerateNumberInRange]);
     // Now we will generate a number between 0 and the string length, this will be the color limit so we can break the ine up randomly into a beginning segment and an ending segment.
     // Each segment of the line will get a different random foreground font color and random background font color.
-    colorBreakPoint = await haystacks.executeBusinessRules([num.c1, [stringLength, false, false]], [biz.crandomlyGenerateNumberInRange]);
-    stringToPrint = await haystacks.executeBusinessRules([stringLength, abt.cMostSpecialCharacters], [biz.cgenerateRandomMixedCaseAlphaNumericCodeWithSpecialCharactersByLength]);
+    colorBreakPoint = await haystacksGui.executeBusinessRules([num.c1, [stringLength, false, false]], [biz.crandomlyGenerateNumberInRange]);
+    stringToPrint = await haystacksGui.executeBusinessRules([stringLength, abt.cMostSpecialCharacters], [biz.cgenerateRandomMixedCaseAlphaNumericCodeWithSpecialCharactersByLength]);
     if (enableColoredLine === true && systemColorLogsEnabled === true) {
       subString1 = stringToPrint.substr(0, colorBreakPoint);
       subString2 = stringToPrint.substr(colorBreakPoint, stringToPrint.length);
       // Determine if the first part of the string will have a light foreground and dark background or dark foreground and light background.
-      if (await haystacks.executeBusinessRules(['', ''], [biz.crandomlyGenerateBooleanValue]) === true) {
-        brightColor1 = await haystacks.executeBusinessRules([200, 255], [biz.cgenerateRandomBrightColor]);
-        darkColor1 = await haystacks.executeBusinessRules([0, 60], [biz.cgenerateRandomDarkColor]);
-        colorMode1 = await haystacks.executeBusinessRules(['', ''], [biz.crandomlyGenerateBooleanValue]);
+      if (await haystacksGui.executeBusinessRules(['', ''], [biz.crandomlyGenerateBooleanValue]) === true) {
+        brightColor1 = await haystacksGui.executeBusinessRules([200, 255], [biz.cgenerateRandomBrightColor]);
+        darkColor1 = await haystacksGui.executeBusinessRules([0, 60], [biz.cgenerateRandomDarkColor]);
+        colorMode1 = await haystacksGui.executeBusinessRules(['', ''], [biz.crandomlyGenerateBooleanValue]);
         if (colorMode1 === true) {
           subString1 = chalk.rgb(brightColor1[0], brightColor1[1], brightColor1[2])(subString1);
           subString2 = chalk.bgRgb(darkColor1[0], darkColor1[1], darkColor1[2])(subString1);
@@ -170,11 +170,11 @@ async function bossPanic(inputData, inputMetaData) {
           subString1 = chalk.rgb(darkColor1[0], darkColor1[1], darkColor1[2])(subString1);
           subString2 = chalk.bgRgb(brightColor1[0], brightColor1[1], brightColor1[2])(subString1);
         }
-      } // End-if (haystacks.executeBusinessRule(biz.crandomlyGenerateBooleanValue, '', '') === true)
-      if (await haystacks.executeBusinessRules(['', ''], [biz.crandomlyGenerateBooleanValue]) === true) {
-        brightColor2 = await haystacks.executeBusinessRules([200, 255], [biz.cgenerateRandomBrightColor]);
-        darkColor2 = await haystacks.executeBusinessRules([0, 60], [biz.cgenerateRandomDarkColor]);
-        colorMode2 = await haystacks.executeBusinessRules(['', ''], [biz.crandomlyGenerateBooleanValue]);
+      } // End-if (haystacksGui.executeBusinessRule(biz.crandomlyGenerateBooleanValue, '', '') === true)
+      if (await haystacksGui.executeBusinessRules(['', ''], [biz.crandomlyGenerateBooleanValue]) === true) {
+        brightColor2 = await haystacksGui.executeBusinessRules([200, 255], [biz.cgenerateRandomBrightColor]);
+        darkColor2 = await haystacksGui.executeBusinessRules([0, 60], [biz.cgenerateRandomDarkColor]);
+        colorMode2 = await haystacksGui.executeBusinessRules(['', ''], [biz.crandomlyGenerateBooleanValue]);
         if (colorMode2 === true) {
           subString2 = chalk.rgb(brightColor2[0], brightColor2[1], brightColor2[2])(subString2);
           subString2 = chalk.bgRgb(darkColor2[0], darkColor2[1], darkColor2[2])(subString2);
@@ -182,7 +182,7 @@ async function bossPanic(inputData, inputMetaData) {
           subString2 = chalk.rgb(darkColor2[0], darkColor2[1], darkColor2[2])(subString2);
           subString2 = chalk.bgRgb(brightColor2[0], brightColor2[1], brightColor2[2])(subString2);
         }
-      } // End-if (haystacks.executeBusinessRule(biz.crandomlyGenerateBooleanValue, '', '') === true)
+      } // End-if (haystacksGui.executeBusinessRule(biz.crandomlyGenerateBooleanValue, '', '') === true)
       // Now colorize the different string segments and we will recombine them before printing out to the screen.
       stringToPrint = subString1 + subString2;
       coloredLineCount--;
@@ -192,14 +192,14 @@ async function bossPanic(inputData, inputMetaData) {
     if (fastTypingOutput === true) {
       for (let i = 0; i < stringToPrint.length; i++) {
         // eslint-disable-next-line no-undef
-        await process.stdout.write(stringToPrint.charAt(i));
-        await haystacks.executeBusinessRules([speedTypingPerformanceIndex, ''], [wrd.csleep]);
+        await haystacksGui.consoleLog(wrd.cInfo, '', stringToPrint.charAt(i));
+        await haystacksGui.executeBusinessRules([speedTypingPerformanceIndex, ''], [wrd.csleep]);
       } // End-for (let i = 0; i < stringToPrint.length; i++)
-      console.log('\r'); // Carriage return
+      await haystacksGui.consoleLog(wrd.cInfo, '', bas.cCarRetNewLin);
     } else {
-      console.log(stringToPrint);
+      await haystacksGui.consoleLog(wrd.cInfo, '', stringToPrint);
     }
-    await haystacks.executeBusinessRules([performanceIndex, ''], [wrd.csleep]);
+    await haystacksGui.executeBusinessRules([performanceIndex, ''], [wrd.csleep]);
   } // End-while (true) // End of the infinite loop
 }
 
@@ -222,7 +222,7 @@ async function clientCommand01(inputData, inputMetaData) {
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cinputMetaDataIs + inputMetaData);
   let returnData= [true, false];
   returnData[1] = namespacePrefix + functionName;
-  console.log(returnData[1]);
+  await haystacksGui.consoleLog(wrd.cInfo, '', returnData[1]);
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cEND_Function);
   return returnData;
@@ -247,7 +247,7 @@ async function clientCommand02(inputData, inputMetaData) {
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cinputMetaDataIs + inputMetaData);
   let returnData= [true, false];
   returnData[1] = namespacePrefix + functionName;
-  console.log(returnData[1]);
+  await haystacksGui.consoleLog(wrd.cInfo, '', returnData[1]);
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cEND_Function);
   return returnData;
@@ -272,7 +272,7 @@ async function clientCommand03(inputData, inputMetaData) {
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cinputMetaDataIs + inputMetaData);
   let returnData= [true, false];
   returnData[1] = namespacePrefix + functionName;
-  console.log(returnData[1]);
+  await haystacksGui.consoleLog(wrd.cInfo, '', returnData[1]);
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cEND_Function);
   return returnData;
@@ -297,7 +297,7 @@ async function clientCommand04(inputData, inputMetaData) {
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cinputMetaDataIs + inputMetaData);
   let returnData= [true, false];
   returnData[1] = namespacePrefix + functionName;
-  console.log(returnData[1]);
+  await haystacksGui.consoleLog(wrd.cInfo, '', returnData[1]);
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cEND_Function);
   return returnData;
@@ -322,7 +322,7 @@ async function clientCommand05(inputData, inputMetaData) {
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cinputMetaDataIs + inputMetaData);
   let returnData= [true, false];
   returnData[1] = namespacePrefix + functionName;
-  console.log(returnData[1]);
+  await haystacksGui.consoleLog(wrd.cInfo, '', returnData[1]);
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cEND_Function);
   return returnData;
@@ -347,7 +347,7 @@ async function clientCommand06(inputData, inputMetaData) {
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cinputMetaDataIs + inputMetaData);
   let returnData= [true, false];
   returnData[1] = namespacePrefix + functionName;
-  console.log(returnData[1]);
+  await haystacksGui.consoleLog(wrd.cInfo, '', returnData[1]);
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cEND_Function);
   return returnData;
@@ -372,7 +372,7 @@ async function clientCommand07(inputData, inputMetaData) {
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cinputMetaDataIs + inputMetaData);
   let returnData= [true, false];
   returnData[1] = namespacePrefix + functionName;
-  console.log(returnData[1]);
+  await haystacksGui.consoleLog(wrd.cInfo, '', returnData[1]);
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cEND_Function);
   return returnData;
@@ -397,7 +397,7 @@ async function clientCommand08(inputData, inputMetaData) {
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cinputMetaDataIs + inputMetaData);
   let returnData= [true, false];
   returnData[1] = namespacePrefix + functionName;
-  console.log(returnData[1]);
+  await haystacksGui.consoleLog(wrd.cInfo, '', returnData[1]);
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cEND_Function);
   return returnData;
@@ -422,7 +422,7 @@ async function clientCommand09(inputData, inputMetaData) {
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cinputMetaDataIs + inputMetaData);
   let returnData= [true, false];
   returnData[1] = namespacePrefix + functionName;
-  console.log(returnData[1]);
+  await haystacksGui.consoleLog(wrd.cInfo, '', returnData[1]);
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cEND_Function);
   return returnData;
@@ -447,7 +447,7 @@ async function clientCommand10(inputData, inputMetaData) {
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cinputMetaDataIs + inputMetaData);
   let returnData= [true, false];
   returnData[1] = namespacePrefix + functionName;
-  console.log(returnData[1]);
+  await haystacksGui.consoleLog(wrd.cInfo, '', returnData[1]);
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await haystacksGui.consoleLog(namespacePrefix, functionName, msg.cEND_Function);
   return returnData;

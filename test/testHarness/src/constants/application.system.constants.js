@@ -14,6 +14,8 @@ const {bas, gen, wrd} = hayConst;
 
 export const cclientLoggerTransmit = wrd.cclient + wrd.cLogger + wrd.cTransmit; // clientLoggerTransmit
 export const cclientLoggerNoTransmit = wrd.cclient + wrd.cLogger + wrd.cNo + wrd.cTransmit; // clientLoggerNoTransmit
+export const cshutdownAll = wrd.cshutdown + wrd.cAll; // shutdownAll
+export const cwindowAllClosedEvent = wrd.cwindow + bas.cDash + wrd.call + bas.cDash + wrd.cclosed; // window-all-closed
 
 // Constants Validation
 export const cresolvedConstantsPath_Application = wrd.cresolved + wrd.cConstants + wrd.cPath + bas.cUnderscore + wrd.cApplication; // resolvedConstantsPath_Application

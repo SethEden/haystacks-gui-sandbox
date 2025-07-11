@@ -40,6 +40,7 @@ export const cclientLoggerSchemaIs = wrd.cclient + wrd.cLogger + wrd.cSchema + s
 export const cappConfigIs = wrd.capp + wrd.cConfig + sys.cSpaceIsColonSpace; // appConfig is:
 export const ctransmitLogsIs = wrd.ctransmit + wrd.cLogs + sys.cSpaceIsColonSpace; // transmitLogs is:
 export const cwindowTitleIs = wrd.cwindow + wrd.cTitle + sys.cSpaceIsColonSpace; // windowTitle is:
+export const cinteractiveNativeCliWindowIs = wrd.cinteractive + wrd.cNative + gen.cCli + wrd.cWindow + sys.cSpaceIsColonSpace; // interactiveNativeCliWindow is:
 
 export const cmostPopularNumberMessage01 = wrd.cBEGIN + bas.cSpace + num.cfirst + bas.cSpace + wrd.cfor + bas.cDash + wrd.cloop; // BEGIN first for-loop
 export const cmostPopularNumberMessage02 = wrd.cBEGIN + bas.cSpace + wrd.cnested + bas.cSpace + wrd.cfor + bas.cDash + wrd.cloop + bas.cSpace + bas.ci + bas.cSpace + bas.cEqual + bas.cSpace; // BEGIN nested for-loop i =
@@ -90,6 +91,10 @@ export const cWarningUnknownMessageType = msg.cWARNING_Colon + wrd.cWe + bas.cSp
 export const cdisconnectedFromServer = wrd.cDisconnected + bas.cSpace + wrd.cfrom + bas.cSpace + wrd.cserver + bas.cDot; // Disconnected from server.
 export const csocketError = wrd.cSocket + bas.cSpace + wrd.cerror + bas.cColon + bas.cSpace; // Socket error:
 export const cshuttingDownGoodbye = wrd.cshutting + bas.cSpace + wrd.cdown + bas.cComa + bas.cSpace + wrd.cgood + wrd.cbye + bas.cDot; // shutting down, goodbye.
+export const cshutdownAllMessage01 = wrd.cAttempting + bas.cSpace + wrd.cto + bas.cSpace + wrd.ckill + bas.cSpace + wrd.cwindows + bas.cSpace + wrd.cwith + bas.cSpace + wrd.ctitle + bas.cSpace + wrd.ccontaining + bas.cColon + bas.cSpace; // Attempting to kill windows with title containing:
+export const cshutdownAllMessage02 = wrd.cSuccessfully + bas.cSpace + wrd.ckilled + bas.cSpace + wrd.cwindow + bas.cSpace + wrd.ctitled + bas.cColon + bas.cSpace; // Successfully killed window titled:
+export const cshutdownAllMessage03 = wrd.cNo + bas.cSpace + wrd.cwindow + bas.cSpace + wrd.cwith + bas.cSpace + wrd.ctitle + bas.cSpace + wrd.cfound + bas.cSpace + wrd.cor + bas.cSpace + wrd.ckilled + bas.cColon + bas.cSpace; // No window with title found or killed:
+export const cshutdownAllMessage04 = wrd.cFinished + bas.cSpace + wrd.ckill + wrd.cShell + wrd.cWindow + wrd.cBy + wrd.cTitle; // Finished killShellWindowByTitle
 
 export const cisAlmostPalindromeInvalidEntry = wrd.cINVALID + bas.cSpace + wrd.cENTRY + bas.cColon + bas.cSpace + wrd.cPlease + bas.cSpace + wrd.center + bas.cSpace + wrd.csome + bas.cSpace + wrd.cvalid + bas.cSpace + wrd.cstring + bas.cDot; // INVALID ENTRY: Please enter some valid string.
 export const cstringInputIs = wrd.cstring + wrd.cInput + sys.cSpaceIsColonSpace; // stringInput is:
