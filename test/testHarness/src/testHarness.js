@@ -591,7 +591,8 @@ app.whenReady().then(async () => {
 
   // 3. Wait briefly to allow the shell to connect.
   // TODO: Replace this timeout with an event-driven handshake so we only proceed once the shellHarness is truly ready.
-  await new Promise(resolve => setTimeout(resolve, 500));
+  // Initial value here was 500, under medium-heavy CPU/GPU load, bumped up to 1s.
+  await new Promise(resolve => setTimeout(resolve, 1000));
   // Rationale: This artificial delay ensures the shellHarness CLI has connected before processing the startup workflow.
   // This should be replaced with a more robust ready-check for production use.
 

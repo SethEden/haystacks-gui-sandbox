@@ -1,7 +1,7 @@
 /**
  * @file workflowBroker.js
  * @module workflowBroker
- * @description Holds all fo the low level functions that manage the workflows,
+ * @description Holds all of the low level functions that manage the workflows,
  * system defined workflows, client defined workflows,
  * setting the workflow data and getting the workflow data.
  * @requires module:loggers
