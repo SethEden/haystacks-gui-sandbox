@@ -8,6 +8,7 @@
  *  - Tracks job status, collects results, and reports back to chiefThreader.
  *  - Implements strategies driven by schema (round robin, priority queue, batching).
  * @requires module:loggers
+ * @requires module:threader
  * @requires module:data
  * @requires {@link https://www.npmjs.com/package/path|path}
  * @author Seth Hollingsead
@@ -17,6 +18,7 @@
 
 // Internal imports
 import loggers from '../executrix/loggers.js';
+import threader from '../executrix/threader.js';
 import D from '../structures/data.js';
 // External imports
 import hayConst from '@haystacks/constants';
@@ -60,7 +62,7 @@ async function startJob(jobData) {
   // jobData is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cjobDataIs + JSON.stringify(jobData));
   let returnData = false;
-
+  returnData = await threader.startThread(jobData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
   return returnData;

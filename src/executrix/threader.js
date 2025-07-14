@@ -9,6 +9,7 @@
  *  - Clean startup/shutdown, can be imported for specialized tasks if needed.
  * @requires module:ruleBroker
  * @requires module:configurator
+ * @requires module:loggers
  * @requires module:data
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
  * @requires {@link https://nodejs.org/api/worker_threads.html|worker_threads}
@@ -21,6 +22,7 @@
 // Internal imports
 import ruleBroker from '../brokers/ruleBroker.js';
 import configurator from './configurator.js';
+import loggers from './loggers.js';
 import D from '../structures/data.js';
 // External imports
 import hayConst from '@haystacks/constants';
@@ -47,7 +49,19 @@ async function startThread(jobData) {
   // jobData is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cjobDataIs + JSON.stringify(jobData));
   let returnData = false;
-
+  returnData = new Promise((resolve, reject) => {
+    // Pass jobData to the worker. For test: worker does "return jobData + 1"
+    const worker = new Worker(new URL('./threadWorker.js', import.meta.url), {
+      workerData: jobData,
+    });
+    worker.on(wrd.cmessage, result => {
+      resolve(result);
+    });
+    worker.on(wrd.cerror, reject);
+    worker.on(wrd.cexit, code => {
+      if (code !== 0) reject(new Error('Worker stopped with exit code: ' + code));
+    })
+  });
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
   return returnData;

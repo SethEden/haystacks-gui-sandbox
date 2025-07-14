@@ -7,6 +7,7 @@
  *  - Decides if a job should be run in parallel, queued, or handled directly.
  *  - Handles startup, shutdown, and worker pool health/status monitoring, race condition checkers.
  *  - Aggregates logging/errors from all workers.
+ * @requires module:threadBroker
  * @requires module:chiefData
  * @requires module:configurator
  * @requires module:loggers
@@ -19,6 +20,7 @@
  */
 
 // Internal imports
+import threadBroker from '../brokers/threadBroker.js';
 import chiefData from './chiefData.js';
 import configurator from '../executrix/configurator.js';
 import loggers from '../executrix/loggers.js';
@@ -65,10 +67,18 @@ async function submitJob(jobData) {
   // jobData is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cjobDataIs + JSON.stringify(jobData));
   let returnData = false;
-
+  returnData = await threadBroker.startJob(jobData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
   return returnData;
+}
+
+// At bottom, for smoke test only
+if (process.argv[1] === import.meta.url) {
+  (async () => {
+    const result = await submitJob({ value: 41 });
+    console.log('Thread result:', result);
+  })();
 }
 
 export default {

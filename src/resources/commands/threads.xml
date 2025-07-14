@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CommandsAliases>
+  <threads>
+    <Command Name="threadTest" Aliases="ThreadTst,ThreadTs,ThreadTest,TdTst,TdTs,TdTest,ThdTst,ThdTs,ThdTest,ThrdTst,ThrdTs,ThrdTest,ThradTst,ThradTs,ThradTest,ThredTst,ThredTs" Description="Executes a thread test."/>
+  </threads>
+</CommandsAliases>

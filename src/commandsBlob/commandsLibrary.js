@@ -30,6 +30,7 @@ import integrationTestCommands from './commands/integrationTests.js';
 import performanceMetricCommands from './commands/performanceMetric.js';
 import pluginCommands from './commands/plugins.js';
 import systemCommands from './commands/system.js';
+import threadCommands from './commands/threads.js';
 import loggers from '../executrix/loggers.js';
 import D from '../structures/data.js';
 // External imports
@@ -162,7 +163,12 @@ async function initCommandsLibrary() {
     [cmd.cprintUserCommandsLog]: (inputData, inputMetaData) => systemCommands.printUserCommandsLog(inputData, inputMetaData),
     [cmd.cprintAllCommandsLog]: (inputData, inputMetaData) => systemCommands.printAllCommandsLog(inputData, inputMetaData),
     [cmd.cclearUserCommandsLog]: (inputData, inputMetaData) => systemCommands.clearUserCommandsLog(inputData, inputMetaData),
-    [cmd.cclearAllCommandsLog]: (inputData, inputMetaData) => systemCommands.clearAllCommandsLog(inputData, inputMetaData)
+    [cmd.cclearAllCommandsLog]: (inputData, inputMetaData) => systemCommands.clearAllCommandsLog(inputData, inputMetaData),
+
+    // ***********************************************
+    // Thread commands in order
+    // ***********************************************
+    [cmd.cthreadTest]: (inputData, inputMetaData) => threadCommands.threadTest(inputData, inputMetaData)
   };
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
 }
