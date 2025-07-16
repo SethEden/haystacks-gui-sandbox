@@ -59,7 +59,7 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDo
  * @param {string} inputData The string that contains a number or how many
  * randomly generated mixed case alphabetic characters should be generated.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} A string of randomly generated mixed case letters where the
+ * @returns {string} A string of randomly generated mixed case letters where the
  * length of the string is defined by the input parameter.
  * @author Seth Hollingsead
  * @date 2022/01/26
@@ -88,7 +88,7 @@ async function generateRandomMixedCaseTextByLength(inputData, inputMetaData) {
  * @param {string} inputData The string that contains a number for how many randomly
  * generated upper case english alphabetic characters should be generated.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} A string of randomly generated upper case letters where the
+ * @returns {string} A string of randomly generated upper case letters where the
  * length of the string is defined by the input parameter.
  * @author Seth Hollingsead
  * @date 2022/01/26
@@ -117,7 +117,7 @@ async function generateRandomUpperCaseTextByLength(inputData, inputMetaData) {
  * @param {string} inputData The string that contains a number for how many randomly
  * generated lower case english alphabetic characters that should be generated.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} A string of randomly generated lower case letters where the
+ * @returns {string} A string of randomly generated lower case letters where the
  * length of the string is defined by the input parameter.
  * @author Seth Hollingsead
  * @date 2022/01/26
@@ -151,7 +151,7 @@ async function generateRandomLowerCaseTextByLength(inputData, inputMetaData) {
  *  "!@#$%^&amp;*()_+-=[]{};:',./&lt;>?\|\"", // SpecialCharacters
  *  "English" // Language
  * ]
- * @return {string} A string of randomly generated mixed case letters and
+ * @returns {string} A string of randomly generated mixed case letters and
  * special characters where the length of the string is defined by the input parameter.
  * @author Seth Hollingsead
  * @date 2022/01/26
@@ -185,7 +185,7 @@ async function generateRandomMixedCaseTextWithSpecialCharactersByLength(inputDat
  *  "!@#$%^&amp;*()_+-=[]{};:',./&lt;>?\|\"", // SpecialCharacters
  *  "English" // Language
  * ]
- * @return {string} A string of randomly generated upper case english letters and
+ * @returns {string} A string of randomly generated upper case english letters and
  * special characters where the length of the string is defined by the input parameter.
  * @author Seth Hollingsead
  * @date 2022/01/26
@@ -221,7 +221,7 @@ async function generateRandomUpperCaseTextWithSpecialCharactersByLength(inputDat
  *  "!@#$%^&amp;*()_+-=[]{};:',./&lt;>?\|\"", // SpecialCharacters
  *  "English" // Language
  * ]
- * @return {string} A string of randomly generated lower case english letters and
+ * @returns {string} A string of randomly generated lower case english letters and
  * special characters where the length of the string is defined by the input parameter.
  * @author Seth Hollingsead
  * @date 2022/01/26
@@ -252,7 +252,7 @@ async function generateRandomLowerCaseTextWithSpecialCharactersByLength(inputDat
  * @param {string} inputData The number of randomly generated mixed case letters and/or
  * numbers that should be generated.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} A string of randomly generated mixed case english letters and
+ * @returns {string} A string of randomly generated mixed case english letters and
  * numbers where the length of the string is defined by the input parameter.
  * @author Seth Hollingsead
  * @date 2022/01/26
@@ -281,7 +281,7 @@ async function generateRandomMixedCaseAlphaNumericCodeByLength(inputData, inputM
  * @param {string} inputData The string that contains a number for how many randomly
  * generated upper case english letters and/or numbers that should be generated.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} A string of randomly generated upper case english letters and numbers
+ * @returns {string} A string of randomly generated upper case english letters and numbers
  * where the length of the string is defined by the input parameter.
  * @author Seth Hollingsead
  * @date 2022/01/26
@@ -310,7 +310,7 @@ async function generateRandomUpperCaseAlphaNumericCodeByLength(inputData, inputM
  * @param {string} inputData The number of randomly generated lower case letters and/or
  * numbers that should be generated.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} A string of randomly generated lower case english letters and
+ * @returns {string} A string of randomly generated lower case english letters and
  * numbers where the length of the string is defined by the input parameter.
  * @author Seth Hollingsead
  * @date 2022/01/26
@@ -337,7 +337,7 @@ async function generateRandomLowerCaseAlphaNumericCodeByLength(inputData, inputM
  * @description Generate the specified number of random numeric characters and string them together.
  * @param {string} inputData The number of randomly generated numeric characters that should be generated.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} A string of randomly generated numeric characters where the
+ * @returns {string} A string of randomly generated numeric characters where the
  * length of the string is defined by the input parameter.
  * @author Seth Hollingsead
  * @date 2022/01/26
@@ -372,7 +372,7 @@ async function generateRandomNumericCodeByLength(inputData, inputMetaData) {
  *  "!@#$%^&amp;*()_+-=[]{};:',./&lt;>?\|\"", // SpecialCharacters
  *  "English" // Language
  * ]
- * @return {string} A string of randomly generated mixed case alpha numeric characters,
+ * @returns {string} A string of randomly generated mixed case alpha numeric characters,
  * and special characters where the length of the string is defined by the input parameter.
  * @author Seth Hollingsead
  * @date 2022/01/26
@@ -409,7 +409,7 @@ async function generateRandomMixedCaseAlphaNumericCodeWithSpecialCharactersByLen
  *  "!@#$%^&amp;*()_+-=[]{};:',./&lt;>?\|\"", // SpecialCharacters
  *  "English" // Language
  * ]
- * @return {string} A string of randomly generated upper case alpha numeric characters,
+ * @returns {string} A string of randomly generated upper case alpha numeric characters,
  * and special characters where the length of the string is defined as one of the input parameters.
  * @author Seth Hollingsead
  * @date 2022/01/26
@@ -446,7 +446,7 @@ async function generateRandomUpperCaseAlphaNumericCodeWithSpecialCharactersByLen
  *  "!@#$%^&amp;*()_+-=[]{};:',./&lt;>?\|\"", // SpecialCharacters
  *  "English" // Language
  * ]
- * @return {string} A string of randomly generated lower case alpha numeric characters,
+ * @returns {string} A string of randomly generated lower case alpha numeric characters,
  * and special characters where the length of the string is defined as one of the input parameters.
  * @author Seth Hollingsead
  * @date 2022/01/26
@@ -476,7 +476,7 @@ async function generateRandomLowerCaseAlphaNumericCodeWithSpecialCharactersByLen
  * generate them and string them together to the specified length.
  * @param {string} inputData The number of randomly generated special characters that should be generated.
  * @param {string} inputMetaData The list of special characters that should be used during the generation process.
- * @return {string} A string of randomly generated characters from the list of
+ * @returns {string} A string of randomly generated characters from the list of
  * allowable special characters that are passed in where the length of the string is defined as one of the input parameters.
  * @author Seth Hollingsead
  * @date 2022/01/26
@@ -511,7 +511,7 @@ async function generateRandomSpecialCharacterCodeByLength(inputData, inputMetaDa
  * inputMetaData[1] - allowableSpecialCharacters - The list of allowable special characters as a string, only used if the {@code generateSpecialCharacters} boolean value is set to {@code TRUE}.
  * inputMetaData[2] - specifiedSuffixAndDomain - The specified suffix and domain to use after the "@" symbol in the email being generated, example "Yahoo.com".
  * inputMetaData[3] - language - The language that should be used to determine the alphabet that should be used for international characters.
- * @return {string} A string of randomly generated mixed case alpha numeric characters and optionally special characters
+ * @returns {string} A string of randomly generated mixed case alpha numeric characters and optionally special characters
  * where the length of the string is also defined as one of the input parameters, formatted as an email: a@b.com".
  * @author Seth Hollingsead
  * @date 2022/01/26
@@ -593,7 +593,7 @@ async function generateValidEmail(inputData, inputMetaData) {
  * inputMetaData[1] - allowableSpecialCharacters - The list of allowable special characters as a string, only used if the {@code generateSpecialCharacters} boolean value is set to {@code TRUE}.
  * inputMetaData[2] - specifiedSuffixAndDomain - The specified suffix and domain to use after the "@" symbol in the email being generated, example "Yahoo.com".
  * inputMetaData[3] - language - The language that should be used to determine the alphabet that should be used for international characters.
- * @return {string} A string of randomly generated mixed case alpha numeric characters and
+ * @returns {string} A string of randomly generated mixed case alpha numeric characters and
  * optionally special characters where the length of the string is also defined as one
  * of the input parameters, formatted as an email: "a@b.com".
  * @author Seth Hollingsead
@@ -676,7 +676,7 @@ async function generateInvalidEmail(inputData, inputMetaData) {
  * inputMetaData[1] - allowableSpecialCharacters - The list of allowable special characters as a string, only used if the {@code generateSpecialCharacters} boolean value is set to {@code TRUE}.
  * inputMetaData[2] - specifiedSuffixAndDomain - The specified suffix and domain to use after the "@" symbol in the email being generated, example "Yahoo.com".
  * inputMetaData[3] - language - The language that should be used to determine the alphabet that should be used for international characters.
- * @return {string} A string of randomly generated mixed case alpha numeric characters and optionally special characters
+ * @returns {string} A string of randomly generated mixed case alpha numeric characters and optionally special characters
  * where the length of the string is also defined as one of the input parameters, formatted as an email: "a@b.com".
  * @NOTE The number of characters in the {@code specifiedSuffixAndDomain} input variable must not
  * exceed the {@code numberOfCharactersToGenerate + 2} or the function/rule will return an empty string.
@@ -733,7 +733,7 @@ async function generateValidEmailWithSpecificSuffixAndDomainName(inputData, inpu
  * inputMetaData[1] - allowableSpecialCharacters - The list of allowable special characters as a string, only used if the {@code generateSpecialCharacters} Boolean value is set to {@code TRUE}.
  * inputMetaData[2] - specifiedSuffixAndDomain - Not used for this business rule.
  * inputMetaData[3] - language - The language that should be used to determine the alphabet that should be used for international characters.
- * @return {string} A string of randomly generated  mixed case alpha numeric characters adn optionally special characters
+ * @returns {string} A string of randomly generated  mixed case alpha numeric characters adn optionally special characters
  * where the length of the string is also defined as one of the input parameters, formatted as an email "a@b.com".
  * @author Seth Hollingsead
  * @date 2022/01/26
@@ -845,7 +845,7 @@ async function generateRandomValidEmail(inputData, inputMetaData) {
  * inputMetaData[1] - allowableSpecialCharacters - The list of allowable special characters as a string, only used if the {@code generateSpecialCharacters} Boolean value is set to {@code TRUE}.
  * inputMetaData[2] - specifiedSuffixAndDomain - The specified suffix and domain to use after the "@" symbol in the email being generated, example: "Yahoo.com".
  * inputMetaData[3] - language - The language that should be used to determine the alphabet that should be used for international characters.
- * @return {string} A string of randomly generated mixed case alpha numeric characters and optionally
+ * @returns {string} A string of randomly generated mixed case alpha numeric characters and optionally
  * special characters where the length of the string is also defined as one of the input parameters, formatted as an email "a@b.com".
  * @NOTE The number of characters in the {@code specifiedSuffixAndDomain} input variable must not
  * exceed the {@code numberOfCharactersToGenerate + 2} or the function/rule will return an empty string.
@@ -965,7 +965,7 @@ async function generateInvalidEmailWithSpecificSuffixAndDomainName(inputData, in
  * inputMetaData[1] - allowableSpecialCharacters - The list of allowable special characters as a string, only used if the {@code generateSpecialCharacters} Boolean value is set to {@code TRUE}.
  * inputMetaData[2] - specifiedSuffixAndDomain - Not used for this business rule.
  * inputMetaData[3] - language - The language that should be used to determine the alphabet that should be used for international characters.
- * @return {string} A string of randomly generated mixed case alpha numeric characters and optionally special characters
+ * @returns {string} A string of randomly generated mixed case alpha numeric characters and optionally special characters
  * where the length of the string is also defined as one of the input parameters, formatted as an email "a@b.com".
  * @author Seth Hollingsead
  * @date 2022/01/26
@@ -1290,7 +1290,7 @@ async function generateRandomInvalidEmail(inputData, inputMetaData) {
  * Really the only difference is the default values. So this function is refactored to call a generic random color generator business rule.
  * @param {string|integer} inputData The number in either numeric or string format that represents the minimum range that should be used to generate the random color.
  * @param {string|integer} inputMetaData The number in either numeric or string format that represents the maximum range that should be used to generate the random color.
- * @return {array&lt;integer,integer,integer>} An array of RGB values in the bright color spectrum range.
+ * @returns {array&lt;integer,integer,integer>} An array of RGB values in the bright color spectrum range.
  * @author Seth Hollingsead
  * @date 2022/01/27
  */
@@ -1324,7 +1324,7 @@ async function generateRandomBrightColor(inputData, inputMetaData) {
  * Really the only difference is the default values. So this function is refactored to call a generic random color generator business rule.
  * @param {string|integer} inputData The number in either numeric or string format that represents the minimum range that should be used to generate the random color.
  * @param {string|integer} inputMetaData The number in either numeric or string format that represents the maximum range that should be used to generate the random color.
- * @return {array&lt;integer,integer,integer>} An array of RGB values in the dark color spectrum range.
+ * @returns {array&lt;integer,integer,integer>} An array of RGB values in the dark color spectrum range.
  * @author Seth Hollingsead
  * @date 2022/01/27
  */
@@ -1354,7 +1354,7 @@ async function generateRandomDarkColor(inputData, inputMetaData) {
  * @description Generates a random set of RGB values in the given color range.
  * @param {string|integer} inputData The number in either numeric or string format that represents the minimum range that should be used to generate the random color.
  * @param {string|integer} inputMetaData The number in either numeric or string format that represents the maximum range that should be used to generate the random color.
- * @return {array&lt;integer,integer,integer>} An array of RGB values that will be used for a color value.
+ * @returns {array&lt;integer,integer,integer>} An array of RGB values that will be used for a color value.
  * @author Seth Hollingsead
  * @date 2022/01/27
  */

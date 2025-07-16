@@ -24,21 +24,63 @@ import path from 'path';
 
 const {bas, biz, cfg, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.businessRules.rules.arrayParsing.dataArrayParsing.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + wrd.carray + wrd.cParsing + bas.cDot + baseFileName + bas.cDot;
+
+const rulesMetaData = [
+  {[wrd.cName]: biz.carraysAreEqual, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cstoreData, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetStoredData, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cisObjectEmpty, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cisArrayEmpty, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cisObject, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cisArray, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cisArrayOrObject, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cisNonZeroLengthArray, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.carrayDeepClone, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cobjectDeepClone, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cobjectDeepMerge, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetNamespacedDataObject, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.csetNamespacedDataObject, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.cascertainMatchingElements]}
+];
+
+/**
+ * @function initDataArrayParsing
+ * @description Adds the dataArrayParsing business rules meta-data to the
+ * D-data structure businessRulesMetaData-framework data structure
+ * The meta-data is used to dynamically import all code dependencies such that a given business rule can be executed in a separate thread.
+ * Multi-threading allows for parallel processing and greatly improved performance!!
+ * @returns {boolean} True or False to indicate if the data structures were initialized or not.
+ * @author Seth Hollingsead
+ * @date 2025/07/15
+ */
+async function initDataArrayParsing () {
+  const functionName = initDataArrayParsing.name;
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+  let returnData = false;
+  // Add all of the rules meta-data to the D-data structure!
+  if (D[sys.cbusinessRulesMetaData] && D[sys.cbusinessRulesMetaData][wrd.cframework]) {
+    D[sys.cbusinessRulesMetaData][wrd.cframework].push(...rulesMetaData);
+    returnData = true;
+  }
+  await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+  return returnData;
+}
 
 /**
  * @function arraysAreEqual
  * @description Determines if a set of arrays are equal or not.
  * @param {array<string|integer|boolean|float|object>} inputData The first array that should be checked for equality.
  * @param {array<string|integer|boolean|float|object>} inputMetaData The second array that should be checked for equality.
- * @return {boolean} True or False to indicate if the arrays are equal or not equal.
+ * @returns {boolean} True or False to indicate if the arrays are equal or not equal.
  * @author Seth Hollingsead
  * @date 2022/01/20
  * @NOTE: Original https://stackoverflow.com/questions/3115982/how-to-check-if-two-arrays-are-equal-with-javascript
  */
 async function arraysAreEqual(inputData, inputMetaData) {
-  let functionName = arraysAreEqual.name;
+  const functionName = arraysAreEqual.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -64,12 +106,12 @@ async function arraysAreEqual(inputData, inputMetaData) {
  * @description Stores some data using the DataStorage data hie on the D data store.
  * @param {string} inputData The context name that the data should be stored with.
  * @param {string|integer|boolean|object|array} inputMetaData The data that should be stored.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/01/20
  */
 async function storeData(inputData, inputMetaData) {
-  let functionName = arraysAreEqual.name;
+  const functionName = arraysAreEqual.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -88,12 +130,12 @@ async function storeData(inputData, inputMetaData) {
  * @description Gets the named data stored in the D data structure in the DataStorage data hive.
  * @param {string} inputData The name of the sub-data hive that should contain the stored data we are looking for.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {object} The data that was stored in the sub-data hive under the DataStorage data hive of the D data structure.
+ * @returns {object} The data that was stored in the sub-data hive under the DataStorage data hive of the D data structure.
  * @author Seth Hollingsead
  * @date 2022/01/20
  */
 async function getStoredData(inputData, inputMetaData) {
-  let functionName = getStoredData.name;
+  const functionName = getStoredData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -111,12 +153,12 @@ async function getStoredData(inputData, inputMetaData) {
  * @description Determines if a JSON object is empty or not.
  * @param {object} inputData The object that should be checked for emptiness.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} True or False to indicate if the object is empty or not empty.
+ * @returns {boolean} True or False to indicate if the object is empty or not empty.
  * @author Seth Hollingsead
  * @date 2022/01/21
  */
 async function isObjectEmpty(inputData, inputMetaData) {
-  let functionName = isObjectEmpty.name;
+  const functionName = isObjectEmpty.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -142,12 +184,12 @@ async function isObjectEmpty(inputData, inputMetaData) {
  * @description Determines if a JSON array is empty or not.
  * @param {array<string|integer|boolean|float|object>} inputData The array that should be checked for emptiness.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} True or False to indicate if the array is empty or not empty.
+ * @returns {boolean} True or False to indicate if the array is empty or not empty.
  * @author Seth Hollingsead
  * @date 2022/01/21
  */
 async function isArrayEmpty(inputData, inputMetaData) {
-  let functionName = isArrayEmpty.name;
+  const functionName = isArrayEmpty.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -165,12 +207,12 @@ async function isArrayEmpty(inputData, inputMetaData) {
  * @description Determines if an object is a JSON object or not.
  * @param {object|array<string|integer|boolean|float|object>} inputData The object that should be tested to see if it is a JSON object or not.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} True or False to indicate if the input object is an array or not.
+ * @returns {boolean} True or False to indicate if the input object is an array or not.
  * @author Seth Hollingsead
  * @date 2022/01/21
  */
 async function isObject(inputData, inputMetaData) {
-  let functionName = isObject.name;
+  const functionName = isObject.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -191,12 +233,12 @@ async function isObject(inputData, inputMetaData) {
  * @param {object|array<string|integer|boolean|float|object>} inputData The object that
  * should be tested to see if it is an array or not.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} True or False to indicate if the input object is an array or not.
+ * @returns {boolean} True or False to indicate if the input object is an array or not.
  * @author Seth Hollingsead
  * @date 2022/01/21
  */
 async function isArray(inputData, inputMetaData) {
-  let functionName = isArray.name;
+  const functionName = isArray.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -215,12 +257,12 @@ async function isArray(inputData, inputMetaData) {
  * @param {object|array<string|integer|boolean|float|object>} inputData The object that
  * should be tested to see if it is either an array or a JSON object or not.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} True or False to indicate if the input object is either an array or a JSON object.
+ * @returns {boolean} True or False to indicate if the input object is either an array or a JSON object.
  * @author Seth Hollingsead
  * @date 2022/01/21
  */
 async function isArrayOrObject(inputData, inputMetaData) {
-  let functionName = isArrayOrObject.name;
+  const functionName = isArrayOrObject.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -241,12 +283,12 @@ async function isArrayOrObject(inputData, inputMetaData) {
  * @param {object|array<string|integer|boolean|float|object>} inputData The object/array that
  * should be tested to see if it is an array of length greater than or equal to 1 or not.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} True or False to indicate if the input object is an array of length greater than equal to zero or not.
+ * @returns {boolean} True or False to indicate if the input object is an array of length greater than equal to zero or not.
  * @author Seth Hollingsead
  * @date 2022/01/21
  */
 async function isNonZeroLengthArray(inputData, inputMetaData) {
-  let functionName = isNonZeroLengthArray.name;
+  const functionName = isNonZeroLengthArray.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -268,12 +310,12 @@ async function isNonZeroLengthArray(inputData, inputMetaData) {
  * @NOTE: https://www.freecodecamp.org/news/how-to-clone-an-array-in-javascript-1d3183468f6a/
  * @param {array<string|integer|boolean|float|object>} inputData The array that should be deeply cloned.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {array<string|integer|boolean|float|object>} The new array object after being cloned deeply.
+ * @returns {array<string|integer|boolean|float|object>} The new array object after being cloned deeply.
  * @author Seth Hollingsead
  * @date 2022/01/21
  */
 async function arrayDeepClone(inputData, inputMetaData) {
-  let functionName = arrayDeepClone.name;
+  const functionName = arrayDeepClone.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -291,13 +333,13 @@ async function arrayDeepClone(inputData, inputMetaData) {
  * @description Recursively walks through all levels of a JSON object and deeply clones all of its contents including function objects.
  * @param {object} inputData The JSON object that should be deeply cloned.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {object} A clone of the original input JSON object.
+ * @returns {object} A clone of the original input JSON object.
  * @author Seth Hollingsead
  * @date 2023/02/15
  * @NOTE This function was generated with the help of ChatGPT.
  */
 async function objectDeepClone(inputData, inputMetaData) {
-  let functionName = objectDeepClone.name;
+  const functionName = objectDeepClone.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -360,13 +402,13 @@ async function objectDeepClone(inputData, inputMetaData) {
  * @description Recursively deeply merges two objects that may or may not contains nested arrays.
  * @param {object} inputData The target data to be merged with.
  * @param {object} inputMetaData The data that should be merged.
- * @return {object} The merged data after the merge is complete.
+ * @returns {object} The merged data after the merge is complete.
  * @author Pery Mimon
  * @date 2020/04/23
  * @reference: https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
  */
 async function objectDeepMerge(inputData, inputMetaData) {
-  let functionName = objectDeepMerge.name;
+  const functionName = objectDeepMerge.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -491,7 +533,7 @@ async function objectDeepMerge(inputData, inputMetaData) {
  * setting should be returned.
  * @param {boolean} inputMetaData True or False value to indicate if
  * the path elements should be created or not it they are not found.
- * @return {object|boolean} The object found at the specified namespace address in the data object,
+ * @returns {object|boolean} The object found at the specified namespace address in the data object,
  * or False if nothing was found.
  * @author Seth Hollingsead
  * @date 2022/05/10
@@ -504,7 +546,7 @@ async function objectDeepMerge(inputData, inputMetaData) {
  * Therefore we can use the loggers here.
  */
 async function getNamespacedDataObject(inputData, inputMetaData) {
-  let functionName = getNamespacedDataObject.name;
+  const functionName = getNamespacedDataObject.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -539,12 +581,12 @@ async function getNamespacedDataObject(inputData, inputMetaData) {
  * @param {array<string>} inputData The path in the data JSON object where the
  * setting should be persisted.
  * @param {object} inputMetaData The data to be persisted on the D-data structure.
- * @return {boolean} True or False to indicate if the data was persisted correctly or not.
+ * @returns {boolean} True or False to indicate if the data was persisted correctly or not.
  * @author Seth Hollingsead
  * @date 2022/05/11
  */
 async function setNamespacedDataObject(inputData, inputMetaData) {
-  let functionName = setNamespacedDataObject.name;
+  const functionName = setNamespacedDataObject.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -572,6 +614,7 @@ async function setNamespacedDataObject(inputData, inputMetaData) {
 }
 
 export default {
+  initDataArrayParsing,
   arraysAreEqual,
   storeData,
   getStoredData,

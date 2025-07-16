@@ -42,12 +42,12 @@ const namespacePrefix = wrd.cframework + bas.cDot + wrd.cbrokers + bas.cDot + ba
  * @function loadPluginRegistry
  * @description Loads the plugin registry file, which specified the data with the paths were plugins should be loaded from.
  * @param {string} pluginRegistryPath The path to the plugin registry for the app that loaded the haystacks framework.
- * @return {object} The JSON data object loaded from the specified plugin registry path by the input parameter.
+ * @returns {object} The JSON data object loaded from the specified plugin registry path by the input parameter.
  * @author Seth Hollingsead
  * @date 2022/09/13
  */
 async function loadPluginRegistry(pluginRegistryPath) {
-  let functionName = loadPluginRegistry.name;
+  const functionName = loadPluginRegistry.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginRegistryPath is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginRegistryPathIs + pluginRegistryPath);
@@ -65,12 +65,12 @@ async function loadPluginRegistry(pluginRegistryPath) {
  * @function storePluginRegistryInDataStructure
  * @description Pushes the input plugin registry data to the D-data structure so it can be used by the rest of the framework.
  * @param {object} pluginRegistryData The plugin registry data that should be stored in the D-data structure.
- * @return {boolean} A True or False value to indicate if the data was successfully stored in the D-data structure or not.
+ * @returns {boolean} A True or False value to indicate if the data was successfully stored in the D-data structure or not.
  * @author Seth Hollingsead
  * @date 2022/09/14
  */
 async function storePluginRegistryInDataStructure(pluginRegistryData) {
-  let functionName = storePluginRegistryInDataStructure.name;
+  const functionName = storePluginRegistryInDataStructure.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginRegistryData is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginRegistryDataIs + JSON.stringify(pluginRegistryData));
@@ -93,12 +93,12 @@ async function storePluginRegistryInDataStructure(pluginRegistryData) {
 /**
  * @function listAllLoadedPlugins
  * @description Builds a list array of the names of the plugins that are currently loaded.
- * @return {array<string>} A list array of the names of the plugins that are currently loaded in the Haystacks platform.
+ * @returns {array<string>} A list array of the names of the plugins that are currently loaded in the Haystacks platform.
  * @author Seth Hollingsead
  * @date 2023/02/06
  */
 async function listAllLoadedPlugins() {
-  let functionName = listAllLoadedPlugins.name;
+  const functionName = listAllLoadedPlugins.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   let returnData = [];
   let pluginsLoadedList = D[sys.cpluginsLoaded];
@@ -127,12 +127,12 @@ async function listAllLoadedPlugins() {
 /**
  * @function listPluginsInRegistry
  * @description Builds a list array of the names of the plugins in the plugin registry.
- * @return {array<string>} A list array of the names of the plugins in the plugin registry.
+ * @returns {array<string>} A list array of the names of the plugins in the plugin registry.
  * @author Seth Hollingsead
  * @date 2022/09/14
  */
 async function listPluginsInRegistry() {
-  let functionName = listPluginsInRegistry.name;
+  const functionName = listPluginsInRegistry.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   let returnData = [];
   returnData = await listPluginsAttributeInRegistry(wrd.cName);
@@ -144,12 +144,12 @@ async function listPluginsInRegistry() {
 /**
  * @function listPluginsPathsInRegistry
  * @description Builds a list array of the paths of the plugins in the plugin registry.
- * @return {array<string>} A list array of the paths of the plugins in the plugin registry.
+ * @returns {array<string>} A list array of the paths of the plugins in the plugin registry.
  * @author Seth Hollingsead
  * @date 2022/09/20
  */
 async function listPluginsPathsInRegistry() {
-  let functionName = listPluginsPathsInRegistry.name;
+  const functionName = listPluginsPathsInRegistry.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   let returnData = [];
   returnData = await listPluginsAttributeInRegistry(wrd.cPath);
@@ -163,12 +163,12 @@ async function listPluginsPathsInRegistry() {
  * @description Builds a list array of the specified attribute out of the plugin objects in the plugin registry.
  * @param {string} attributeName The name of the attribute that should be looked up in the plugin object,
  * for each of the plugin objects in the plugin registry.
- * @return {array<string>} A list array of the attributes from the plugins in the plugin registry.
+ * @returns {array<string>} A list array of the attributes from the plugins in the plugin registry.
  * @author Seth Hollingsead
  * @date 2023/01/31
  */
 async function listPluginsAttributeInRegistry(attributeName) {
-  let functionName = listPluginsAttributeInRegistry.name;
+  const functionName = listPluginsAttributeInRegistry.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // attributeName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cattributeNameIs + attributeName);
@@ -197,13 +197,13 @@ async function listPluginsAttributeInRegistry(attributeName) {
  * @function listPluginsInRegistryPath
  * @description In the plugin registry there should be an entry for the path of the plugins on the local system.
  * This function will load that path and return a list of the sub-folders located at that path.
- * @return {array<string>} A list array of the names of the plugins located at the specified path on
+ * @returns {array<string>} A list array of the names of the plugins located at the specified path on
  * the local system from the plugins registry data hive.
  * @author Seth Hollingsead
  * @date 2022/09/14
  */
 async function listPluginsInRegistryPath() {
-  let functionName = listPluginsInRegistryPath.name;
+  const functionName = listPluginsInRegistryPath.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   let returnData = [];
   returnData = ruleBroker.processRules([D[cfg.cpluginRegistry][wrd.cpath], ''], [biz.cgetDirectoryList]);
@@ -215,12 +215,12 @@ async function listPluginsInRegistryPath() {
 /**
  * @function countPluginsInRegistry
  * @description Scans the plugin registry data hive and determines how many plugins are registered there.
- * @return {integer} The count of the number of plugins listed in the plugin registry data hive.
+ * @returns {integer} The count of the number of plugins listed in the plugin registry data hive.
  * @author Seth Hollingsead
  * @date 2022/09/14
  */
 async function countPluginsInRegistry() {
-  let functionName = countPluginsInRegistry.name;
+  const functionName = countPluginsInRegistry.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   let returnData = 0;
   let pluginRegistryList = await listPluginsInRegistry();
@@ -233,12 +233,12 @@ async function countPluginsInRegistry() {
 /**
  * @function countPluginsInRegistryPath
  * @description Counts the number of sub-folders located at the path specified in the plugin registry data hive.
- * @return {integer} The count of the number of plugin sub-folders in the plugins path listed in the plugin registry data hive.
+ * @returns {integer} The count of the number of plugin sub-folders in the plugins path listed in the plugin registry data hive.
  * @author Seth Hollingsead
  * @date 2022/09/14
  */
 async function countPluginsInRegistryPath() {
-  let functionName = countPluginsInRegistryPath.name;
+  const functionName = countPluginsInRegistryPath.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   let returnData = 0;
   let pluginFolderList = await listPluginsInRegistryPath();
@@ -256,12 +256,12 @@ async function countPluginsInRegistryPath() {
  * @param {string} pluginName The name of the plugin that should be registered.
  * @param {string} pluginPath The path to the plugin, to be added to the plugin registry.
  * This should be the path to the plugin/package.json file, but not including the package.json as part of the path URI.
- * @return {boolean} True or False to indicate if the plugin was added to the plugin registry successfully or not.
+ * @returns {boolean} True or False to indicate if the plugin was added to the plugin registry successfully or not.
  * @author Seth Hollingsead
  * @date 2022/09/14
  */
 async function registerPlugin(pluginName, pluginPath) {
-  let functionName = registerPlugin.name;
+  const functionName = registerPlugin.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginNameIs + pluginName);
@@ -317,12 +317,12 @@ async function registerPlugin(pluginName, pluginPath) {
  * @function unregisterPlugin
  * @description Manually removes a plugin from the plugin registry data hive.
  * @param {string} pluginName The name of the plugin that should be removed from the plugin registry.
- * @return {boolean} True or False to indicate if the plugin was removed from the plugin registry successfully or not.
+ * @returns {boolean} True or False to indicate if the plugin was removed from the plugin registry successfully or not.
  * @author Seth Hollingsead
  * @date 2022/09/14
  */
 async function unregisterPlugin(pluginName) {
-  let functionName = unregisterPlugin.name;
+  const functionName = unregisterPlugin.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginNameIs + pluginName);
@@ -360,12 +360,12 @@ async function unregisterPlugin(pluginName) {
  * @function unregisterPlugins
  * @description Removes a list of plugins from the plugin registry data hive, by calling unregisterPlugin for each one.
  * @param {array<string>} pluginListArray A list array of plugin names that should be removed from the plugin registry.
- * @return {boolean} True or False to indicate if all the plugins were removed from the plugin registry successfully or not.
+ * @returns {boolean} True or False to indicate if all the plugins were removed from the plugin registry successfully or not.
  * @author Seth Hollingsead
  * @date 2023/02/07
  */
 async function unregisterPlugins(pluginListArray) {
-  let functionName = unregisterPlugins.name;
+  const functionName = unregisterPlugins.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginListArray is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginListArrayIs + JSON.stringify(pluginListArray));
@@ -397,7 +397,7 @@ async function unregisterPlugins(pluginListArray) {
  * @description performs a synchronization procedure on the plugin registry to ensure that the contents and
  * plugins registered in the plugin registry match with the list of plugin folders located at the path specified in
  * the plugin registry as the default plugin path. The updates are made to the plugin registry data hive.
- * @return {boolean} True or False to indicate if the synchronization was performed successfully.
+ * @returns {boolean} True or False to indicate if the synchronization was performed successfully.
  * @author Seth Hollingsead
  * @date 2022/09/14
  * @NOTE It is expected that the number of plugins loaded at any one time will not be crazy high.
@@ -405,7 +405,7 @@ async function unregisterPlugins(pluginListArray) {
  * if the number of plugins needed at any one time ever grows much over 100, then this solution will need to be re-evaluated!
  */
 async function syncPluginRegistryWithPluginRegistryPath() {
-  let functionName = syncPluginRegistryWithPluginRegistryPath.name;
+  const functionName = syncPluginRegistryWithPluginRegistryPath.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   let returnData = false;
   let pluginRegistryList = await listPluginsInRegistry();
@@ -490,12 +490,12 @@ async function syncPluginRegistryWithPluginRegistryPath() {
  * @function unregisterAllPlugins
  * @description Removes all plugins from the list of registered plugins in the plugin registry.
  * This removes all plugins in the plugins registry data hive.
- * @return {boolean} True or False to indicate if the plugin registry data hive was cleared successfully or not.
+ * @returns {boolean} True or False to indicate if the plugin registry data hive was cleared successfully or not.
  * @author Seth Hollingsead
  * @date 2022/09/14
  */
 async function unregisterAllPlugins() {
-  let functionName = unregisterAllPlugins.name;
+  const functionName = unregisterAllPlugins.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   let returnData = false;
   try {
@@ -517,12 +517,12 @@ async function unregisterAllPlugins() {
  * @function savePluginRegistry
  * @description Exports the plugin registry data hive JSON object and saves it out to disk,
  * over-writing any existing plugin registry JSON file at the location specified by the application.
- * @return {boolean} True or False to indicate if the export to file was completed successfully or not.
+ * @returns {boolean} True or False to indicate if the export to file was completed successfully or not.
  * @author Seth Hollingsead
  * @date 2022/09/14
  */
 async function savePluginRegistry() {
-  let functionName = savePluginRegistry.name;
+  const functionName = savePluginRegistry.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   let returnData = false;
   let pluginRegistry = D[cfg.cpluginRegistry]
@@ -551,12 +551,12 @@ async function savePluginRegistry() {
  * @param {string} pluginPath The path to a plugin where a package.json should be expected to be found for that plugin.
  * It could also be that the pluginPath just contains the name of the folder that is the plugin,
  * and the path should be acquired from the plugin registry path.
- * @return {object} The JSON data object loaded from the plugin package.json file, specified by the input parameter.
+ * @returns {object} The JSON data object loaded from the plugin package.json file, specified by the input parameter.
  * @author Seth Hollingsead
  * @date 2022/09/02
  */
 async function loadPluginMetaData(pluginPath) {
-  let functionName = loadPluginMetaData.name;
+  const functionName = loadPluginMetaData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginPath is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginPathIs + pluginPath);
@@ -599,12 +599,12 @@ async function loadPluginMetaData(pluginPath) {
  * @param {string} pluginPath The path to the plugin, used to form a fully-qualified path.
  * NOTE: It could also be that the pluginPath just contains the name of the folder that is the plugin,
  * and the path should be acquired from the plugin registry path.
- * @return {string} The path entry point to the plugin as a URI file path.
+ * @returns {string} The path entry point to the plugin as a URI file path.
  * @author Seth Hollingsead
  * @date 2022/09/02
  */
 async function extractAndProcessPluginEntryPointURI(pluginMetaData, pluginPath) {
-  let functionName = extractAndProcessPluginEntryPointURI.name;
+  const functionName = extractAndProcessPluginEntryPointURI.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginMetaData is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginMetaDataIs + JSON.stringify(pluginMetaData));
@@ -647,12 +647,12 @@ async function extractAndProcessPluginEntryPointURI(pluginMetaData, pluginPath) 
  * @description Uses a combination of promises and a function call to
  * import the specified plugin file at the specified URI path.
  * @param {string} pluginExecutionPath The entry point for the plugin that should be loaded.
- * @return {object} The data that was returned and loaded from the plugin.
+ * @returns {object} The data that was returned and loaded from the plugin.
  * @author Seth Hollingsead
  * @date 2022/09/02
  */
 async function loadPlugin(pluginExecutionPath) {
-  let functionName = loadPlugin.name;
+  const functionName = loadPlugin.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginExecutionPath is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginExecutionPathIs + pluginExecutionPath);
@@ -766,12 +766,12 @@ async function loadPlugin(pluginExecutionPath) {
  * @description Saves all of the plugin business rules to the D-data structure where business rules are stored and called from.
  * @param {string} pluginName The name of the plugin who's business rules should be integrated with the haystacks business rules.
  * @param {object} pluginBusinessRules The business rules specific to this current plugin.
- * @return {boolean} True or False to indicate if this plugins business rules are successfully integrated or not.
+ * @returns {boolean} True or False to indicate if this plugins business rules are successfully integrated or not.
  * @author Seth Hollingsead
  * @date 2022/10/23
  */
 async function integratePluginBusinessRules(pluginName, pluginBusinessRules) {
-  let functionName = integratePluginBusinessRules.name;
+  const functionName = integratePluginBusinessRules.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginNameIs + pluginName);
@@ -789,12 +789,12 @@ async function integratePluginBusinessRules(pluginName, pluginBusinessRules) {
  * @description Saves all of the plugin commands to the D-data structure where commands are stored and called from.
  * @param {string} pluginName The name of the plugin who's commands should be integrated with the haystacks commands.
  * @param {object} pluginCommands The commands specific to this current plugin.
- * @return {boolean} True or False to indicate if this plugins commands are successfully integrated or not.
+ * @returns {boolean} True or False to indicate if this plugins commands are successfully integrated or not.
  * @author Seth Hollingsead
  * @date 2022/10/23
  */
 async function integratePluginCommands(pluginName, pluginCommands) {
-  let functionName = integratePluginCommands.name;
+  const functionName = integratePluginCommands.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginNameIs + pluginName);
@@ -812,12 +812,12 @@ async function integratePluginCommands(pluginName, pluginCommands) {
  * @description Saves all of the plugin configuration data to the D-data structure where configuration data are stored.
  * @param {string} pluginName The name of the plugin who's configuration data should be integrated with the haystacks configuration data.
  * @param {object} pluginConfigurationData The JSON object that contains all of the configuration data specific to this current plugin.
- * @return {boolean} True or False to indicate if this plugins configuration data are successfully integrated or not.
+ * @returns {boolean} True or False to indicate if this plugins configuration data are successfully integrated or not.
  * @author Seth Hollingsead
  * @date 2022/10/23
  */
 async function integratePluginConfigurationData(pluginName, pluginConfigurationData) {
-  let functionName = integratePluginConfigurationData.name;
+  const functionName = integratePluginConfigurationData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginNameIs + pluginName);
@@ -835,12 +835,12 @@ async function integratePluginConfigurationData(pluginName, pluginConfigurationD
  * @description Saves all of the plugin command aliases to the D-data structure where command aliases data are stored.
  * @param {string} pluginName The name of the plugin who's command aliases should be integrated with the haystacks command aliases data.
  * @param {object} pluginCommandAliases The JSON object that contains all of the command aliases specific to this current plugin.
- * @return {boolean} True or False to indicate if this plugins command aliases data are successfully integrated or not.
+ * @returns {boolean} True or False to indicate if this plugins command aliases data are successfully integrated or not.
  * @author Seth Hollingsead
  * @date 2022/10/23
  */
 async function integratePluginCommandAliases(pluginName, pluginCommandAliases) {
-  let functionName = integratePluginCommandAliases.name;
+  const functionName = integratePluginCommandAliases.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginNameIs + pluginName);
@@ -858,12 +858,12 @@ async function integratePluginCommandAliases(pluginName, pluginCommandAliases) {
  * @description Saves all of the plugin workflows to the D-data structure where workflow data are stored.
  * @param {string} pluginName The name of the plugin who's workflows should be integrated with the haystacks workflows data.
  * @param {object} pluginWorkflows The JSON object that contains all of the workflows specific to this current plugin.
- * @return {boolean} True or False to indicate if the plugins workflows data are successfully integrated or not.
+ * @returns {boolean} True or False to indicate if the plugins workflows data are successfully integrated or not.
  * @author Seth Hollingsead
  * @date 2022/10/23
  */
 async function integratePluginWorkflows(pluginName, pluginWorkflows) {
-  let functionName = integratePluginWorkflows.name;
+  const functionName = integratePluginWorkflows.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginNameIs + pluginName);
@@ -881,12 +881,12 @@ async function integratePluginWorkflows(pluginName, pluginWorkflows) {
  * @description Saves all of the plugin theme data to the D-data structure where theme data is stored.
  * @param {string} pluginName The name of the plugin who's theme data should be integrated with the haystacks theme data.
  * @param {object} pluginThemeData The JSON object that contains all of the theme data specific to this current plugin.
- * @return {boolean} True or False to indicate if the plugins theme data are successfully integrated or not.
+ * @returns {boolean} True or False to indicate if the plugins theme data are successfully integrated or not.
  * @author Seth Hollingsead
  * @date 2022/10/25
  */
 async function integratePluginThemeData(pluginName, pluginThemeData) {
-  let functionName = integratePluginThemeData.name;
+  const functionName = integratePluginThemeData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginNameIs + pluginName);
@@ -904,12 +904,12 @@ async function integratePluginThemeData(pluginName, pluginThemeData) {
  * @description Unloads a plugin by removing all of the plugin data and meta-data from all of the
  * appropriate data structures in the D-data structure.
  * @param {string} pluginName The name of the plugin that should have all its data unloaded from the D-data structure.
- * @return {boolean} True or False to indicate if the plugin was unloaded successfully or not.
+ * @returns {boolean} True or False to indicate if the plugin was unloaded successfully or not.
  * @author Seth Hollingsead
  * @date 2023/02/01
  */
 async function unloadPlugin(pluginName) {
-  let functionName = unloadPlugin.name;
+  const functionName = unloadPlugin.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginNameIs + pluginName);
@@ -988,12 +988,12 @@ async function unloadPlugin(pluginName) {
 /**
  * @function getPluginsRegistryPath
  * @description Looks up the plugin registry meta-data and finds the attribute that contains the plugins path.
- * @return {string} The path to the plugins listed in the plugin registry as meta-data.
+ * @returns {string} The path to the plugins listed in the plugin registry as meta-data.
  * @author Seth Hollingsead
  * @date 2023/02/07
  */
 async function getPluginsRegistryPath() {
-  let functionName = getPluginsRegistryPath.name;
+  const functionName = getPluginsRegistryPath.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   let returnData = '';
   if (D[cfg.cpluginRegistry] !== 'undefined') {

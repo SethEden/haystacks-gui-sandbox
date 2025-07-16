@@ -4,6 +4,7 @@
  * @description Contains all of the business rules needed for generating time stamps,
  * reformatting time stamps and computing time durations.
  * @requires module:loggers
+ * @requires module:data
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
  * @requires {@link https://www.npmjs.com/package/moment|moment}
  * @requires {@link https://www.npmjs.com/package/path|path}
@@ -14,6 +15,7 @@
 
 // Internal imports
 import loggers from '../../executrix/loggers.js';
+import D from '../../structures/data.js';
 // External imports
 import hayConst from '@haystacks/constants';
 import moment from 'moment';
@@ -22,6 +24,7 @@ import path from 'path';
 
 const {bas, gen, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.businessRules.rules.timeComputation.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + baseFileName + bas.cDot;
 
@@ -31,14 +34,14 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDo
  * @param {string} inputData The formatting string, that tells moment in what format to
  * return the value for the day, month, year, hour, minute, second and millisecond.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} A time stamp string that has been formatted according to the input format.
+ * @returns {string} A time stamp string that has been formatted according to the input format.
  * @author Seth Hollingsead
  * @date 2022/05/04 - May the Forth be with you!! ;-)
  * @NOTE Cannot use the loggers here, because of a circular dependency.
  */
 // eslint-disable-next-line no-unused-vars
 async function getNowMoment(inputData, inputMetaData) {
-  // let functionName = getNowMoment.name;
+  // const functionName = getNowMoment.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`inputData is: ${inputData}`);
   // console.log(`inputMetaData is: ${inputMetaData}`);
@@ -54,12 +57,12 @@ async function getNowMoment(inputData, inputMetaData) {
  * @description Computes the time difference between two different date-time stamps in milliseconds.
  * @param {string} inputData The start of the time period that should be computed.
  * @param {string} inputMetaData The end of the time period that should be computed.
- * @return {integer} The difference between the beginning time and ending time in milliseconds.
+ * @returns {integer} The difference between the beginning time and ending time in milliseconds.
  * @author Seth Hollingsead
  * @date 2022/05/04 - May the Forth be with you!! ;-)
  */
 async function computeDeltaTime(inputData, inputMetaData) {
-  let functionName = computeDeltaTime.name;
+  const functionName = computeDeltaTime.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -77,12 +80,12 @@ async function computeDeltaTime(inputData, inputMetaData) {
  * @description Converts a time interval into a different kind of format.
  * @param {integer} inputData A time interval measured in milliseconds.
  * @param {string} inputMetaData The formatting template that should be used to format the time interval.
- * @return {string} A time interval formatted according to the input format template string.
+ * @returns {string} A time interval formatted according to the input format template string.
  * @author Seth Hollingsead
  * @date 2022/05/04 - May the Forth be with you!! ;-)
  */
 async function reformatDeltaTime(inputData, inputMetaData) {
-  let functionName = reformatDeltaTime.name;
+  const functionName = reformatDeltaTime.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -105,7 +108,7 @@ async function reformatDeltaTime(inputData, inputMetaData) {
  * @description Causes the JavaScript code to wait for a period of time defined by the input.
  * @param {integer} inputData The number of milliseconds that the system should sleep for.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/05/04 - May the Forth be with you!! ;-)
  * @reference {@link https://www.sitepoint.com/delay-sleep-pause-wait/}
@@ -118,7 +121,7 @@ async function reformatDeltaTime(inputData, inputMetaData) {
  * Use this function ONLY when absolutely necessary and where non-blocking alternatives are not feasible.
  */
 async function sleep(inputData, inputMetaData) {
-  let functionName = sleep.name;
+  const functionName = sleep.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);

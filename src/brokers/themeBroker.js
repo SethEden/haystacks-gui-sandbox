@@ -35,12 +35,12 @@ const namespacePrefix = wrd.cframework + bas.cDot + wrd.cbrokers + bas.cDot + ba
 /**
  * @function initThemeData
  * @description Initializes the theme data object on the D-data structure.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/10/28
  */
 async function initThemeData() {
-  let functionName = initThemeData.name;
+  const functionName = initThemeData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   D[wrd.cThemes] = {};
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -51,12 +51,12 @@ async function initThemeData() {
  * @description Takes a theme root path and scans the sub-folders that it contains and converts those to theme names,
  * then builds a JSON data object with those names and also generates paths for each one based on the input themes root path.
  * @param {string} themesRootPath The root path that should be used when building the JSON object with the themes meta-data.
- * @return {object} A JSON object that contains all of the theme names and theme paths from the input theme root path.
+ * @returns {object} A JSON object that contains all of the theme names and theme paths from the input theme root path.
  * @author Seth Hollingsead
  * @date 2022/10/26
  */
  async function generateThemeDataFromPath(themesRootPath) {
-  let functionName = generateThemeDataFromPath.name;
+  const functionName = generateThemeDataFromPath.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // themesRootPath is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cthemesRootPathIs + themesRootPath);
@@ -91,12 +91,12 @@ async function initThemeData() {
  * @param {object} themeData A JSON object that contains the theme data for either the application or the current plugin.
  * @param {string} contextName The context name where the theme data is coming from.
  * Ex: Application, Plugin:<PluginName>
- * @return {boolean} True or False to indicate if the merge was successful or not.
+ * @returns {boolean} True or False to indicate if the merge was successful or not.
  * @author Seth Hollingsead
  * @date 2022/10/25
  */
 async function addThemeData(themeData, contextName) {
-  let functionName = addThemeData.name;
+  const functionName = addThemeData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // themeData is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cthemeDataIs + JSON.stringify(themeData));
@@ -139,12 +139,12 @@ async function addThemeData(themeData, contextName) {
  * @function getNamedThemesFromRootPath
  * @description Gets the names of the themes installed in the specified themes root path folder.
  * @param {string} themesRootPath The root path that should be used when searching for a list of themes folders.
- * @return {array<string>} The list of names for the themes that are currently installed.
+ * @returns {array<string>} The list of names for the themes that are currently installed.
  * @author Seth Hollingsead
  * @date 2022/10/26
  */
 async function getNamedThemesFromRootPath(themesRootPath) {
-  let functionName = getNamedThemesFromRootPath.name;
+  const functionName = getNamedThemesFromRootPath.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // themesRootPath is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cthemesRootPathIs + themesRootPath);
@@ -163,12 +163,12 @@ async function getNamedThemesFromRootPath(themesRootPath) {
  * then returns the fully qualified path to that theme.
  * @param {string} themeName The name of the theme that a path should be returned for.
  * @param {string} themesRootPath The root path that should be used when searching for the named theme.
- * @return {string|boolean} The path of the theme relative to the input root path it if exists, or false if it does not.
+ * @returns {string|boolean} The path of the theme relative to the input root path it if exists, or false if it does not.
  * @author Seth Hollingsead
  * @date 2022/10/26
  */
 async function getNamedThemePathFromRootPath(themeName, themesRootPath) {
-  let functionName = getNamedThemePathFromRootPath.name;
+  const functionName = getNamedThemePathFromRootPath.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // themeName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cthemeNameIs + themeName);
@@ -197,12 +197,12 @@ async function getNamedThemePathFromRootPath(themeName, themesRootPath) {
  * @function loadTheme
  * @description Takes a theme path and loads all the theme data debug configuration settings for that theme.
  * @param {string} themePath The fully qualified path to the theme debug configuration settings.
- * @return {object} All of the debug configuration data for a specified theme path.
+ * @returns {object} All of the debug configuration data for a specified theme path.
  * @author Seth Hollingsead
  * @date 2022/06/13
  */
 async function loadTheme(themePath) {
-  let functionName = loadTheme.name;
+  const functionName = loadTheme.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // themePath is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cthemePathIs + themePath);
@@ -220,12 +220,12 @@ async function loadTheme(themePath) {
  * @description Takes theme data and applies it to the currently loaded
  * debug configuration data set in the D-Data Structure configuration.debugSettings data hive.
  * @param {object} themeData All the theme debug configuration settings data that control the debug log theme colors.
- * @return {boolean} True or False to indicate if the theme data was applied successfully or not.
+ * @returns {boolean} True or False to indicate if the theme data was applied successfully or not.
  * @author Seth Hollingsead
  * @date 2022/06/14
  */
 async function applyTheme(themeData) {
-  let functionName = applyTheme.name;
+  const functionName = applyTheme.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // themeData is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cthemeDataIs + JSON.stringify(themeData));
@@ -241,12 +241,12 @@ async function applyTheme(themeData) {
  * @description Parses through the theme data and finds the theme data associated with the named plugin.
  * Then removes that data shredding it from existence at the edge of a black hole.
  * @param {string} pluginName The name of the plugin that should have its theme data removed from the D-data structure.
- * @return {boolean} True or False to indicate if the removal of the data was completed successfully or not.
+ * @returns {boolean} True or False to indicate if the removal of the data was completed successfully or not.
  * @author Seth Hollingsead
  * @date 2023/02/01
  */
 async function removePluginThemeData(pluginName) {
-  let functionName = removePluginThemeData.name;
+  const functionName = removePluginThemeData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginNameIs + pluginName);

@@ -30,7 +30,7 @@ const namespacePrefix = wrd.capplication + bas.cDot + apc.cApplicationName + bas
  * @description Provides instructions to the end user on what steps they need to perform to get up and running and interface with the system.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string>} An array with a boolean True or False value to indicate if the application should exit or not exit, followed by an empty string.
+ * @returns {array<boolean,string>} An array with a boolean True or False value to indicate if the application should exit or not exit, followed by an empty string.
  * @author Seth Hollingsead
  * @date 2025/07/09
  */
@@ -55,7 +55,7 @@ async function instructions(inputData, inputMetaData) {
  * If no plugins are loaded by the application then no plugin commands will be listed.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string>} An array with a boolean True or False value to
+ * @returns {array<boolean,string>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by an empty string.
  * @author Seth Hollingsead
  * @date 2025/06/23
@@ -78,7 +78,7 @@ async function applicationHelp(inputData, inputMetaData) {
  * If no plugins are loaded by the application then no plugin workflows will be listed.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string>} An array with a boolean True or False value to
+ * @returns {array<boolean,string>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, follows by an empty string.
  * @author Seth Hollingsead
  * @date 2025/06/23

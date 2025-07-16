@@ -57,7 +57,7 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDo
  * @description Removes any "--" from the command to make it a valid command.
  * @param {string} inputData The string that should have the "--" removed from it.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The same as the input, but with the "--" removed.
+ * @returns {string} The same as the input, but with the "--" removed.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
@@ -85,7 +85,7 @@ async function cleanCommandInput(inputData, inputMetaData) {
  * @param {string} inputData The string that should be evaluated if it is sufficiently formatted
  * such that it could qualify as a command name.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} True or False to indicate if the string is sufficiently formatted to be considered as a command name in the system.
+ * @returns {boolean} True or False to indicate if the string is sufficiently formatted to be considered as a command name in the system.
  * @author Seth Hollingsead
  * @date 2022/01/24
  */

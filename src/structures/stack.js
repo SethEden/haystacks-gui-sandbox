@@ -30,7 +30,7 @@ const namespacePrefix = wrd.cframework + bas.cDot + wrd.cstructures + bas.cDot +
  * @function initStack
  * @description Initializes the stack with the provided namespace.
  * @param {string} stackNameSpace The namespace the Stack array should be created under.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/02/01
  */
@@ -52,7 +52,7 @@ async function initStack(stackNameSpace) {
  * @function clearStack
  * @description Clears all contents of the stack so it can start fresh. It does not delete the stack completely!
  * @param {string} stackNameSpace The namespace for the stack that should be cleared.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/02/01
  */
@@ -75,7 +75,7 @@ async function clearStack(stackNameSpace) {
  * @description Pushes some data on the stack identified by the namespace input parameter.
  * @param {string} stackNameSpace The namespace of the stack that should be used to push the data onto.
  * @param {string|integer|boolean|object|array} value The data that should be pushed on the stack.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/02/01
  */
@@ -98,7 +98,7 @@ async function push(stackNameSpace, value) {
  * @function pop
  * @description Pops some data off the stack identified by the namespace input parameter.
  * @param {string} stackNameSpace The namespace of the stack that should be used to pop the data and return it.
- * @return {string|integer|boolean|object|array} Whatever data was stored at the top of the stack.
+ * @returns {string|integer|boolean|object|array} Whatever data was stored at the top of the stack.
  * @author Seth Hollingsead
  * @date 2022/02/01
  */
@@ -130,7 +130,7 @@ async function pop(stackNameSpace) {
  * @function isEmpty
  * @description Determines if the stack specified by the namespace parameter is empty or not empty.
  * @param {string} stackNameSpace The namespace of the stack that should be checked if it is empty or not empty.
- * @return {boolean} True or False to indicate if the specified stack is empty or not empty.
+ * @returns {boolean} True or False to indicate if the specified stack is empty or not empty.
  * @author Seth Hollingsead
  * @date 2022/02/01
  */
@@ -157,7 +157,7 @@ async function isEmpty(stackNameSpace) {
  * @function length
  * @description Gets the length of the stack specified by the namespace parameter.
  * @param {string} stackNameSpace The namespace of the stack that should return a length property.
- * @return {integer} A value that represents a count of the number of entities on the specified stack.
+ * @returns {integer} A value that represents a count of the number of entities on the specified stack.
  * @author Seth Hollingsead
  * @date 2022/02/01
  */
@@ -183,7 +183,7 @@ async function length(stackNameSpace) {
  * @description Determines if the specified stack contains the specified value.
  * @param {string} stackNameSpace The namespace of the stack that should be searched for the specified value.
  * @param {string|integer|object|array} value The value/object that should be searched to see if it exists on the specified stack or does not exist.
- * @return {boolean} True or False to indicate if the value/object exists or does not exist.
+ * @returns {boolean} True or False to indicate if the value/object exists or does not exist.
  * @author Seth Hollingsead
  * @date 2022/02/01
  */
@@ -208,7 +208,7 @@ async function contains(stackNameSpace, value) {
  * @function print
  * @description Prints out the stack as specified by the namespace input parameter.
  * @param {string} stackNameSpace The namespace that should be used to print out the contents of the stack on the D-data structure.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/02/01
  */
@@ -231,7 +231,7 @@ async function print(stackNameSpace) {
  * @function getStackContents
  * @description Returns the contents of the stack as specified by the namespace input parameter.
  * @param {string} stackNameSpace The namespace that should be used to return the contents of the stack on the D-data structure.
- * @return {array<string>} The contents of the stack as specified by the input parameter stack namespace.
+ * @returns {array<string>} The contents of the stack as specified by the input parameter stack namespace.
  * @author Seth Hollingsead
  * @date 2023/02/14
  */

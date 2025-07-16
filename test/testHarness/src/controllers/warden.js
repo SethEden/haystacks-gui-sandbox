@@ -38,7 +38,7 @@ const namespacePrefix = wrd.capplication + bas.cDot + apc.cApplicationName + bas
  * @param {object} appConfig Contains a JSON data object that has all of the application paths where data should be loaded from,
  * as well as all the other configuration settings that should be set as part of the application startup process.
  * @param {boolean} transmitLogs A True or False value to indicate if logs should be transmitted or not.
- * @return {boolean} A True or False value to indicate if the initialization was completed successfully or not.
+ * @returns {boolean} A True or False value to indicate if the initialization was completed successfully or not.
  * @author Seth Hollingsead
  * @date 2025/07/04 - Happy 4th of July!! Independence Day! America Day
  */

@@ -26,6 +26,7 @@ import path from 'path';
 
 const {bas, biz, cmd, cfg, gen, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.commandsBlob.commands.constant.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.ccommandsBlob + bas.cDot + wrd.ccommands + bas.cDot + baseFileName + bas.cDot;
 
@@ -36,7 +37,7 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.ccommandsBlob + bas.cDot
  * Also checks to see if that new constant is already defined in the constants system.
  * @param {string} inputData Parameterized constant to generate for.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/03/30
@@ -124,13 +125,13 @@ async function constantsGenerator(inputData, inputMetaData) {
  * @NOTE Testing string: constGenL somethingXML,whatever that is,A basic NodeJS template App,that can easily
  * @param {string} inputData Parameterized coma delimited list of constants to be auto-generated
  * @param {string} inputMetaData Not used for this business rule.
- * @return {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/03/30
  */
 async function constantsGeneratorList(inputData, inputMetaData) {
-   let functionName = constantsGeneratorList.name;
+  const functionName = constantsGeneratorList.name;
    await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
    await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
    await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -211,13 +212,13 @@ async function constantsGeneratorList(inputData, inputMetaData) {
  * @param {string} inputData Parameterized coma delimited list of constants to be
  * passed through pattern recognition to find common strings among them.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/03/31
  */
 async function constantsPatternRecognizer(inputData, inputMetaData) {
-  let functionName = constantsPatternRecognizer.name;
+  const functionName = constantsPatternRecognizer.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -292,13 +293,13 @@ async function constantsPatternRecognizer(inputData, inputMetaData) {
  * inputData[0] = evaluateConstant
  * inputData[1] = constantToBeEvaluated - The constant that should be resolved and printed to the output if it exists.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/05/11
  */
 async function evaluateConstant(inputData, inputMetaData) {
-  let functionName = evaluateConstant.name;
+  const functionName = evaluateConstant.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);

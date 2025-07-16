@@ -22,7 +22,7 @@ let data = {};
  * @function getData
  * @description returns the contents of the data structure. Can be used to stash data,
  * before it is reassigned, for the purpose of setting up a unit test scenario with mocked data.
- * @return {object} A JSON object that contains all of the data that is currently stored in the data structure.
+ * @returns {object} A JSON object that contains all of the data that is currently stored in the data structure.
  * @author Seth Hollingsead
  * @date 2023/01/09
  */
@@ -43,7 +43,7 @@ async function getData() {
  * Can be used to setup mock data, or create a clone of Haystacks for the purposes of
  * executing a callback on Haystacks such as loading more data for a plugin.
  * @param {object} newData The new data that should replace any data already stored on the data structure.
- * @return {boolean} True or false to indicate success or failure if the data was set.
+ * @returns {boolean} True or false to indicate success or failure if the data was set.
  * @author Seth Hollingsead
  * @date 2023/01/09
  * @NOTE This function isn't actually working, because in the haystacks code base we've

@@ -35,13 +35,13 @@ const namespacePrefix = wrd.cframework + bas.cDot + wrd.cbrokers + bas.cDot + ba
  * So we need a way to merge all client defined and system defined business rules into one location.
  * Then the rule broker will execute business rules from the D-data structure and not the rules library per-say.
  * This will allow the system to expand much more dynamically and even be user-defined & flexible to client needs.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2021/10/27
  * @NOTE Cannot use the loggers here, because dependency data will have never been loaded.
  */
 async function bootStrapBusinessRules() {
-  // let functionName = bootStrapBusinessRules.name;
+  // const functionName = bootStrapBusinessRules.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   await rules.initRulesLibrary();
   // console.log(`END ${namespacePrefix}${functionName} function`);
@@ -50,12 +50,12 @@ async function bootStrapBusinessRules() {
 /**
  * @function resetBusinessRules
  * @description Clears out and reinitializes the business rules.
- * @return {void}
+ * @returns {void}
  * @date 2023/02/12
  * @NOTE Cannot use the loggers here, because of a circular dependency.
  */
 async function resetBusinessRules() {
-  // let functionName = bootStrapBusinessRules.name;
+  // const functionName = bootStrapBusinessRules.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // await rules.clearRulesLibrary();
   await rules.initRulesLibrary();
@@ -66,13 +66,13 @@ async function resetBusinessRules() {
  * @function addClientRules
  * @description Merges client defined business rules with the system defined business rules.
  * @param {array<object>} clientRules The client rules that should be merged with the system rules.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2021/10/27
  * @NOTE Cannot use the loggers here, because of a circular dependency.
  */
 async function addClientRules(clientRules) {
-  // let functionName = bootStrapBusinessRules.name;
+  // const functionName = bootStrapBusinessRules.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   await Object.assign(D[sys.cbusinessRules], clientRules);
   // D-businessRules stack is:
@@ -85,12 +85,12 @@ async function addClientRules(clientRules) {
  * @description Merges plugin defined business rules with the system defined business rules.
  * @param {string} pluginName The name of the current plugin these rules belong to.
  * @param {array<object>} pluginRules The plugin rules that should be merged with the system rules.
- * @return {boolean} True or False to indicate if the merge was successful or not.
+ * @returns {boolean} True or False to indicate if the merge was successful or not.
  * @author Seth Hollingsead
  * @date 2022/10/24
  */
 async function addPluginRules(pluginName, pluginRules) {
-  // let functionName = addPluginRules.name;
+  // const functionName = addPluginRules.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // pluginName is:
   // console.log(msg.cpluginNameIs + pluginName);
@@ -134,14 +134,14 @@ async function addPluginRules(pluginName, pluginRules) {
  * inputs[0] = inputData - The primary input data that should be processed by the business rule.
  * inputs[1] = inputMetaData - Additional meta-data that should be used when processing the business rule.
  * @param {array<string>} rulesToExecute The name(s) of the rule(s) that should be executed for modding the input data.
- * @return {string|integer|boolean|object|function} A modified data Object/String/Integer/Boolean/Function
+ * @returns {string|integer|boolean|object|function} A modified data Object/String/Integer/Boolean/Function
  * where the data has been modified based on the input data, input meta-data, and business rule that was executed.
  * @author Seth Hollingsead
  * @date 2021/10/27
  * @NOTE Cannot use the loggers here, because of a circular dependency.
  */
 async function processRules(inputs, rulesToExecute) {
-  // let functionName = processRules.name;
+  // const functionName = processRules.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`inputs is: ${JSON.stringify(inputs)}`);
   // console.log(`rulesToExecute is: ${JSON.stringify(rulesToExecute)}`);
@@ -176,13 +176,13 @@ async function processRules(inputs, rulesToExecute) {
  * @description Parses through the business rules and finds the business rules associated with the named plugin.
  * Then removes that data shredding it from existence at the edge of a black hole.
  * @param {string} pluginName The name of the plugin that should have its business rules removed from the D-data structure.
- * @return {boolean} True or False to indicate if the removal of the data was completed successfully or not.
+ * @returns {boolean} True or False to indicate if the removal of the data was completed successfully or not.
  * @author Seth Hollingsead
  * @date 2023/02/01
  * @NOTE Cannot use the loggers here, because of a circular dependency.
  */
 async function removePluginBusinessRules(pluginName) {
-  // let functionName = removePluginBusinessRules.name;
+  // const functionName = removePluginBusinessRules.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // pluginName is:
   // console.log(msg.cpluginNameIs + pluginName);

@@ -4,6 +4,7 @@
  * @description Contains all system defined business rules for parsing arrays specific to words.
  * @requires module:ruleParsing
  * @requires module:loggers
+ * @requires module:data
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
  * @requires {@link https://www.npmjs.com/package/path|path}
  * @author Seth Hollingsead
@@ -14,21 +15,56 @@
 // Internal imports
 import ruleParsing from '../ruleParsing.js';
 import loggers from '../../../executrix/loggers.js';
+import D from '../../../structures/data.js';
 // External imports
 import hayConst from '@haystacks/constants';
 import path from 'path';
 
 const {abt, bas, biz, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.businessRules.rules.arrayParsing.wordArrayParsing.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + wrd.carray + wrd.cParsing + bas.cDot + baseFileName + bas.cDot;
+
+const rulesMetaData = [
+  {[wrd.cName]: biz.cconvertCamelCaseStringToArray, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetWordsArrayFromString, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.cgetWordCountInString, biz.cdetermineWordDelimiter, biz.cdoesStringContainAcronym]},
+  {[wrd.cName]: biz.crecombineStringArrayWithSpaces, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cconvertArrayToCamelCaseString, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.cmapWordToCamelCaseWord]},
+  {[wrd.cName]: biz.cdoesArrayContainLowerCaseConsolidatedString, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.caggregateNumericalDifferenceBetweenTwoStrings, biz.cdoesArrayContainValue]},
+  {[wrd.cName]: biz.cascertainMatchingElements, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []}
+];
+
+/**
+ * @function initWordArrayParsing
+ * @description Adds the wordArrayParsing business rules meta-data to the
+ * D-data structure businessRulesMetaData-framework data structure.
+ * The meta-data is used to dynamically import all code dependencies such that a given business rule can be executed in a separate thread.
+ * Multi-threading allows for parallel processing and greatly improved performance!!
+ * @returns {boolean} True or False to indicate if the data structures were initialized or not.
+ * @author Seth Hollingsead
+ * @date 2025/07/15
+ */
+async function initWordArrayParsing() {
+  const functionName = initWordArrayParsing.name;
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+  let returnData = false;
+  // Add all of the rules meta-data to the D-data structure!
+  if (D[sys.cbusinessRulesMetaData] && D[sys.cbusinessRulesMetaData][wrd.cframework]) {
+    D[sys.cbusinessRulesMetaData][wrd.cframework].push(...rulesMetaData);
+    returnData = true;
+  }
+  await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+  return returnData;
+}
 
 /**
  * @function convertCamelCaseStringToArray
  * @description Takes a string in camelCase and returns an array of the words.
  * @param {string} inputData String to decompose into an array.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {array<string>} The array of words that were composed in the original string.
+ * @returns {array<string>} The array of words that were composed in the original string.
  * @author Seth Hollingsead
  * @date 2022/01/18
  * @NOTE Might not work so well with numbers as part of the string, they are not treated as capital letters.
@@ -36,7 +72,7 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDo
  * mixed numbers and camel case strings ever becomes a requirement as input to this function.
  */
 async function convertCamelCaseStringToArray(inputData, inputMetaData) {
-  let functionName = convertCamelCaseStringToArray.name;
+  const functionName = convertCamelCaseStringToArray.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -68,12 +104,12 @@ async function convertCamelCaseStringToArray(inputData, inputMetaData) {
  * automatically determining how the words are delimited based on common word delimiters: camel case, space, period, dash & underscore.
  * @param {string} inputData The string that should be broken down into words and returned as an array.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {array<string>} The array of words found in the string.
+ * @returns {array<string>} The array of words found in the string.
  * @author Seth Hollingsead
  * @date 2022/01/18
  */
 async function getWordsArrayFromString(inputData, inputMetaData) {
-  let functionName = getWordsArrayFromString.name;
+  const functionName = getWordsArrayFromString.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -112,12 +148,12 @@ async function getWordsArrayFromString(inputData, inputMetaData) {
  * So this function lets us recombine and teh re-parse the string with another delimiter.
  * @param {array<string>} inputData The array of strings that should be recombined.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string array with spaces between array elements.
+ * @returns {string} The string array with spaces between array elements.
  * @author Seth Hollingsead
  * @date 2022/01/19
  */
 async function recombineStringArrayWithSpaces(inputData, inputMetaData) {
-  let functionName = recombineStringArrayWithSpaces.name;
+  const functionName = recombineStringArrayWithSpaces.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -139,12 +175,12 @@ async function recombineStringArrayWithSpaces(inputData, inputMetaData) {
  * @description Takes an array of words and returns a camelCase string of the input words.
  * @param {array<string>} inputData The array of words that should be strung together into a single long string.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} A string that contains all of the words from the input array put together in sequential order.
+ * @returns {string} A string that contains all of the words from the input array put together in sequential order.
  * @author Seth Hollingsead
  * @date 2022/01/19
  */
 async function convertArrayToCamelCaseString(inputData, inputMetaData) {
-  let functionName = convertArrayToCamelCaseString.name;
+  const functionName = convertArrayToCamelCaseString.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -163,12 +199,12 @@ async function convertArrayToCamelCaseString(inputData, inputMetaData) {
  * @description Checks if an array contains a string, comparison made by lowerCaseAndConsolidatedString().
  * @param {array<string>} inputData The array of strings that should be checked if it contains the specified string.
  * @param {string} inputMetaData The string we are looking for in the array.
- * @return {boolean} A Boolean to indicate if the string is found in the array or not.
+ * @returns {boolean} A Boolean to indicate if the string is found in the array or not.
  * @author Seth Hollingsead
  * @date 2022/01/19
  */
 async function doesArrayContainLowerCaseConsolidatedString(inputData, inputMetaData) {
-  let functionName = doesArrayContainLowerCaseConsolidatedString.name;
+  const functionName = doesArrayContainLowerCaseConsolidatedString.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -202,12 +238,12 @@ async function doesArrayContainLowerCaseConsolidatedString(inputData, inputMetaD
  * @description Determines if to values are identical. Needed for completeness of comparison for nested arrays.
  * @param {array<string|boolean|integer|float|object>} inputData An array that should be compared for equality.
  * @param {array<string|boolean|integer|float|object>} inputMetaData Second array that should be compared for equality.
- * @return {boolean} True or False to indicate array equality or not.
+ * @returns {boolean} True or False to indicate array equality or not.
  * @author Seth Hollingsead
  * @date 2022/01/19
  */
 async function ascertainMatchingElements(inputData, inputMetaData) {
-  let functionName = ascertainMatchingElements.name;
+  const functionName = ascertainMatchingElements.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -229,6 +265,7 @@ async function ascertainMatchingElements(inputData, inputMetaData) {
 }
 
 export default {
+  initWordArrayParsing,
   convertCamelCaseStringToArray,
   getWordsArrayFromString,
   recombineStringArrayWithSpaces,

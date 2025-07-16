@@ -28,6 +28,7 @@ import path from 'path';
 
 const {bas, biz, cfg, gen, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.commandsBlob.commands.configuration.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.ccommandsBlob + bas.cDot + wrd.ccommands + bas.cDot + baseFileName + bas.cDot;
 
@@ -36,13 +37,13 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.ccommandsBlob + bas.cDot
  * @description Saves out all of the configuration data to a JSON file so custom user settings can be persisted between sessions.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/03/11
  */
 async function saveConfiguration(inputData, inputMetaData) {
-  let functionName = saveConfiguration.name;
+  const functionName = saveConfiguration.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -66,7 +67,7 @@ async function saveConfiguration(inputData, inputMetaData) {
  * inputData[1] = fully.Qualified.Configuration.Path
  * inputData[2] = value to assign to the configuration setting property
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/05/11
@@ -74,7 +75,7 @@ async function saveConfiguration(inputData, inputMetaData) {
  * Test String 2: changeConfigurationSetting debugSetting.commandsBlob.commands.system true
  */
 async function changeConfigurationSetting(inputData, inputMetaData) {
-  let functionName = changeConfigurationSetting.name;
+  const functionName = changeConfigurationSetting.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -117,13 +118,13 @@ async function changeConfigurationSetting(inputData, inputMetaData) {
  * @description Lists all of the debug configuration themes currently installed in the resources/themes folder.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/06/10
  */
 async function listConfigurationThemes(inputData, inputMetaData) {
-  let functionName = listConfigurationThemes.name;
+  const functionName = listConfigurationThemes.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -148,13 +149,13 @@ async function listConfigurationThemes(inputData, inputMetaData) {
  * inputData[0] = changeDebugConfigurationTheme
  * inputData[1] = The name of the theme that the user would like to switch to.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/06/13
  */
 async function changeDebugConfigurationTheme(inputData, inputMetaData) {
-  let functionName = changeDebugConfigurationTheme.name;
+  const functionName = changeDebugConfigurationTheme.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);

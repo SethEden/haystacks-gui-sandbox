@@ -28,7 +28,7 @@ const namespacePrefix = wrd.cframework + bas.cDot + wrd.cstructures + bas.cDot +
  * @function initQueue
  * @description Initializes the queue with the provided namespace.
  * @param {string} queueNameSpace The namespace the queue array should be created under.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/02/01
  * @reference {@link https://www.youtube.com/watch?v=bK7I79hcm08}
@@ -45,7 +45,7 @@ async function initQueue(queueNameSpace) {
  * @function dequeue
  * @description Gets the entity at the front of the queue, removes it from the queue and returns that entity.
  * @param {string} queueNameSpace The namespace the queue array should be dequeued from.
- * @return {string} The item at the front of the queue and removes it from the queue.
+ * @returns {string} The item at the front of the queue and removes it from the queue.
  * @author Seth Hollingsead
  * @date 2022/02/01
  * @reference {@link https://www.youtube.com/watch?v=bK7I79hcm08}
@@ -66,7 +66,7 @@ async function dequeue(queueNameSpace) {
  * @description Adds the value to the specified namespace queue.
  * @param {string} queueNameSpace The namespace the queue array should have a value added to.
  * @param {string} value The value that should be added to the specified queue array.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/02/01
  * @reference {@link https://www.youtube.com/watch?v=bK7I79hcm08}
@@ -86,7 +86,7 @@ async function enqueue(queueNameSpace, value) {
  * @param {string} queueNameSpace The namespace the queue array should have a value added to to the front.
  * @param {string|array<string>} value The value that should be added to the specified queue array,
  * it could be a string value or an array of string values.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/08/31
  */
@@ -108,7 +108,7 @@ async function enqueueFront(queueNameSpace, value) {
  * @function isEmpty
  * @description Determines if the queue is empty or not empty.
  * @param {string} queueNameSpace The namespace the queue array should have a value added to.
- * @return {boolean} True or False to indicate if the queue is empty or not empty.
+ * @returns {boolean} True or False to indicate if the queue is empty or not empty.
  * @author Seth Hollingsead
  * @date 2022/02/01
  * @reference {@link https://www.youtube.com/watch?v=bK7I79hcm08}
@@ -132,7 +132,7 @@ async function isEmpty(queueNameSpace) {
  * @function queueFront
  * @description Gets the entity at the front of the queue.
  * @param {string} queueNameSpace The namespace the queue array from which the front of the queue should be found.
- * @return {string} The entity at the front of the queue.
+ * @returns {string} The entity at the front of the queue.
  * @author Seth Hollingsead
  * @date 2022/02/01
  * @reference {@link https://www.youtube.com/watch?v=bK7I79hcm08}
@@ -157,7 +157,7 @@ async function queueFront(queueNameSpace) {
  * @function queueSize
  * @description Gets the current size of the queue.
  * @param {string} queueNameSpace The namespace of the queue array from which we should get the current queue size.
- * @return {integer} A count for the number of entities in the specified queue.
+ * @returns {integer} A count for the number of entities in the specified queue.
  * @author Seth Hollingsead
  * @date 2022/02/01
  * @reference {@link https://www.youtube.com/watch?v=bK7I79hcm08}
@@ -182,7 +182,7 @@ async function queueSize(queueNameSpace) {
  * @function queueContents
  * @description Returns the contents of the queue as an array.
  * @param {string} queueNameSpace The namespace of the queue who's contents should be returned as an array.
- * @return {array<string>} The entire queue and it's contents as an array.
+ * @returns {array<string>} The entire queue and it's contents as an array.
  * @author Seth Hollingsead
  * @date 2022/09/01
  */
@@ -206,7 +206,7 @@ async function queueContents(queueNameSpace) {
  * @function queuePrint
  * @description Prints out the queue as specified by the namespace input parameter.
  * @param {string} queueNameSpace The namespace that should be used to print out the contents of the queue on the D-data structure.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/06/21
  */

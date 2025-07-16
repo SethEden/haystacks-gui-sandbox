@@ -4,6 +4,7 @@
  * @description Contains all system defined business rules for parsing arrays specific to auxiliary capabilities.
  * @requires module:colorizer
  * @requires module:loggers
+ * @requires module:data
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
  * @requires {@link https://mathjs.org/index.html|math}
  * @requires {@link https://www.npmjs.com/package/path|path}
@@ -15,15 +16,47 @@
 // Internal imports
 import colorizer from '../../../executrix/colorizer.js';
 import loggers from '../../../executrix/loggers.js';
+import D from '../../../structures/data.js';
 // External imports
 import hayConst from '@haystacks/constants';
 import * as math from 'mathjs';
 import path from 'path';
 
-const {bas, msg, sys, wrd} = hayConst;
+const {bas, biz, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.businessRules.rules.arrayParsing.auxiliaryArrayParsing.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + wrd.carray + wrd.cParsing + bas.cDot + baseFileName + bas.cDot;
+
+const rulesMetaData = [
+  {[wrd.cName]: biz.cparseColorRangeInputs, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetNamedColorDataArray, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cdoesArrayContainValue, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []}
+];
+
+/**
+ * @function initAuxiliaryArrayParsing
+ * @description Adds the auxiliaryArrayParsing business rules meta-data to the
+ * D-data structure businessRulesMetaData-framework data structure.
+ * The meta-data is used to dynamically import all code dependencies such that a given business rule can be executed in a separate thread.
+ * Multi-threading allows for parallel processing and greatly improved performance!!
+ * @returns {boolean} True or False to indicate if the data structures were initialized or not.
+ * @author Seth Hollingsead
+ * @date 2025/07/15
+ */
+async function initAuxiliaryArrayParsing() {
+  const functionName = initAuxiliaryArrayParsing.name;
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+  let returnData = false;
+  // Add all of the rules meta-data to the D-data structure!
+  if (D[sys.cbusinessRulesMetaData] && D[sys.cbusinessRulesMetaData][wrd.cframework]) {
+    D[sys.cbusinessRulesMetaData][wrd.cframework].push(...rulesMetaData);
+    returnData = true;
+  }
+  await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+  return returnData;
+}
 
  /**
   * @function parseColorRangeInputs
@@ -32,56 +65,56 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDo
   * represents the minimum range that should be used to generate the random color.
   * @param {string|integer} inputMetaData The number in either numeric or string format that
   * represents the maximum range that should be used to generate the random color.
-  * @return {array<integer>} The minimum and maximum values returned in an array.
+  * @returns {array<integer>} The minimum and maximum values returned in an array.
   * returnData[0] = minimum value.
   * returnData[1] = maximum value.
   * @author Seth Hollingsead
   * @date 2022/01/21
   */
 async function parseColorRangeInputs(inputData, inputMetaData) {
-   let functionName = parseColorRangeInputs.name;
-   loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
-   loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
-   loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
-   let returnData = [0,0,0];
-   let minimumColorRange = 0;
-   let tempMinimumColorRange = 0;
-   let maximumColorRange = 0;
-   let tempMaximumColorRange = 0;
-   if (inputData && inputMetaData && inputData !== '' && inputMetaData !== '') {
-     // Try to parse them as numbers for the range.
-     if (typeof(inputData) === 'string') {
-       tempMinimumColorRange = parseInt(inputData);
-     } else if (typeof(inputData) === 'number') {
-       tempMinimumColorRange = inputData;
-     }
-     if (typeof(inputMetaData) === 'string') {
-       tempMaximumColorRange = parseInt(inputMetaData);
-     } else if (typeof(inputMetaData) === 'number') {
-       tempMaximumColorRange = inputMetaData;
-     }
-     if (tempMinimumColorRange < tempMaximumColorRange) {
-       minimumColorRange = tempMinimumColorRange;
-       maximumColorRange = tempMaximumColorRange;
-     } else if (tempMinimumColorRange > tempMaximumColorRange) {
-       minimumColorRange = tempMaximumColorRange;
-       maximumColorRange = tempMinimumColorRange;
-     }
-   } // End-if (inputData && inputMetaData && inputData !== '' && inputMetaData !== '')
-   if (minimumColorRange < 0) {
-     minimumColorRange = math.abs(minimumColorRange);
-   } else if (minimumColorRange > 255) {
-     minimumColorRange = 255;
-   }
-   if (maximumColorRange < 0) {
-     maximumColorRange = math.abs(maximumColorRange);
-   } else if (maximumColorRange > 255) {
-     maximumColorRange = 255;
-   }
-   returnData = [minimumColorRange, maximumColorRange];
-   loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
-   loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
-   return returnData;
+  const functionName = parseColorRangeInputs.name;
+  loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+  loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
+  loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
+  let returnData = [0,0,0];
+  let minimumColorRange = 0;
+  let tempMinimumColorRange = 0;
+  let maximumColorRange = 0;
+  let tempMaximumColorRange = 0;
+  if (inputData && inputMetaData && inputData !== '' && inputMetaData !== '') {
+    // Try to parse them as numbers for the range.
+    if (typeof(inputData) === 'string') {
+      tempMinimumColorRange = parseInt(inputData);
+    } else if (typeof(inputData) === 'number') {
+      tempMinimumColorRange = inputData;
+    }
+    if (typeof(inputMetaData) === 'string') {
+      tempMaximumColorRange = parseInt(inputMetaData);
+    } else if (typeof(inputMetaData) === 'number') {
+      tempMaximumColorRange = inputMetaData;
+    }
+    if (tempMinimumColorRange < tempMaximumColorRange) {
+      minimumColorRange = tempMinimumColorRange;
+      maximumColorRange = tempMaximumColorRange;
+    } else if (tempMinimumColorRange > tempMaximumColorRange) {
+      minimumColorRange = tempMaximumColorRange;
+      maximumColorRange = tempMinimumColorRange;
+    }
+  } // End-if (inputData && inputMetaData && inputData !== '' && inputMetaData !== '')
+  if (minimumColorRange < 0) {
+    minimumColorRange = math.abs(minimumColorRange);
+  } else if (minimumColorRange > 255) {
+    minimumColorRange = 255;
+  }
+  if (maximumColorRange < 0) {
+    maximumColorRange = math.abs(maximumColorRange);
+  } else if (maximumColorRange > 255) {
+    maximumColorRange = 255;
+  }
+  returnData = [minimumColorRange, maximumColorRange];
+  loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
+  loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+  return returnData;
 }
 
 /**
@@ -90,12 +123,12 @@ async function parseColorRangeInputs(inputData, inputMetaData) {
  * Looks up the named color data as loaded in the Haystacks engine.
  * @param {string} inputData The name of the color that should be looked up.
  * @param {array<integer>} inputMetaData A default array, if the color isn't found.
- * @return {array<integer>} An array of integers that represent RGB values.
+ * @returns {array<integer>} An array of integers that represent RGB values.
  * @author Seth Hollingsead
  * @date 2023/03/02
  */
 async function getNamedColorDataArray(inputData, inputMetaData) {
-  let functionName = getNamedColorDataArray.name;
+  const functionName = getNamedColorDataArray.name;
   loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -117,12 +150,12 @@ async function getNamedColorDataArray(inputData, inputMetaData) {
  * inputData[1] = Value to be searched for in the array.
  * the input array that should be searched for the given input value.
  * @param {function} inputMetaData The function that should be used to do the search.
- * @return {boolean} A True or False to indicate if the value was found in the array or not found.
+ * @returns {boolean} A True or False to indicate if the value was found in the array or not found.
  * @author Seth Hollingsead
  * @date 2022/01/21
  */
 async function doesArrayContainValue(inputData, inputMetaData) {
-  let functionName = doesArrayContainValue.name;
+  const functionName = doesArrayContainValue.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   // Not sure how this will output, would be good to also put some type checking on this input variable.
@@ -155,6 +188,7 @@ async function doesArrayContainValue(inputData, inputMetaData) {
 }
 
  export default {
+  initAuxiliaryArrayParsing,
    parseColorRangeInputs,
    getNamedColorDataArray,
    doesArrayContainValue

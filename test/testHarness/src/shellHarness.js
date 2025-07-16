@@ -111,7 +111,7 @@ async function safeJsonParse(persistentBuffer) {
  * - Gracefully handles user-triggered exits (`exit` command or Ctrl+C), server disconnects, or socket errors.
  * This is the entrypoint for the interactive shell window/harness process,
  * acting as the glue between user keyboard input and framework server logic.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2025/07/03
  * @notes

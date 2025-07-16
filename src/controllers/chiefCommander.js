@@ -36,12 +36,12 @@ const namespacePrefix = wrd.cframework + bas.cDot + wrd.ccontrollers + bas.cDot 
 /**
  * @function bootStrapCommands
  * @description Initializes all of the commands and gets them added to the D-data structure.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/02/01
  */
 async function bootStrapCommands() {
-  let functionName = bootStrapCommands.name;
+  const functionName = bootStrapCommands.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await commandBroker.bootStrapCommands();
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -50,12 +50,12 @@ async function bootStrapCommands() {
 /**
  * @function reinitializeCommands
  * @description Clears out and then re-bootstraps the commands.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2023/02/12
  */
 async function reinitializeCommands() {
-  let functionName = reinitializeCommands.name;
+  const functionName = reinitializeCommands.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await commandBroker.resetCommands();
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -65,12 +65,12 @@ async function reinitializeCommands() {
  * @function addClientCommands
  * @description This is a wrapper function for calling the commandBroker.addClientCommands.
  * @param {object} clientCommands A map of client defined command names and client defined command function calls.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/02/17
  */
 async function addClientCommands(clientCommands) {
-  let functionName = addClientCommands.name;
+  const functionName = addClientCommands.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await commandBroker.addClientCommands(clientCommands);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -87,12 +87,12 @@ async function addClientCommands(clientCommands) {
  * contextName = "framework" => D['CommandsAliases']['Framework']
  * contextName = "application" => D['CommandAliases']['Application']
  * contextName = "plugin" => D['CommandAliases']['Plugins']['<pluginName>']
- * @return {boolean|object} True or False if the data to be loaded is not from a plugin, returns a JSON object is the data to be loaded is from a plugin.
+ * @returns {boolean|object} True or False if the data to be loaded is not from a plugin, returns a JSON object is the data to be loaded is from a plugin.
  * @author Seth Hollingsead
  * @date 2022/02/02
  */
 async function loadCommandAliasesFromPath(commandAliasesFilePathConfigurationName, contextName) {
-  let functionName = loadCommandAliasesFromPath.name;
+  const functionName = loadCommandAliasesFromPath.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // commandAliasesFilePathConfigurationName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.ccommandAliasesFilePathConfigurationNameIs + commandAliasesFilePathConfigurationName);
@@ -137,12 +137,12 @@ async function loadCommandAliasesFromPath(commandAliasesFilePathConfigurationNam
  * @description Determines if the command queue has been setup or not,
  * if not then it is initialized, and the command is added to the command queue.
  * @param {string} command The command that should be added  to the command queue.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/02/02
  */
 async function enqueueCommand(command) {
-  let functionName = enqueueCommand.name;
+  const functionName = enqueueCommand.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // command is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.ccommandIs + command);
@@ -161,12 +161,12 @@ async function enqueueCommand(command) {
 /**
  * @function isCommandQueueEmpty
  * @description Determines if the command queue is empty or not empty.
- * @return {boolean} A True or False value to indicate if the command queue is empty or not empty.
+ * @returns {boolean} A True or False value to indicate if the command queue is empty or not empty.
  * @author Seth Hollingsead
  * @date 2022/02/02
  */
 async function isCommandQueueEmpty() {
-  let functionName = isCommandQueueEmpty.name;
+  const functionName = isCommandQueueEmpty.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   let returnData = false;
   returnData = await queue.isEmpty(sys.cCommandQueue);
@@ -178,13 +178,13 @@ async function isCommandQueueEmpty() {
 /**
  * @function processCommandQueue
  * @description Pulls the command from the front of the command queue and executes it using the command broker.
- * @return {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/02/02
  */
 async function processCommandQueue() {
-  let functionName = processCommandQueue.name;
+  const functionName = processCommandQueue.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   let commandToExecute;
   let returnData;

@@ -62,7 +62,7 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDo
  * output: 'input[name="emailAddress"][class="username"]'
  * @param {string} inputData A string that contains text with single quotes that should be swapped for double quotes.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} A string that contains text where single quotes have been exchanged for double quotes.
+ * @returns {string} A string that contains text where single quotes have been exchanged for double quotes.
  * @author Seth Hollingsead
  * @date 2021/10/28
  */
@@ -111,7 +111,7 @@ async function singleQuoteSwapAfterEquals(inputData, inputMetaData) {
  * @description Swaps all forward slash characters in a string for back slash characters.
  * @param {string} inputData String that might contain some forward slashes.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The same as the input string, just all forward slash characters
+ * @returns {string} The same as the input string, just all forward slash characters
  * swapped for back slash characters.
  * @author Seth Hollingsead
  * @date 2021/10/28
@@ -142,7 +142,7 @@ async function swapForwardSlashToBackSlash(inputData, inputMetaData) {
  * @description Swaps all back slash characters in a string for forward slash characters.
  * @param {string} inputData String that might contains some back slashes.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The same as the input string, just all back slash characters
+ * @returns {string} The same as the input string, just all back slash characters
  * swapped for forward slash characters.
  * @author Seth Hollingsead
  * @date 2021/10/28
@@ -177,7 +177,7 @@ async function swapBackSlashToForwardSlash(inputData, inputMetaData) {
  * @description Swaps all double forward slash characters for single forward slash characters.
  * @param {string} inputData String that might contain some double forward slashes.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The same as the input string, just all double forward slash characters
+ * @returns {string} The same as the input string, just all double forward slash characters
  * swapped for single forward slash characters.
  * @author Seth Hollingsead
  * @date 2021/10/28
@@ -212,7 +212,7 @@ async function swapDoubleForwardSlashToSingleForwardSlash(inputData, inputMetaDa
  * @description Swaps all double back slash characters for single back slash characters.
  * @param {string} inputData String that might contain some double back slashes.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The same as the input string, just all double back slash characters
+ * @returns {string} The same as the input string, just all double back slash characters
  * swapped for single back slash characters.
  * @author Seth Hollingsead
  * @date 2021/10/28
@@ -243,7 +243,7 @@ async function swapDoubleBackSlashToSingleBackSlash(inputData, inputMetaData) {
  * @description Replaces all spaces in the input string with plus symbols.
  * @param {string} inputData A string that contains spaces that should be converted to plus symbols.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The same as the input string but with space characters converted to plus symbols.
+ * @returns {string} The same as the input string but with space characters converted to plus symbols.
  * @author Seth Hollingsead
  * @date 2022/01/21
  */
@@ -267,7 +267,7 @@ async function replaceSpacesWithPlus(inputData, inputMetaData) {
  * @description Replaces all colons in the input string with underscore symbols.
  * @param {string} inputData A string that contains colons that should be converted to underscore symbols.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The same as teh input String but with colon characters converted to underscore symbols.
+ * @returns {string} The same as teh input String but with colon characters converted to underscore symbols.
  * @author Seth Hollingsead
  * @date 2022/01/23
  */
@@ -291,7 +291,7 @@ async function replaceColonWithUnderscore(inputData, inputMetaData) {
  * @description Cleans carriage return characters from the input data and trims off any leading or training spaces.
  * @param {string} inputData The string that should be scrubbed for carriage returns.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The same as teh input string, but with all carriage return characters removed.
+ * @returns {string} The same as teh input string, but with all carriage return characters removed.
  * @author Seth Hollingsead
  * @date 2022/01/23
  */
@@ -319,7 +319,7 @@ async function cleanCarriageReturnFromString(inputData, inputMetaData) {
  * @description Converts the input String to the same string but with no upper case letters.
  * @param {string} inputData The string that should have all upper case letters changed to lower case letters.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The corrected string with all lower case letters.
+ * @returns {string} The corrected string with all lower case letters.
  * @author Seth Hollingsead
  * @date 2022/01/23
  */
@@ -342,7 +342,7 @@ async function convertStringToLowerCase(inputData, inputMetaData) {
  * @description Converts the input string to the same string but with no lower case letters.
  * @param {string} inputData The string that should have all lower case letters changed to upper case letters.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The corrected string with all upper case letters.
+ * @returns {string} The corrected string with all upper case letters.
  * @author Seth Hollingsead
  * @date 2022/01/23
  */
@@ -365,7 +365,7 @@ async function convertStringToUpperCase(inputData, inputMetaData) {
  * @description Determines if the input string contains at least one upper case character or not.
  * @param {string} inputData The string that should be checked for upper case characters.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} True or False to indicate if the string contains
+ * @returns {boolean} True or False to indicate if the string contains
  * at least one upper case character or more, or not any upper case characters.
  * @author Seth Hollingsead
  * @date 2022/01/23
@@ -394,7 +394,7 @@ async function doesStringContainUpperCaseCharacter(inputData, inputMetaData) {
  * @description Determines if the input string contains at least one lower case character or not.
  * @param {string} inputData The string that should be checked for lower case characters.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} True or False to indicate if the string contains
+ * @returns {boolean} True or False to indicate if the string contains
  * at least one lower case character or more, or not any lower case characters.
  * @author Seth Hollingsead
  * @date 2022/01/23
@@ -423,7 +423,7 @@ async function doesStringContainLowerCaseCharacter(inputData, inputMetaData) {
  * @description Determines if the first character of the string is a lower case character or not.
  * @param {string} inputData The string that should be checked to determine if the first character is lower case or not.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} True or False to indicate if the first character of the string is a lower case character or not.
+ * @returns {boolean} True or False to indicate if the first character of the string is a lower case character or not.
  * @author Seth Hollingsead
  * @date 2022/01/23
  */
@@ -446,7 +446,7 @@ async function isFirstCharacterLowerCase(inputData, inputMetaData) {
  * @description Determines if the first character of the string is an upper case character or not.
  * @param {string} inputData The string that should be checked to determine if the first character is upper case or not.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} True or False to indicate if the first character of the string is an upper case character or not.
+ * @returns {boolean} True or False to indicate if the first character of the string is an upper case character or not.
  * @author Seth Hollingsead
  * @date 2022/01/23
  */
@@ -473,7 +473,7 @@ async function isFirstCharacterUpperCase(inputData, inputMetaData) {
  * inputData[0] = originalString - The string where the replacement should be made.
  * inputData[1] = index - The index of the character where the replacement should be made.
  * @param {string} inputMetaData The character or string that should be used to make the replacement, inserted at the specified index.
- * @return {string} The string after the replacement has been made.
+ * @returns {string} The string after the replacement has been made.
  * @author Seth Hollingsead
  * @date 2021/10/28
  * @NOTE: https://stackoverflow.com/questions/1431094/how-do-i-replace-a-character-at-a-particular-index-in-javascript

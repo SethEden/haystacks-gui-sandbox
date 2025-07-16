@@ -20,7 +20,7 @@ import * as app_cmd from '../constants/application.command.constants.js';
 /**
  * @function initClientCommandsLibrary
  * @description Initializes an object map of client commands and client function calls and returns them.
- * @return {object} A JSON object that contains a list of business rule names and their associated function calls.
+ * @returns {object} A JSON object that contains a list of business rule names and their associated function calls.
  * @author Seth Hollingsead
  * @date 2025/06/23
  * @NOTE Please be aware that the Commands and BusinessRules data fields in the

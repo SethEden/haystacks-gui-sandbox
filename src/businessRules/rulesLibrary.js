@@ -77,7 +77,7 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDo
 /**
  * @function clearRulesLibrary
  * @description Clears out the business rules data structure on D. Useful so that it can be re-initialized.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2023/02/12
  */
@@ -91,7 +91,7 @@ async function clearRulesLibrary() {
 /**
  * @function initRulesLibrary
  * @description Initializes the business rules function data structure on D.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2021/10/27
  * @NOTE Please be aware that the Commands and BusinessRules data fields in the
@@ -102,6 +102,10 @@ async function clearRulesLibrary() {
 async function initRulesLibrary() {
   //  let functionName = initRulesLibrary.name;
    // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
+   D[sys.cbusinessRulesMetaData] = {};
+   D[sys.cbusinessRulesMetaData][wrd.cframework] = [];
+   D[sys.cbusinessRulesMetaData][wrd.capplication] = [];
+   D[sys.cbusinessRulesMetaData][wrd.cplugins] = {};
    D[sys.cbusinessRules] = {};
    D[sys.cbusinessRules] = {
      // eslint-disable-next-line no-unused-vars

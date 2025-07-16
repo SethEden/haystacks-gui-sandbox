@@ -4,6 +4,7 @@
  * @description Contains all system defined business rules for parsing strings, specific to file names.
  * @requires module:ruleParsing
  * @requires module:loggers
+ * @requires module:data
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
  * @requires {@link https://www.npmjs.com/package/path|path}
  * @author Seth Hollingsead
@@ -14,26 +15,64 @@
 // Internal imports
 import ruleParsing from '../ruleParsing.js';
 import loggers from '../../../executrix/loggers.js';
+import D from '../../../structures/data.js';
 // External imports
 import hayConst from '@haystacks/constants';
 import path from 'path';
 
 const {bas, biz, gen, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.businessRules.rules.stringParsing.fileStringParsing.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + wrd.cstring + wrd.cParsing + bas.cDot + baseFileName + bas.cDot;
+
+const rulesMetaData = [
+  {[wrd.cName]: biz.cgetFileNameFromPath, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.cswapDoubleForwardSlashToSingleForwardSlash, biz.cswapForwardSlashToBackSlash]},
+  {[wrd.cName]: biz.cremoveFileNameFromPath, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.cswapDoubleForwardSlashToSingleForwardSlash, biz.cswapForwardSlashToBackSlash]},
+  {[wrd.cName]: biz.cgetFileExtension, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cremoveDotFromFileExtension, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cremoveFileExtensionFromFileName, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cascertainMatchingFilenames, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.csupportedFileFormatsAre, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cremoveXnumberOfFoldersFromEndOfPath, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.cisInteger]},
+  {[wrd.cName]: biz.cgetFirstTopLevelFolderFromPath, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []}
+];
+
+/**
+ * @function initFileStringParsing
+ * @description Adds the fileStringParsing business rules meta-data to the
+ * D-data structure businessRulesMetaData-framework data structure.
+ * The meta-data is used to dynamically import all code dependencies such that a given business rule can be executed in a separate thread.
+ * Multi-threading allows for parallel processing and greatly improved performance!!
+ * @returns {boolean} True or False to indicate if the data structures were initialized or not.
+ * @author Seth Hollingsead
+ * @date 2025/07/15
+ */
+async function initFileStringParsing() {
+  const functionName = initFileStringParsing.name;
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+  let returnData = false;
+  // Add all of the rules meta-data to the D-data structure!
+  if (D[sys.cbusinessRulesMetaData] && D[sys.cbusinessRulesMetaData][wrd.cframework]) {
+    D[sys.cbusinessRulesMetaData][wrd.cframework].push(...rulesMetaData);
+    returnData = true;
+  }
+  await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+  return returnData;
+}
 
 /**
  * @function getFileNameFromPath
  * @description Gets the file name from a string that contains the path and the file name.
  * @param {string} inputData The string that should have all the folders and path removed from it.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The file name and file extension string without the full path.
+ * @returns {string} The file name and file extension string without the full path.
  * @author Seth Hollingsead
  * @date 2022/01/23
  */
 async function getFileNameFromPath(inputData, inputMetaData) {
-  let functionName = getFileNameFromPath.name;
+  const functionName = getFileNameFromPath.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -60,12 +99,12 @@ async function getFileNameFromPath(inputData, inputMetaData) {
  * @description Removes the file name from a string that contains a path and file name.
  * @param {string} inputData The string that should have the file name removed from it.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The path without the file name.
+ * @returns {string} The path without the file name.
  * @author Seth Hollingsead
  * @date 2025/01/08
  */
 async function removeFileNameFromPath(inputData, inputMetaData) {
-  let functionName = removeFileNameFromPath.name;
+  const functionName = removeFileNameFromPath.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -109,12 +148,12 @@ async function removeFileNameFromPath(inputData, inputMetaData) {
  * but regardless it gets the file extension of the file.
  * @param {string} inputData The string that should contain the file name to which we want to get the file extension from.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The file extension such as txt, xml, csv, etc...
+ * @returns {string} The file extension such as txt, xml, csv, etc...
  * @author Seth Hollingsead
  * @date 2022/01/23
  */
 async function getFileExtension(inputData, inputMetaData) {
-  let functionName = getFileExtension.name;
+  const functionName = getFileExtension.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -133,12 +172,12 @@ async function getFileExtension(inputData, inputMetaData) {
  * example: If the input is ".txt", the return value will just be "txt".
  * @param {string} inputData The string that should contain the file extension that is being modified.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The file extension without the dot prefix.
+ * @returns {string} The file extension without the dot prefix.
  * @author Seth Hollingsead
  * @date 2022/01/23
  */
 async function removeDotFromFileExtension(inputData, inputMetaData) {
-  let functionName = removeDotFromFileExtension.name;
+  const functionName = removeDotFromFileExtension.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -157,12 +196,12 @@ async function removeDotFromFileExtension(inputData, inputMetaData) {
  * Otherwise it will remove all the characters after the last period in the file name.
  * @param {string} inputData The string that should have all the characters after the last period in the file name removed.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The same input string but without the file extension or all the characters removed after the last dot.
+ * @returns {string} The same input string but without the file extension or all the characters removed after the last dot.
  * @author Seth Hollingsead
  * @date 2022/01/23
  */
 async function removeFileExtensionFromFileName(inputData, inputMetaData) {
-  let functionName = removeFileExtensionFromFileName.name;
+  const functionName = removeFileExtensionFromFileName.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -180,12 +219,12 @@ async function removeFileExtensionFromFileName(inputData, inputMetaData) {
  * @description Compares two file names after stripping off the path and determines if they are matching or not.
  * @param {string} inputData The first filename and path that should be used in making the file name comparison.
  * @param {string} inputMetaData The second filename and path that should be used in making the file name comparison.
- * @return {boolean} A True or False value to indicate if the file names are equivalent.
+ * @returns {boolean} A True or False value to indicate if the file names are equivalent.
  * @author Seth Hollingsead
  * @date 2022/01/23
  */
 async function ascertainMatchingFilenames(inputData, inputMetaData) {
-  let functionName = ascertainMatchingFilenames.name;
+  const functionName = ascertainMatchingFilenames.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -210,12 +249,12 @@ async function ascertainMatchingFilenames(inputData, inputMetaData) {
  * @description Returns a list of supported file formats.
  * @param {string} inputData Not used for this business rule.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} A coma separated ist of supported file formats. IE a list of file extensions.
+ * @returns {string} A coma separated ist of supported file formats. IE a list of file extensions.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
 async function supportedFileFormatsAre(inputData, inputMetaData) {
-  let functionName = supportedFileFormatsAre.name;
+  const functionName = supportedFileFormatsAre.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -230,12 +269,12 @@ async function supportedFileFormatsAre(inputData, inputMetaData) {
  * @description Removes X number of folders from the end of a path and returns the newly modified path.
  * @param {string} inputData The path that should have the number of folders removed.
  * @param {integer} inputMetaData The number of paths that should be removed from the input path.
- * @return {string} The modified string with the folders removed from the input path.
+ * @returns {string} The modified string with the folders removed from the input path.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
 async function removeXnumberOfFoldersFromEndOfPath(inputData, inputMetaData) {
-  let functionName = removeXnumberOfFoldersFromEndOfPath.name;
+  const functionName = removeXnumberOfFoldersFromEndOfPath.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -292,12 +331,12 @@ async function removeXnumberOfFoldersFromEndOfPath(inputData, inputMetaData) {
  * @description Takes a path and returns the folder at the farthest right of that path.
  * @param {string} inputData The path that should be evaluated.
  * @param {string} inputMetaData Not used fore this business rule.
- * @return {string} The folder at the far-right of the input path.
+ * @returns {string} The folder at the far-right of the input path.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
 async function getFirstTopLevelFolderFromPath(inputData, inputMetaData) {
-  let functionName = getFirstTopLevelFolderFromPath.name;
+  const functionName = getFirstTopLevelFolderFromPath.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -323,6 +362,7 @@ async function getFirstTopLevelFolderFromPath(inputData, inputMetaData) {
 }
 
 export default {
+  initFileStringParsing,
   getFileNameFromPath,
   removeFileNameFromPath,
   getFileExtension,

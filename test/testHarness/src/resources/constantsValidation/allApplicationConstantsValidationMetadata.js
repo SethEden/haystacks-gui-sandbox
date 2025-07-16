@@ -43,7 +43,7 @@ let namespacePrefix = wrd.capplication + bas.cDot + apc.cApplicationName + bas.c
 /**
  * @function initializeAllClientConstantsValidationData
  * @description Initializes all of the client constants validation data so that it can be used to validate all of the constants.
- * @return {object} An object that contains all of the data and metaData for application level constants validation.
+ * @returns {object} An object that contains all of the data and metaData for application level constants validation.
  * @author Seth Hollingsead
  * @date 2025/06/22
  */

@@ -54,7 +54,7 @@ const namespacePrefix = wrd.cframework + bas.cDot + wrd.ccontrollers + bas.cDot 
 /**
  * @function initializeConstantsValidationData
  * @description Calls the dataBroker to initialize the constants verification data structure.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/03/22
  */
@@ -68,7 +68,7 @@ const namespacePrefix = wrd.cframework + bas.cDot + wrd.ccontrollers + bas.cDot 
 /**
  * @function generateFrameworkConstantsValidationData
  * @description Generates all of the framework constants validation data and returns all that data as a single JSON object.
- * @return {object} A JSON object that contains all of the framework constants validation data.
+ * @returns {object} A JSON object that contains all of the framework constants validation data.
  * @author Seth Hollingsead
  * @date 2022/03/28
  */
@@ -88,7 +88,7 @@ async function generateFrameworkConstantsValidationData() {
  * @param {array&lt;array&lt;string,object>>} arrayValidationData An array of arrays that contains all of the constants library validation names and data objects.
  * @param {string} contextName The name of the type of data that is being added.
  * Ex: Framework, Application, Plugin:PluginOne, Plugin:D-CAF
- * @return {boolean} True or False to indicate if the data was added successfully or not.
+ * @returns {boolean} True or False to indicate if the data was added successfully or not.
  * @author Seth Hollingsead
  * @date 2022/03/24
  */

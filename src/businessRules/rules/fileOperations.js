@@ -3,12 +3,13 @@
  * @module fileOperations
  * @description Contains all of the functions required to do file operations
  * on a physical/virtual hard drive and/or mounted volume.
- * Including loading files, saving files, reloading files, resaving files,
+ * Including loading files, saving files, reloading files, re-saving files,
  * copying files, moving files, copying folders including copying folders recursively,
  * zipping files and saving sip-packages as part of a deployment/release process.
  * @requires module:ruleParsing
  * @requires module:configurator
  * @requires module:loggers
+ * @requires module:data
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
  * @requires {@link https://www.npmjs.com/package/adm-zip|adm-zip}
  * @requires {@link https://nodejs.dev/learn/the-nodejs-fs-module|fs}
@@ -26,6 +27,7 @@
 import ruleParsing from './ruleParsing.js';
 import configurator from '../../executrix/configurator.js';
 import loggers from '../../executrix/loggers.js';
+import D from '../../structures/data.js';
 // External imports
 import hayConst from '@haystacks/constants';
 import admZip from 'adm-zip';
@@ -38,6 +40,7 @@ import path from 'path';
 
 const {bas, biz, cfg, gen, msg, phn, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.businessRules.rules.fileOperations.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + baseFileName + bas.cDot;
 const directoriesToSkip = ['browser_components', 'node_modules', 'www', 'platforms', 'Release', 'Documentation', 'Recycle', 'Trash', 'config.json'];
@@ -52,18 +55,63 @@ xml2js.Parser({
   mergeAttrs: true
 });
 
+const rulesMetaData = [
+  {[wrd.cName]: biz.cgetXmlData, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetCsvData, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetJsonData, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cwriteJsonData, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cwriteAsciiData, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cloadAsciiFileFromPath, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.creadDirectoryContents, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cscanDirectoryContents, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetDirectoryList, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.creadDirectorySynchronously, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.ccopyAllFilesAndFoldersFromFolderToFolder, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cbuildReleasePackage, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.cgetFileNameFromPath, biz.cremoveFileExtensionFromFileName, biz.cgetNowMoment]},
+  {[wrd.cName]: biz.ccreateZipArchive, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.ccleanRootPath, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.cremoveXnumberOfFoldersFromEndOfPath]},
+  {[wrd.cName]: biz.ccopyFileSync, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.ccopyFolderRecursiveSync, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cdeleteFile, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cappendMessageToFile, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []}
+];
+
+/**
+ * @function initFileOperations
+ * @description Adds the fileOperations business rules meta-data to the
+ * D-data structure businessRulesMetaData-framework data structure.
+ * The meta-data is used to dynamically import all code dependencies such that a given business rule can be executed in a separate thread.
+ * Multi-threading allows for parallel processing and greatly improved performance!!
+ * @returns {boolean} True or False to indicate if the data structures were initialized or not.
+ * @author Seth Hollingsead
+ * @date 2025/07/15
+ */
+async function initFileOperations() {
+  const functionName = initFileOperations.name;
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+  let returnData = false;
+  // Add all of the rules meta-data to the D-data structure!
+  if (D[sys.cbusinessRulesMetaData] && D[sys.cbusinessRulesMetaData][wrd.cframework]) {
+    D[sys.cbusinessRulesMetaData][wrd.cframework].push(...rulesMetaData);
+    returnData = true;
+  }
+  await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+  return returnData;
+}
+
 /**
  * @function getXmlData
  * @description Loads the specified file and parses it into JSON objects, all strings.
  * @param {string} inputData The path and file name of the XML file that should be loaded and parsed into JSON objects.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {object} A parsed JSON object containing all of the data, meta-data, objects,
+ * @returns {object} A parsed JSON object containing all of the data, meta-data, objects,
  * values and attributes that were stored  in the specified XML file.
  * @author Seth Hollingsead
  * @date 2022/04/28
  */
 async function getXmlData(inputData, inputMetaData) {
-  let functionName = getXmlData.name;
+  const functionName = getXmlData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -97,12 +145,12 @@ async function getXmlData(inputData, inputMetaData) {
  * We want to keep everything as modular as possible to allow for this future proofing flexibility.
  * @param {string} inputData The path and file name of the CSV file that should be loaded and parsed into JSON objects.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {object} The JSON object as it was loaded from the file with minimal to no additional processing.
+ * @returns {object} The JSON object as it was loaded from the file with minimal to no additional processing.
  * @author Seth Hollingsead
  * @date 2022/04/28
  */
 async function getCsvData(inputData, inputMetaData) {
-  let functionName = getCsvData.name;
+  const functionName = getCsvData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -129,14 +177,14 @@ async function getCsvData(inputData, inputMetaData) {
  * @param {string} inputData The path and file name of the JSON file that
  * should be loaded and parsed into JSON objects.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {object} The JSON object as it was loaded from the file with minimal to no additional processing.
+ * @returns {object} The JSON object as it was loaded from the file with minimal to no additional processing.
  * @author Seth Hollingsead
  * @date 2022/04/28
  * @NOTE Cannot use the loggers her, because of a circular dependency.
  */
 // eslint-disable-next-line no-unused-vars
 async function getJsonData(inputData, inputMetaData) {
-  // let functionName = getJsonData.name;
+  // const functionName = getJsonData.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`inputData is: ${inputData}`);
   // console.log(`inputMetaData is: ${inputMetaData}`);
@@ -156,12 +204,12 @@ async function getJsonData(inputData, inputMetaData) {
  * @description Writes out JSON data to the specified file and path location, it will automatically over-write any existing file.
  * @param {string} inputData The path and file name for the file that should have data written to it.
  * @param {object} inputMetaData The data that should be written to the specified file.
- * @return {boolean} True of False to indicate if the file was written out successfully or not.
+ * @returns {boolean} True of False to indicate if the file was written out successfully or not.
  * @author Seth Hollingsead
  * @date 2022/04/28
  */
 async function writeJsonData(inputData, inputMetaData) {
-  let functionName = writeJsonData.name;
+  const functionName = writeJsonData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -185,12 +233,12 @@ async function writeJsonData(inputData, inputMetaData) {
  * @description Writes out a string of ASCII data to the specified file and path location, it will automatically over-write any existing file.
  * @param {string} inputData The path and file name for the file that should have data written to it.
  * @param {string} inputMetaData The data that should be written to the specified file.
- * @return {boolean} True or False to indicate if the file was written out successfully or not.
+ * @returns {boolean} True or False to indicate if the file was written out successfully or not.
  * @author Seth Hollingsead
  * @date 2025/01/07
  */
 async function writeAsciiData(inputData, inputMetaData) {
-  let functionName = writeAsciiData.name;
+  const functionName = writeAsciiData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -214,12 +262,12 @@ async function writeAsciiData(inputData, inputMetaData) {
  * @description Loads the contents of the ASCII file at the specified path and file name, returns the entire contents of the file.
  * @param {string} inputData The path and file name of the file that should have its contents loaded into memory for reading and parsing.
  * @param {string} inputMetaData Not used for this business rules.
- * @return {object} The contents of the file loaded, False if nothing was loaded.
+ * @returns {object} The contents of the file loaded, False if nothing was loaded.
  * @author Seth Hollingsead
  * @date 2022/11/11
  */
 async function loadAsciiFileFromPath(inputData, inputMetaData) {
-  let functionName = loadAsciiFileFromPath.name;
+  const functionName = loadAsciiFileFromPath.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -242,14 +290,14 @@ async function loadAsciiFileFromPath(inputData, inputMetaData) {
  * needs to be reset after the work is done with it. So these are the things that this wrapper function can do.
  * @param {string} inputData The path that needs to be scanned.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {object} An object containing any array of all the files in the folder and all sub-folders.
+ * @returns {object} An object containing any array of all the files in the folder and all sub-folders.
  * @author Seth Hollingsead
  * @date 2022/04/28
  * @NOTE Cannot use the loggers here, because of a circular dependency.
  */
 // eslint-disable-next-line no-unused-vars
 async function readDirectoryContents(inputData, inputMetaData) {
-  // let functionName = readDirectoryContents.name;
+  // const functionName = readDirectoryContents.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`inputData is: ${inputData}`);
   // console.log(`inputMetaData is: ${inputMetaData}`);
@@ -278,12 +326,12 @@ async function readDirectoryContents(inputData, inputMetaData) {
  * @param {array<boolean,integer>} inputMetaData An array that contains a boolean flag for enable the limit and an integer for what the limit should be:
  * inputMetaData[0] = enableLimit - True or False to indicate if the boolean limit should be enabled or not.
  * inputMetaData[1] = filesLimit - The number of files that should be limited when scanning, if the enableLimit is set to True.
- * @return {array<string>} An array of all the files in the folder up to the limit if specified.
+ * @returns {array<string>} An array of all the files in the folder up to the limit if specified.
  * @author Seth Hollingsead
  * @date 2022/05/02
  */
 async function scanDirectoryContents(inputData, inputMetaData) {
-  let functionName = scanDirectoryContents.name;
+  const functionName = scanDirectoryContents.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // Path that should be scanned is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cPathThatShouldBeScannedIs + inputData);
@@ -316,12 +364,12 @@ async function scanDirectoryContents(inputData, inputMetaData) {
  * @description Scans the specified path and returns the list of folders at that level. Does not scan recursively.
  * @param {string} inputData The path that should be scanned for getting a folder list at that folder level.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {array<string>} The list of folders found at the specified path.
+ * @returns {array<string>} The list of folders found at the specified path.
  * @author Seth Hollingsead
  * @date 2022/06/10
  */
 async function getDirectoryList(inputData, inputMetaData) {
-  let functionName = getDirectoryList.name;
+  const functionName = getDirectoryList.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -347,7 +395,7 @@ async function getDirectoryList(inputData, inputMetaData) {
  * @description Recursively parses through all the sub-folders in a given path and loads all of the files contained in each sub-folder into a map.
  * @param {string} inputData The system path that should be scanned recursively for files.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {object} A map of all the files contained in all levels of the specified path in all the folders and sub-folders.
+ * @returns {object} A map of all the files contained in all levels of the specified path in all the folders and sub-folders.
  * @NOTE The function doesn't actually return anything, all the file data is stored in an external data collection.
  * @author wn050
  * @reference https://stackoverflow.com/questions/41462606/get-all-files-recursively-in-directores-nodejs
@@ -356,7 +404,7 @@ async function getDirectoryList(inputData, inputMetaData) {
  */
 // eslint-disable-next-line no-unused-vars
 async function readDirectorySynchronously(inputData, inputMetaData) {
-  // let functionName = readDirectorySynchronously.name;
+  // const functionName = readDirectorySynchronously.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`inputData is: ${inputData}`);
   // console.log(`inputMetaData is: ${inputMetaData}`);
@@ -430,7 +478,7 @@ async function readDirectorySynchronously(inputData, inputMetaData) {
  * Example:
  * filterArray[0] = exclusion array
  * filterArray[1] = inclusion array
- * @return {boolean} A True or False value to indicate if the full copy process is successful or not.
+ * @returns {boolean} A True or False value to indicate if the full copy process is successful or not.
  * @author Seth Hollingsead
  * @date 2022/05/02
  * @NOTE This is mainly used by the build system to execute a copy process for the
@@ -439,7 +487,7 @@ async function readDirectorySynchronously(inputData, inputMetaData) {
  * @NOTE This is a wrapper fro the copyFolderRecursiveSync business rule, because that one is recursive.
  */
 async function copyAllFilesAndFoldersFromFolderToFolder(inputData, inputMetaData) {
-  let functionName = copyAllFilesAndFoldersFromFolderToFolder.name;
+  const functionName = copyAllFilesAndFoldersFromFolderToFolder.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -456,12 +504,12 @@ async function copyAllFilesAndFoldersFromFolderToFolder(inputData, inputMetaData
  * give a name to the file for the current date-time and release version, saving to the destination folder.
  * @param {string} inputData The folder that should be packaged up for the release zip file.
  * @param {string} inputMetaData The folder where the zip file release package should be saved.
- * @return {boolean} A True or False value to indicate if the release package process is successful or not.
+ * @returns {boolean} A True or False value to indicate if the release package process is successful or not.
  * @author Seth Hollingsead
  * @date 2022/05/02
  */
 async function buildReleasePackage(inputData, inputMetaData) {
-  let functionName = buildReleasePackage.name;
+  const functionName = buildReleasePackage.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -541,12 +589,12 @@ async function buildReleasePackage(inputData, inputMetaData) {
  * @param {array<string>} inputData All the folders and paths to include in the zip archive.
  * @param {string} inputMetaData The full path and file name to the
  * destination where the zip file should be saved.
- * @return {boolean} A True or False value to indicate if the zip file was created successfully or not.
+ * @returns {boolean} A True or False value to indicate if the zip file was created successfully or not.
  * @author Seth Hollingsead
  * @date 2022/05/02
  */
 async function createZipArchive(inputData, inputMetaData) {
-  let functionName = createZipArchive.name;
+  const functionName = createZipArchive.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -576,11 +624,11 @@ async function createZipArchive(inputData, inputMetaData) {
  * or top-level folder path for the application.
  * @param {string} inputData Not used for this business rule.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The real rot path or top-level path for the application.
+ * @returns {string} The real rot path or top-level path for the application.
  * @NOTE
  */
 async function cleanRootPath(inputData, inputMetaData) {
-  let functionName = cleanRootPath.name
+  const functionName = cleanRootPath.name
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
@@ -608,7 +656,7 @@ async function cleanRootPath(inputData, inputMetaData) {
  * Example:
  * inputMetaData[0] = exclusionArray
  * inputMetaData[1] = inclusionArray
- * @return {boolean} A True or False to indicate if the copy operation was successful or not.
+ * @returns {boolean} A True or False to indicate if the copy operation was successful or not.
  * @author Simon Zyx
  * @date 2014/09/25
  * {@link https://stackoverflow.com/questions/13786160/copy-folder-recursively-in-node-js}
@@ -617,7 +665,7 @@ async function cleanRootPath(inputData, inputMetaData) {
  * since the original file is more important, and this is really just about the deployment of a build-release.
  */
 async function copyFileSync(inputData, inputMetaData) {
-  let functionName = copyFileSync.name;
+  const functionName = copyFileSync.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -686,7 +734,7 @@ async function copyFileSync(inputData, inputMetaData) {
  * Example:
  * inputMetaData[0] = exclusionArray
  * inputMetaData[1] = inclusionArray
- * @return {boolean} A True or False value to indicate fi the copy operation was a success or not.
+ * @returns {boolean} A True or False value to indicate fi the copy operation was a success or not.
  * @author Simon Zyx
  * @date 2014/09/25
  * {@link https://stackoverflow.com/questions/13786160/copy-folder-recursively-in-node-js}
@@ -695,7 +743,7 @@ async function copyFileSync(inputData, inputMetaData) {
  * since the original file is more important, and this is really just about the deployment of a build-release.
  */
 async function copyFolderRecursiveSync(inputData, inputMetaData) {
-  let functionName = copyFolderRecursiveSync.name;
+  const functionName = copyFolderRecursiveSync.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -781,12 +829,12 @@ async function copyFolderRecursiveSync(inputData, inputMetaData) {
  * @description Deletes a file at the specified file path and file name.
  * @param {string} inputData The fully qualified path and file name for the file that should be deleted.
  * @param {string} inputMetaData The current working directory.
- * @return {boolean} A True or False to indicate if the delete was successful or not.
+ * @returns {boolean} A True or False to indicate if the delete was successful or not.
  * @author Karl-Edward F.P. Jean-Mehu
  * @date 2024/02/02
  */
 async function deleteFile(inputData, inputMetaData) {
-  let functionName = deleteFile.name;
+  const functionName = deleteFile.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -851,13 +899,13 @@ async function deleteFile(inputData, inputMetaData) {
  * @description Opens a file and appends a message to the file, then closes the file.
  * @param {string} inputData The fully qualified path and file name for the file that should be opened, appended and saved.
  * @param {string} inputMetaData The message that should be appended to the specified file.
- * @return {boolean} A True or False to indicate if the append happened successfully or not.
+ * @returns {boolean} A True or False to indicate if the append happened successfully or not.
  * @author Seth Hollingsead
  * @date 2022/05/02
  * @NOTE Cannot use the loggers here, because of a circular dependency.
  */
 async function appendMessageToFile(inputData, inputMetaData) {
-  // let functionName = appendMessageToFile.name;
+  // const functionName = appendMessageToFile.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(msg.cinputDataIs + inputData);
   // console.log(msg.cinputMetaDataIs + inputMetaData);
@@ -884,6 +932,7 @@ async function appendMessageToFile(inputData, inputMetaData) {
 }
 
 export default {
+  initFileOperations,
   getXmlData,
   getCsvData,
   getJsonData,

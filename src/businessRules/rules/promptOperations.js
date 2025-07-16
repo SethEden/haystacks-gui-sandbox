@@ -4,6 +4,7 @@
  * @module promptOperations
  * @description A simple prompt module to get input from the user using process.stdin.
  * @requires module:loggers
+ * @requires module:data
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
  * @requires {@link https://nodejs.dev/learn/the-nodejs-fs-module|fs}
  * @requires {@link https://www.npmjs.com/package/path|path}
@@ -14,6 +15,7 @@
 
 // Internal imports
 import loggers from '../../executrix/loggers.js';
+import D from '../../structures/data.js';
 // External imports
 import hayConst from '@haystacks/constants';
 // import fs from 'fs';
@@ -21,6 +23,7 @@ import path from 'path';
 
 const {bas, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.businessRules.rules.promptOperations.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + baseFileName + bas.cDot;
 // const term = 13; // carriage return
@@ -30,14 +33,14 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDo
  * @description Prompts the user for some input and returns the input.
  * @param {string} inputData What the prompt should display when asking the user for input.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} A string of whatever input the user gave.
+ * @returns {string} A string of whatever input the user gave.
  * @author Seth Hollingsead
  * @date 2022/05/04 - May the Forth be with you!! ;-)
  * @NOTE This function was written with extensive help from ChatGPT,
  * special effort was made to make it work in a cross-platform environment.
  */
 async function prompt(inputData, inputMetaData) {
-  let functionName = prompt.name;
+  const functionName = prompt.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.caskIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -61,12 +64,12 @@ async function prompt(inputData, inputMetaData) {
  * @description Allows for single keystroke character input from the keyboard, without pressing the enter key to confirm input.
  * @param {string} inputData Not used for this business rule.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The character entered by the user.
+ * @returns {string} The character entered by the user.
  * @author Seth Hollingsead
  * @date 2023/03/01
  */
 async function promptRaw(inputData, inputMetaData) {
-  let functionName = promptRaw.name;
+  const functionName = promptRaw.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -103,7 +106,7 @@ async function promptRaw(inputData, inputMetaData) {
  * a callback is invoked.
  * @param {string} inputData The prompt string to display.
  * @param {function} inputMetaData Callback function to receive input when available.
- * @return {boolean} A True or False value to indicate if the prompt finished successfully or not.
+ * @returns {boolean} A True or False value to indicate if the prompt finished successfully or not.
  * @author Seth Hollingsead
  * @date 2025/07/01
  */

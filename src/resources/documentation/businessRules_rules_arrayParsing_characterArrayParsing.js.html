@@ -64,7 +64,7 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDo
  * inputMetaData[0] === character2Find - The character to be searched and replaced from the input string.
  * inputMetaData[1] === character2Replace - The character that should be used to replace
  * the character specified for replacement from the input data.
- * @return {string} The same as the input string but with specified characters converted to the other specified character.
+ * @returns {string} The same as the input string but with specified characters converted to the other specified character.
  * @author Seth Hollingsead
  * @date 2021/10/28
  */
@@ -98,7 +98,7 @@ async function replaceCharacterWithCharacter(inputData, inputMetaData) {
  * @description Parses through all the elements of an array and determines if any one of them contains the input character.
  * @param {string|boolean|integer|object} inputData The character that should be searched for in the array of elements.
  * @param {array&lt;string|boolean|integer|object>} inputMetaData The array that should be searched for the specified character/value/etc...
- * @return {boolean} True or False to indicate if the value was found or not found.
+ * @returns {boolean} True or False to indicate if the value was found or not found.
  * @author Seth Hollingsead
  * @date 2022/01/19
  */
@@ -128,7 +128,7 @@ async function doesArrayContainCharacter(inputData, inputMetaData) {
  * @param {string|integer|boolean|float|object} inputData The character, integer, boolean, float or object
  * that should be removed from all instances of the input array.
  * @param {array&lt;string|boolean|integer|object>} inputMetaData The array from which all instances of the input character, integer, etc...should be removed.
- * @return {array&lt;string|boolean|integer|object>} The array after having the specified character removed from all elements of the input array.
+ * @returns {array&lt;string|boolean|integer|object>} The array after having the specified character removed from all elements of the input array.
  * @author Seth Hollingsead
  * @date 2022/01/19
  */
@@ -163,7 +163,7 @@ async function removeCharacterFromArray(inputData, inputMetaData) {
  * @param {string} inputData The string which should have the specified character changed, then returned.
  * @param {array&lt;integer,string>} inputMetaData An array with an integer of what index the character should be replaced,
  * and a string with the character or characters that should be inserted at the specified index.
- * @return {string} The modified string.
+ * @returns {string} The modified string.
  * @author Seth Hollingsead
  * @date 2022/01/21
  * @reference: {@link https://stackoverflow.com/questions/1431094/how-do-i-replace-a-character-at-a-particular-index-in-javascript}

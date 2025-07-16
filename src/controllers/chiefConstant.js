@@ -26,12 +26,12 @@ const namespacePrefix = wrd.cframework + bas.cDot + wrd.ccontrollers + bas.cDot 
 /**
  * @function initializeConstantsValidationData
  * @description Calls the dataBroker to initialize the constants verification data structure.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/03/22
  */
  async function initializeConstantsValidationData() {
-  let functionName = initializeConstantsValidationData.name;
+  const functionName = initializeConstantsValidationData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await constantBroker.initializeConstantsValidationData();
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -40,12 +40,12 @@ const namespacePrefix = wrd.cframework + bas.cDot + wrd.ccontrollers + bas.cDot 
 /**
  * @function generateFrameworkConstantsValidationData
  * @description Generates all of the framework constants validation data and returns all that data as a single JSON object.
- * @return {object} A JSON object that contains all of the framework constants validation data.
+ * @returns {object} A JSON object that contains all of the framework constants validation data.
  * @author Seth Hollingsead
  * @date 2022/03/28
  */
 async function generateFrameworkConstantsValidationData() {
-  let functionName = generateFrameworkConstantsValidationData.name
+  const functionName = generateFrameworkConstantsValidationData.name
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   let returnData = false;
   returnData = await constantBroker.generateFrameworkConstantsValidationData();
@@ -60,12 +60,12 @@ async function generateFrameworkConstantsValidationData() {
  * @param {array<array<string,object>>} arrayValidationData An array of arrays that contains all of the constants library validation names and data objects.
  * @param {string} contextName The name of the type of data that is being added.
  * Ex: Framework, Application, Plugin:PluginOne, Plugin:D-CAF
- * @return {boolean} True or False to indicate if the data was added successfully or not.
+ * @returns {boolean} True or False to indicate if the data was added successfully or not.
  * @author Seth Hollingsead
  * @date 2022/03/24
  */
 async function addConstantsValidationData(arrayValidationData, contextName) {
-  let functionName = addConstantsValidationData.name;
+  const functionName = addConstantsValidationData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // contextName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.ccontextNameIs + contextName);

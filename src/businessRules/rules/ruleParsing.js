@@ -21,6 +21,7 @@ import path from 'path';
 
 const {bas, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.businessRules.rules.ruleParsing.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + baseFileName + bas.cDot;
 
@@ -31,14 +32,14 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDo
  * @param {array<string>} inputData The array of rule names that should be
  * validated for existence in the runtime rules data structure.
  * @param {string} inputMetaData Not used by this business rule.
- * @return {boolean} A True or False value to indicate if all the rules in the
+ * @returns {boolean} A True or False value to indicate if all the rules in the
  * input array exist or do not all exist.
  * @author Seth Hollingsead
  * @date 2022/05/03
  */
 // eslint-disable-next-line no-unused-vars
 async function doAllRulesExist(inputData, inputMetaData) {
-  // let functionName = doAllRulesExist.name;
+  // const functionName = doAllRulesExist.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`inputData is: ${JSON.stringify(inputData)}`);
   let returnData = false;
@@ -63,13 +64,13 @@ async function doAllRulesExist(inputData, inputMetaData) {
  * @description Determines if a specified named rule exists in the rules system or not.
  * @param {string} inputData The rule name that should be validated as existing in the runtime rules data structure.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} A True or False value to indicate if the rule exists or does not exist.
+ * @returns {boolean} A True or False value to indicate if the rule exists or does not exist.
  * @author Seth Hollingsead
  * @date 2022/05/03
  */
 // eslint-disable-next-line no-unused-vars
 async function doesRuleExist(inputData, inputMetaData) {
-  // let functionName = doesRuleExist.name;
+  // const functionName = doesRuleExist.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`inputData is: ${inputData}`);
   // console.log(`inputMetaData is: ${inputMetaData}`);
@@ -90,12 +91,12 @@ async function doesRuleExist(inputData, inputMetaData) {
  * so it can be used as a call-back function.
  * @param {string} inputData The name of the rule that should be returned if it exists as a valid rule name.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {function} The function that was found if it exists or False if no rule is found.
+ * @returns {function} The function that was found if it exists or False if no rule is found.
  * @author Seth Hollingsead
  * @date 2022/05/09
  */
 async function getRule(inputData, inputMetaData) {
-  let functionName = getRule.name;
+  const functionName = getRule.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -121,13 +122,13 @@ async function getRule(inputData, inputMetaData) {
  * inputData[0] = inputData - The primary input data that should be processed by the business rule.
  * inputData[1] = inputMetaData - Additional meta-data that should be used when processing the business rule.
  * @param {array<string>} inputMetaData The name(s) of the rule(s) that should be executed for modifying the input data.
- * @return {string|integer|boolean|object|function} A modified data Object/String/Integer/Boolean/Function
+ * @returns {string|integer|boolean|object|function} A modified data Object/String/Integer/Boolean/Function
  * where the data has been modified based on the input data, input meta-data, and business rule that was executed.
  * @author Seth Hollingsead
  * @date 2022/05/03
  */
 async function processRulesInternal(inputData, inputMetaData) {
-  let functionName = processRulesInternal.name;
+  const functionName = processRulesInternal.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));

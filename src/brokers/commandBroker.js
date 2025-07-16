@@ -43,12 +43,12 @@ const namespacePrefix = wrd.cframework + bas.cDot + wrd.cbrokers + bas.cDot + ba
  * So we need a way to merge al the client defined and system defined commands into one location.
  * Then the command broker will execute commands rom the D-Data structure and not the commands library per-say.
  * This will allow the system to expand much more dynamically and even be user-defined & flexible to client needs.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/02/02
  */
 async function bootStrapCommands() {
-  let functionName = bootStrapCommands.name;
+  const functionName = bootStrapCommands.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await commandsLibrary.initCommandsLibrary();
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -57,11 +57,11 @@ async function bootStrapCommands() {
 /**
  * @function resetCommands
  * @description Clears out and reinitializes the commands.
- * @return {void}
+ * @returns {void}
  * @date 2023/02/12
  */
 async function resetCommands() {
-  let functionName = resetCommands.name;
+  const functionName = resetCommands.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // await commandsLibrary.clearCommandsLibrary();
   await commandsLibrary.initCommandsLibrary();
@@ -72,12 +72,12 @@ async function resetCommands() {
  * @function addClientCommands
  * @description Merges client defined commands with the system defined commands.
  * @param {array<object>} clientCommands The client rules that should be merged with the system rules.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/02/02
  */
 async function addClientCommands(clientCommands) {
-  let functionName = addClientCommands.name;
+  const functionName = addClientCommands.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // Object.assign(D[wrd.cCommands], clientCommands);
   // D[wrd.cCommands] = {...D[wrd.cCommands], Object.keys(clientCommands): clientCommands[Object.keys(clientCommands)]};
@@ -95,12 +95,12 @@ async function addClientCommands(clientCommands) {
  * @description Merges plugin defined commands with the system defined commands.
  * @param {string} pluginName The name of the current plugin these commands belong to.
  * @param {array<object>} pluginCommands The plugin commands that should be merged with the system commands.
- * @return {boolean} True or False to indicate if the merge was successful or not.
+ * @returns {boolean} True or False to indicate if the merge was successful or not.
  * @author Seth Hollingsead
  * @date 2022/10/24
  */
 async function addPluginCommands(pluginName, pluginCommands) {
-  let functionName = addPluginCommands.name;
+  const functionName = addPluginCommands.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginNameIs + pluginName);
@@ -146,12 +146,12 @@ async function addPluginCommands(pluginName, pluginCommands) {
  * @param {string} pluginName The name of the current plugin these command aliases belong to.
  * @param {object} pluginCommandAliases A JSON object that contains the plugin command aliases that
  * should be merged with the system command aliases.
- * @return {boolean} True or False to indicate if the merge was successful or not.
+ * @returns {boolean} True or False to indicate if the merge was successful or not.
  * @author Seth Hollingsead
  * @date 2022/10/24
  */
 async function addPluginCommandAliases(pluginName, pluginCommandAliases) {
-  let functionName = addPluginCommandAliases.name;
+  const functionName = addPluginCommandAliases.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginNameIs + pluginName);
@@ -182,12 +182,12 @@ async function addPluginCommandAliases(pluginName, pluginCommandAliases) {
  * working with multiple levels of delimiters for nested command calls, looking up a command alias, etc...
  * @param {string} commandString The command string that should be parsed for a valid command.
  * @param {string} commandDelimiter The delimiter that should be used to parse the command line.
- * @return {boolean|string} False if the command is not valid, otherwise it returns the command string.
+ * @returns {boolean|string} False if the command is not valid, otherwise it returns the command string.
  * @author Seth Hollingsead
  * @date 2022/02/02
  */
 async function getValidCommand(commandString, commandDelimiter) {
-  let functionName = getValidCommand.name;
+  const functionName = getValidCommand.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // commandString is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.ccommandStringIs + commandString);
@@ -252,12 +252,12 @@ async function getValidCommand(commandString, commandDelimiter) {
  * data structures and counts the number of command aliases that match the input alias.
  * @param {object} commandAliasData The command alias data that should be searched recursively for the specified command alias.
  * @param {string} commandAliasName The command alias name/string that should be searched for and counted when matches are found.
- * @return {integer} The count of the number of command aliases that match the given input alias.
+ * @returns {integer} The count of the number of command aliases that match the given input alias.
  * @author Seth Hollingsead
  * @date 2022/06/06
  */
 async function countMatchingCommandAlias(commandAliasData, commandAliasName) {
-  let functionName = countMatchingCommandAlias.name;
+  const functionName = countMatchingCommandAlias.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // commandAliasData is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.ccommandAliasDataIs + JSON.stringify(commandAliasData));
@@ -330,12 +330,12 @@ async function countMatchingCommandAlias(commandAliasData, commandAliasName) {
  * data structures and returns the one command data object that matches the input name.
  * @param {object} commandAliasData The command alias data that should be searched recursively for the specified command alias.
  * @param {string} commandAliasName The command alias name/string that should be found.
- * @return {object} The command object that corresponds to the input command alias name.
+ * @returns {object} The command object that corresponds to the input command alias name.
  * @author Seth Hollingsead
  * @date 2022/05/27
  */
 async function searchCommandAlias(commandAliasData, commandAliasName) {
-  let functionName = searchCommandAlias.name;
+  const functionName = searchCommandAlias.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // commandAliasData is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.ccommandAliasDataIs + JSON.stringify(commandAliasData));
@@ -403,13 +403,13 @@ async function searchCommandAlias(commandAliasData, commandAliasName) {
  * @description Recursively gets all of the commands alias data from all levels and flattens them into a single array for printing out to the help command.
  * @param {object} commandAliasDataStructure The command alias data structure that should be recursively flattened into a single array for output.
  * If the input is undefined then the main CommandsAliases data structure will be used at the root of the command aliases data hive.
- * @return {array<string>|boolean} An array of all the command aliases currently needing to be flattened or
+ * @returns {array<string>|boolean} An array of all the command aliases currently needing to be flattened or
  * a boolean True or False to indicate that a leaf-node has been found by the recursive caller.
  * @author Seth Hollingsead
  * @date 2022/05/27
  */
 async function getAllCommandAliasData(commandAliasDataStructure) {
-  let functionName = getAllCommandAliasData.name;
+  const functionName = getAllCommandAliasData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // commandAliasDataStructure is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.ccommandAliasDataStructureIs + JSON.stringify(commandAliasDataStructure));
@@ -467,12 +467,12 @@ async function getAllCommandAliasData(commandAliasDataStructure) {
  * @param {object} commandAliasDataStructure The command alias data structure that should be recursively searched for the namespace specified.
  * if the input is undefined then the main cCommandsAliases data structure will be used at the root of the CommandAliases data hive.
  * @param {string} namespaceToFind The namespace to look for in the command alias metaData data structure.
- * @return {object|boolean} The namespace object if it is found, or False if the namespace object was not found.
+ * @returns {object|boolean} The namespace object if it is found, or False if the namespace object was not found.
  * @author Seth Hollingsead
  * @date 2022/05/27
  */
 async function getCommandNamespaceDataObject(commandAliasDataStructure, namespaceToFind) {
-  let functionName = getCommandNamespaceDataObject.name;
+  const functionName = getCommandNamespaceDataObject.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // commandAliasDataStructure is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.ccommandAliasDataStructureIs + JSON.stringify(commandAliasDataStructure));
@@ -512,12 +512,12 @@ async function getCommandNamespaceDataObject(commandAliasDataStructure, namespac
  * @description Gets the arguments of the current command.
  * @param {string} commandString The command string that should be parsed fro command arguments.
  * @param {string} commandDelimiter The delimiter that should be used to parse the command line.
- * @return {array<boolean|string|integer>} Any array of arguments, some times these might actually be nested command calls.
+ * @returns {array<boolean|string|integer>} Any array of arguments, some times these might actually be nested command calls.
  * @author Seth Hollingsead
  * @date 2022/02/02
  */
 async function getCommandArgs(commandString, commandDelimiter) {
-  let functionName = getCommandArgs.name;
+  const functionName = getCommandArgs.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // commandString is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.ccommandStringIs + commandString);
@@ -662,7 +662,7 @@ async function getCommandArgs(commandString, commandDelimiter) {
  * This function will parse all of that out of the command lien variable that is passed in.
  * And finally pass all of that data on the execution of the actual command.
  * @param {string} commandString The command to execute along with all the associated command arguments, data & meta-data.
- * @return {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/02/02
@@ -673,7 +673,7 @@ async function executeCommand(commandString) {
   // Also don't forget this is where we will need to implement the command performance
   // tracking & command results processing such as pass-fail,
   // so that when a chain of commands has completed execution we can evaluate command statistics and metrics.
-  let functionName = executeCommand.name;
+  const functionName = executeCommand.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // commandString is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.ccommandStringIs + commandString);
@@ -753,12 +753,12 @@ async function executeCommand(commandString) {
  * @description Parses through the commands and finds the commands associated with the named plugin.
  * Then removes that data shredding it from existence at the edge of a black hole.
  * @param {string} pluginName The name of the plugin that should have its commands removed from the D-data structure.
- * @return {boolean} True or False to indicate if the removal of the data was completed successfully or not.
+ * @returns {boolean} True or False to indicate if the removal of the data was completed successfully or not.
  * @author Seth Hollingsead
  * @date 2023/02/01
  */
 async function removePluginCommands(pluginName) {
-  let functionName = removePluginCommands.name;
+  const functionName = removePluginCommands.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginNameIs + pluginName);
@@ -805,12 +805,12 @@ async function removePluginCommands(pluginName) {
  * @description Parses through the command aliases and finds the command aliases associated with the named plugin.
  * Then removes that data shredding it from existence at the edge of a black hole.
  * @param {string} pluginName The name of the plugin that should have its command aliases removed from the D-data structure.
- * @return {boolean} True or False to indicate if the removal of the data was completed successfully or not.
+ * @returns {boolean} True or False to indicate if the removal of the data was completed successfully or not.
  * @author Seth Hollingsead
  * @date 2023/02/01
  */
 async function removePluginCommandAliases(pluginName) {
-  let functionName = removePluginCommandAliases.name;
+  const functionName = removePluginCommandAliases.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginNameIs + pluginName);

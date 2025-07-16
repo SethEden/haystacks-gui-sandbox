@@ -56,13 +56,13 @@ const namespacePrefix = wrd.cframework + bas.cDot + wrd.ccontrollers + bas.cDot 
  * But what we really need for the root path is just C:/Calculator2/
  * @param {string} inputPath The path for the entry point to the framework, ie: main.js
  * @param {string} actualFrameworkName The name of the framework that the application is expecting to use.
- * @return {string} The true root path of the application.
+ * @returns {string} The true root path of the application.
  * @author Seth Hollingsead
  * @date 2021/10/12
  * @NOTE Cannot use the loggers here, because dependency data will have never been loaded.
  */
 async function processRootPath(inputPath, actualFrameworkName) {
-  // let functionName = processRootPath.name;
+  // const functionName = processRootPath.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`inputPath is: ${inputPath}`);
   await ruleBroker.bootStrapBusinessRules();
@@ -79,12 +79,12 @@ async function processRootPath(inputPath, actualFrameworkName) {
  * @function initFrameworkSchema
  * @description Setup all the framework data and configuration settings.
  * @param {object} configData All of the configuration data that should be parsed as part of the setup process.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2021/10/12
  */
 async function initFrameworkSchema(configData) {
-  let functionName = initFrameworkSchema.name;
+  const functionName = initFrameworkSchema.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`configData is: ${JSON.stringify(configData)}`);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
@@ -329,12 +329,12 @@ async function initFrameworkSchema(configData) {
  * So therefore the solution is to have the plugin instance of Haystacks to clear and re-initialize its own business rules and commands.
  * That way the plugin instance of Haystacks, when it tries to execute its own business rules and commands it will be doing so using,
  * its own path to those business rules and commands and should therefore work as expected.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2023/02/12
  */
 async function resetRulesAndCommands() {
-  let functionName = resetRulesAndCommands.name;
+  const functionName = resetRulesAndCommands.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await chiefCommander.reinitializeCommands();
   await ruleBroker.resetBusinessRules();
@@ -346,12 +346,12 @@ async function resetRulesAndCommands() {
  * @description Merges the map of client defined business rule names and client defined business rule function calls
  * with the existing D-data structure that should already have all of the system defined business rule.
  * @param {object} clientBusinessRules A map of client defined business rule names and client defined business rule function calls.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/02/09
  */
 async function mergeClientBusinessRules(clientBusinessRules) {
-  let functionName = mergeClientBusinessRules.name;
+  const functionName = mergeClientBusinessRules.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // console.log(`clientBusinessRules is: ${JSON.stringify(clientBusinessRules)}`);
   await ruleBroker.addClientRules(clientBusinessRules);
@@ -363,12 +363,12 @@ async function mergeClientBusinessRules(clientBusinessRules) {
  * @description Merges the map of client defined command names and client defined command function calls
  * with the existing D-data structure that should already have all of the system defined commands.
  * @param {object} clientCommands A map of client defined command names and client defined command function calls.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/02/09
  */
 async function mergeClientCommands(clientCommands) {
-  let functionName = mergeClientCommands.name;
+  const functionName = mergeClientCommands.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // console.log(`clientCommands is: ${JSON.stringify(clientCommands)}`);
   await chiefCommander.addClientCommands(clientCommands);
@@ -381,12 +381,12 @@ async function mergeClientCommands(clientCommands) {
  * the client defined command aliases XML file, or an optional user defined command aliases path.
  * @param {string} commandAliasesPath The configuration name of the configuration setting where
  * the path to the commands aliases XML file is stored, that should be loaded (OPTIONAL).
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/02/09
  */
 async function loadCommandAliases(commandAliasesPathConfigName) {
-  let functionName = loadCommandAliases.name;
+  const functionName = loadCommandAliases.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // commandAliasesPathConfigName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.ccommandAliasesPathConfigNameIs + commandAliasesPathConfigName);
@@ -429,12 +429,12 @@ async function loadCommandAliases(commandAliasesPathConfigName) {
  * client defined command workflows XML file, or an optional user defined workflow path.
  * @param {string} workflowPathConfigName The configuration name of the configuration setting where
  * the path to the workflows XML file is stored, that should be loaded (OPTIONAL).
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/02/16
  */
 async function loadCommandWorkflows(workflowPathConfigName) {
-  let functionName = loadCommandWorkflows.name;
+  const functionName = loadCommandWorkflows.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // workflowPathConfigName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cworkflowPathConfigurationNameIs + workflowPathConfigName);
@@ -472,12 +472,12 @@ async function loadCommandWorkflows(workflowPathConfigName) {
 /**
  * @function loadAllSchemas
  * @description Loads all of the schema data that will be used to control code behavior and business rule dissemination of execution logic.
- * @return {boolean} True or False to indicate if all of the schema's were loaded and stored or not.
+ * @returns {boolean} True or False to indicate if all of the schema's were loaded and stored or not.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
 async function loadAllSchemas() {
-  let functionName = loadAllSchemas.name;
+  const functionName = loadAllSchemas.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   let returnData = false;
   await dataBroker.initSchemaStorage();
@@ -510,12 +510,12 @@ async function loadAllSchemas() {
  * @function listLoadedPlugins
  * @description This is a wrapper function for chiefPlugin.listLoadedPlugins.
  * Which is in-turn a wrapper function for pluginBroker.listAllLoadedPlugins.
- * @return {array<string>} A list array of the names of the plugins that are currently loaded.
+ * @returns {array<string>} A list array of the names of the plugins that are currently loaded.
  * @author Seth Hollingsead
  * @date 2023/02/06
  */
 async function listLoadedPlugins() {
-  let functionName = listLoadedPlugins.name;
+  const functionName = listLoadedPlugins.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   let returnData = [];
   returnData = await chiefPlugin.listLoadedPlugins();
@@ -528,12 +528,12 @@ async function listLoadedPlugins() {
  * @function listAllPluginsInRegistry
  * @description This is a wrapper function for chiefPlugin.getAllPluginsInRegistry.
  * Which is in-turn a wrapper function for pluginBroker.listPluginsInRegistry.
- * @return {array<string>} A list array of the names of the plugins in the plugin registry.
+ * @returns {array<string>} A list array of the names of the plugins in the plugin registry.
  * @author Seth Hollingsead
  * @date 2022/09/15
  */
 async function listAllPluginsInRegistry() {
-  let functionName = listAllPluginsInRegistry.name;
+  const functionName = listAllPluginsInRegistry.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   let returnData = [];
   returnData = await chiefPlugin.getAllPluginsInRegistry();
@@ -546,12 +546,12 @@ async function listAllPluginsInRegistry() {
  * @function listAllPluginsInRegistryPath
  * @description This is a wrapper function for chiefPlugin.getAllPluginsInRegistryPath.
  * Which is in-turn a wrapper function for pluginBroker.listPluginsInRegistryPath.
- * @return {array<string>} A list array of the names of the plugins in the plugin registry.
+ * @returns {array<string>} A list array of the names of the plugins in the plugin registry.
  * @author Seth Hollingsead
  * @date 2022/09/15
  */
 async function listAllPluginsInRegistryPath() {
-  let functionName = listAllPluginsInRegistryPath.name;
+  const functionName = listAllPluginsInRegistryPath.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   let returnData = [];
   returnData = await chiefPlugin.getAllPluginsInRegistryPath();
@@ -564,12 +564,12 @@ async function listAllPluginsInRegistryPath() {
  * @function numberOfPluginsInRegistry
  * @description This is a wrapper function for chiefPlugin.countAllPluginsInRegistry.
  * Which is in-turn a wrapper function for pluginBroker.countPluginsInRegistry.
- * @return {integer} The count of the number of plugins listed in the plugin registry data hive.
+ * @returns {integer} The count of the number of plugins listed in the plugin registry data hive.
  * @author Seth Hollingsead
  * @date 2022/09/15
  */
 async function numberOfPluginsInRegistry() {
-  let functionName = numberOfPluginsInRegistry.name;
+  const functionName = numberOfPluginsInRegistry.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   let returnData = 0;
   returnData = await chiefPlugin.countAllPluginsInRegistry();
@@ -582,12 +582,12 @@ async function numberOfPluginsInRegistry() {
  * @function numberOfPluginsInRegistryPath
  * @description This is a wrapper function for chiefPlugin.countAllPluginsInRegistryPath.
  * Which is in-turn a wrapper function for pluginBroker.countPluginsInRegistryPath.
- * @return {integer} The count of the number of plugin sub-folders in the plugins path listed in the plugin registry data hive.
+ * @returns {integer} The count of the number of plugin sub-folders in the plugins path listed in the plugin registry data hive.
  * @author Seth Hollingsead
  * @date 2022/09/15
  */
 async function numberOfPluginsInRegistryPath() {
-  let functionName = numberOfPluginsInRegistryPath.name;
+  const functionName = numberOfPluginsInRegistryPath.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   let returnData = 0;
   returnData = await chiefPlugin.countAllPluginsInRegistryPath();
@@ -603,12 +603,12 @@ async function numberOfPluginsInRegistryPath() {
  * @param {string} pluginName The name of the plugin that should be registered.
  * @param {string} pluginPath The path to the plugin, to be added to the plugin registry.
  * This should be the path to the plugin/package.json file, but not including the package.json as part of the path URI.
- * @return {boolean} True or False to indicate if the plugin was added to the plugin registry successfully or not.
+ * @returns {boolean} True or False to indicate if the plugin was added to the plugin registry successfully or not.
  * @author Seth Hollingsead
  * @date 2022/09/15
  */
 async function registerPluginByNameAndPath(pluginName, pluginPath) {
-  let functionName = registerPluginByNameAndPath.name;
+  const functionName = registerPluginByNameAndPath.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginNameIs + pluginName);
@@ -626,12 +626,12 @@ async function registerPluginByNameAndPath(pluginName, pluginPath) {
  * @description This is a wrapper function for chiefPlugin.unregisterNamedPlugin.
  * Which is in-turn a wrapper function for pluginBroker.unregisterPlugin.
  * @param {string} pluginName The name of the plugin that should be removed from the plugin registry.
- * @return {boolean} True or False to indicate if the plugin was removed from the plugin registry successfully or not.
+ * @returns {boolean} True or False to indicate if the plugin was removed from the plugin registry successfully or not.
  * @author Seth Hollingsead
  * @date 2022/09/15
  */
 async function unregisterPluginByName(pluginName) {
-  let functionName = unregisterPluginByName.name;
+  const functionName = unregisterPluginByName.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginNameIs + pluginName);
@@ -647,12 +647,12 @@ async function unregisterPluginByName(pluginName) {
  * @description This is a wrapper function for chiefPlugin.unregisterPlugins.
  * Which is in-turn a wrapper function for pluginBroker.unregisterPlugins.
  * @param {array<string>} pluginsListArray A list array of plugin names that should be removed from the plugin registry.
- * @return {boolean} True or False to indicate if all the plugins were successfully removed from the plugin registry or not.
+ * @returns {boolean} True or False to indicate if all the plugins were successfully removed from the plugin registry or not.
  * @author Seth Hollingsead
  * @date 2023/02/07
  */
 async function unregisterPlugins(pluginsListArray) {
-  let functionName = unregisterPlugins.name;
+  const functionName = unregisterPlugins.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginsListArray is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginsListArrayIs + JSON.stringify(pluginsListArray));
@@ -667,7 +667,7 @@ async function unregisterPlugins(pluginsListArray) {
  * @function syncPluginRegistryWithPath
  * @description This is a wrapper function for chiefPlugin.synchronizePluginRegistryWithPath
  * Which is in-turn a wrapper function for pluginBroker.synchPluginRegistryWithPluginRegistryPath.
- * @return {boolean} True or False to indicate if the synchronization was performed successfully or not.
+ * @returns {boolean} True or False to indicate if the synchronization was performed successfully or not.
  * @author Seth Hollingsead
  * @date 2022/09/15
  * @NOTE It is expected that the number of plugins loaded at any one time will not be crazy high.
@@ -676,7 +676,7 @@ async function unregisterPlugins(pluginsListArray) {
  * if the number of plugins needed at any one time ever grows much over 100, then this solution will need to be re-evaluated!
  */
 async function syncPluginRegistryWithPath() {
-  let functionName = syncPluginRegistryWithPath.name;
+  const functionName = syncPluginRegistryWithPath.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   let returnData = false;
   returnData = await chiefPlugin.synchronizePluginRegistryWithPath();
@@ -689,12 +689,12 @@ async function syncPluginRegistryWithPath() {
  * @function clearAllPluginRegistry
  * @description This is a wrapper function for chiefPlugin.clearPluginRegistry.
  * Which is in-turn a wrapper function for pluginBroker.unregisterAllPlugins.
- * @return {boolean} True or False to indicate if the plugin registry data hive was cleared successfully or not.
+ * @returns {boolean} True or False to indicate if the plugin registry data hive was cleared successfully or not.
  * @author Seth Hollingsead
  * @date 2022/09/15
  */
 async function clearAllPluginRegistry() {
-  let functionName = clearAllPluginRegistry.name;
+  const functionName = clearAllPluginRegistry.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   let returnData = false;
   returnData = await chiefPlugin.clearPluginRegistry();
@@ -707,12 +707,12 @@ async function clearAllPluginRegistry() {
  * @function writePluginRegistryToDisk
  * @description This is a wrapper function for chiefPlugin.savePluginRegistryDisk.
  * Which is in-turn a wrapper function for pluginBroker.savePluginRegistry.
- * @return {boolean} True or False to indicate if the plugin registry was successfully saved to the disk or not.
+ * @returns {boolean} True or False to indicate if the plugin registry was successfully saved to the disk or not.
  * @author Seth Hollingsead
  * @date 2022/09/15
  */
 async function writePluginRegistryToDisk() {
-  let functionName = writePluginRegistryToDisk.name;
+  const functionName = writePluginRegistryToDisk.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   let returnData = false;
   returnData = await chiefPlugin.savePluginRegistryDisk();
@@ -727,12 +727,12 @@ async function writePluginRegistryToDisk() {
  * Business rules, Commands, Workflows, Constants, Configurations, dependencies ist (dependant plugins), etc...
  * @param {string} pluginPath The fully qualified path where to load the plugin from,
  * or the folder name that will contain the plugin in the plugin registry path.
- * @return {boolean} True or False to indicate if the plugin was loaded successfully or not.
+ * @returns {boolean} True or False to indicate if the plugin was loaded successfully or not.
  * @author Seth Hollingsead
  * @date 2022/09/15
  */
 async function loadPlugin(pluginPath) {
-  let functionName = loadPlugin.name;
+  const functionName = loadPlugin.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginPath is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginPathIs + pluginPath);
@@ -750,12 +750,12 @@ async function loadPlugin(pluginPath) {
  * @description Calls the plugin initializePlugin function to get the plugin data, for each of the plugins in the input array of plugin paths:
  * Business rules, Commands, Workflows, Constants, Configurations, dependencies list (dependant plugins), etc...
  * @param {array<string>} pluginsPaths An array of fully qualified paths where to load the plugins from.
- * @return {boolean} True or False to indicate if all the plugins were loaded or not.
+ * @returns {boolean} True or False to indicate if all the plugins were loaded or not.
  * @author Seth Hollingsead
  * @date 2022/09/01
  */
 async function loadPlugins(pluginsPaths) {
-  let functionName = loadPlugins.name;
+  const functionName = loadPlugins.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginsPaths are:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginsPathsAre + JSON.stringify(pluginsPaths));
@@ -781,12 +781,12 @@ async function loadPlugins(pluginsPaths) {
  * @function loadPluginsFromRegistry
  * @description Calls the plugin initializePlugin function to get teh plugin data, for each of the plugins and their paths from the plugin registry.
  * Business rules, Commands, Workflows, Constants, Configurations, dependencies list (dependant plugins), etc...
- * @return {boolean} True or False to ndicate if all the plugins were loaded or not.
+ * @returns {boolean} True or False to ndicate if all the plugins were loaded or not.
  * @author Seth Hollingsead
  * @date 2022/09/16
  */
 async function loadPluginsFromRegistry() {
-  let functionName = loadPluginsFromRegistry.name;
+  const functionName = loadPluginsFromRegistry.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   let returnData = false;
   let pluginPathsArray = await chiefPlugin.getAllPluginsPathsInRegistry();
@@ -803,12 +803,12 @@ async function loadPluginsFromRegistry() {
  * @description Calls various functions in the chiefPlugin and pluginBroker to unload and remove all plugin metaData and data for the specified plugin:
  * Business rules, Commands, Workflows, Constants, Configurations, dependencies list (dependant plugins), etc...
  * @param {string} pluginName The name of the plugin that should be unloaded.
- * @return {boolean} True or False to indicate if the plugin was unloaded successfully or not.
+ * @returns {boolean} True or False to indicate if the plugin was unloaded successfully or not.
  * @author Seth Hollingsead
  * @date 2022/09/15
  */
 async function unloadPlugin(pluginName) {
-  let functionName = unloadPlugin.name;
+  const functionName = unloadPlugin.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginNameIs + pluginName);
@@ -828,12 +828,12 @@ async function unloadPlugin(pluginName) {
  * @description Calls various functions n the chiefPlugin and pluginBroker to unload and remove all the metaData and data for a list of plugins:
  * Business rules, Commands, Workflows, Constants, Configurations, dependencies list (dependant plugins), etc...
  * @param {array<string>} pluginNames An array ist of names of plugins that should be unloaded.
- * @return {boolean} True or False to indicate if all the plugins were unloaded successfully or not.
+ * @returns {boolean} True or False to indicate if all the plugins were unloaded successfully or not.
  * @author Seth Hollingsead
  * @date 2022/09/15
  */
 async function unloadPlugins(pluginNames) {
-  let functionName = unloadPlugins.name;
+  const functionName = unloadPlugins.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginNames is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginNamesIs + JSON.stringify(pluginNames));
@@ -864,12 +864,12 @@ async function unloadPlugins(pluginNames) {
  * @function unloadAllPlugins
  * @description Calls various functions in the chiefPlugin and pluginBroker to unload and remove all plugin metaData and data:
  * Business rules, Commands, Workflows, Constants, Configurations, dependencies ist (dependant plugins), etc...
- * @return {boolean} True or False to indicate if all the plugins were unloaded successfully or not.
+ * @returns {boolean} True or False to indicate if all the plugins were unloaded successfully or not.
  * @author Seth Hollingsead
  * @date 2022/09/15
  */
 async function unloadAllPlugins() {
-  let functionName = unloadAllPlugins.name;
+  const functionName = unloadAllPlugins.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   let returnData = false;
   let allLoadedPlugins = await listLoadedPlugins();
@@ -883,12 +883,12 @@ async function unloadAllPlugins() {
  * @function getPluginsRegistryPath
  * @description This is a wrapper function for the chiefPlugin.getPluginsRegistryPath.
  * Which is in-turn a wrapper function for pluginBroker.getPluginsRegistryPath.
- * @return {string} The path to the plugins listed in the plugin registry as meta-data.
+ * @returns {string} The path to the plugins listed in the plugin registry as meta-data.
  * @author Seth Hollingsead
  * @date 2023/02/07
  */
 async function getPluginsRegistryPath() {
-  let functionName = getPluginsRegistryPath.name;
+  const functionName = getPluginsRegistryPath.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   let returnData = '';
   returnData = await chiefPlugin.getPluginsRegistryPath();
@@ -902,12 +902,12 @@ async function getPluginsRegistryPath() {
  * @description Calls the necessary functions to load and parse the resource data from the specified path.
  * @param {string} contextName The type of resource that is being loaded, eg: configuration, commandAliases, workflows, etc...
  * @param {string} pluginResourcePath The fully qualified path to the plugin resource data.
- * @return {object} The JSON data that is loaded and parsed from the plugin path.
+ * @returns {object} The JSON data that is loaded and parsed from the plugin path.
  * @author Seth Hollingsead
  * @date 2022/09/09
  */
 async function loadPluginResourceData(contextName, pluginResourcePath) {
-  let functionName = loadPluginResourceData.name;
+  const functionName = loadPluginResourceData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // contextName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.ccontextNameIs + contextName);
@@ -943,12 +943,12 @@ async function loadPluginResourceData(contextName, pluginResourcePath) {
  * Can be used to load account data, transaction history logs, activity logs, or any other kind of JSON data.
  * @param {string|array<string>} dataPath The path to the JSON files that should be loaded, or the array of files to load.
  * @param {string} contextName The type of data that should be loaded.
- * @return {object} A JSON object that contains all of the data that was loaded and merged together.
+ * @returns {object} A JSON object that contains all of the data that was loaded and merged together.
  * @author Seth Hollingsead
  * @date 2023/02/27
  */
 async function loadAllJsonData(dataPath, contextName) {
-  let functionName = loadAllJsonData.name;
+  const functionName = loadAllJsonData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // dataPath is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cdataPathIs + JSON.stringify(dataPath));
@@ -966,12 +966,12 @@ async function loadAllJsonData(dataPath, contextName) {
  * @description Persist some data to the data storage in the D-data structure.
  * @param {string} dataName The name of the data, unique name used to store the data in the data structure.
  * @param {object|string|boolean|number|array} data The data that should be stored.
- * @return {boolean} True or False to indicate if the data was stored successfully or not.
+ * @returns {boolean} True or False to indicate if the data was stored successfully or not.
  * @author Seth Hollingsead
  * @date 2023/02/27
  */
 async function storeData(dataName, data) {
-  let functionName = storeData.name;
+  const functionName = storeData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // dataName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cdataNameIs + dataName);
@@ -988,12 +988,12 @@ async function storeData(dataName, data) {
  * @function getData
  * @description Gets data from the D-Data structure data storage data hive.
  * @param {string} dataName The unique name the data should be stored under.
- * @return {object|string|boolean|number|array} The data element or object that was stored if any was found.
+ * @returns {object|string|boolean|number|array} The data element or object that was stored if any was found.
  * @author Seth Hollingsead
  * @date 2023/02/27
  */
 async function getData(dataName) {
-  let functionName = getData.name;
+  const functionName = getData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // dataName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cdataNameIs + dataName);
@@ -1009,12 +1009,12 @@ async function getData(dataName) {
  * @description Wipes out the data using the unique specified data name,
  * if any is found in the D-0data structure data storage data hive.
  * @param {string} dataName The unique name of the data that should be cleared.
- * @return {boolean} True or False to indicate if the data was cleared successfully or not.
+ * @returns {boolean} True or False to indicate if the data was cleared successfully or not.
  * @author Seth Hollingsead
  * @date 2023/02/27
  */
 async function clearData(dataName) {
-  let functionName = clearData.name;
+  const functionName = clearData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // dataName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cdataNameIs + dataName);
@@ -1033,12 +1033,12 @@ async function clearData(dataName) {
  * adds functionality, or changes functionality but does not remove functionality.
  * @param {string} schemaName The name of the schema that is being added.
  * @param {object} schemaDataObject The JSON object that contains the schema data that is being added/replaced/over-written.
- * @return {boolean} True or False to indicate if the schema was successfully added/replaced/over-written.
+ * @returns {boolean} True or False to indicate if the schema was successfully added/replaced/over-written.
  * @author Seth Hollingsead
  * @date 2024/12/31
  */
 async function setSchemaData(schemaName, schemaDataObject) {
-  let functionName = setSchemaData.name;
+  const functionName = setSchemaData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // schemaName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cschemaNameIs + schemaName);
@@ -1062,12 +1062,12 @@ async function setSchemaData(schemaName, schemaDataObject) {
  * @function getSchemaData
  * @description Gets a specific named schema data object, that should be stored in the system, or all schema data if no name is specified.
  * @param {string} schemaName The name of the schema object that should exist in the list of currently loaded schemas.
- * @return {object} A JSON object that contains the schema content for the named schema, if it exists, or all schema data if no name is specified.
+ * @returns {object} A JSON object that contains the schema content for the named schema, if it exists, or all schema data if no name is specified.
  * @author Seth Hollingsead
  * @date 2024/11/22
  */
 async function getSchemaData(schemaName) {
-  let functionName = getSchemaData.name;
+  const functionName = getSchemaData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cschemaNameIs + schemaName);
   let returnData = false;
@@ -1084,12 +1084,12 @@ async function getSchemaData(schemaName) {
  * inputs[0] = inputData - The input to the rule that is being called.
  * inputs[1] = inputMetaData - Additional data the input to the rule.
  * @param {array<string>} businessRules The array that contains the name(s) of the business rule that should be executed.
- * @return {string} The value that is returned from the rule is also returned.
+ * @returns {string} The value that is returned from the rule is also returned.
  * @author Seth Hollingsead
  * @date 2022/02/16
  */
 async function executeBusinessRules(inputs, businessRules) {
-  let functionName = executeBusinessRules.name;
+  const functionName = executeBusinessRules.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // inputs is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputsIs + inputs);
@@ -1110,12 +1110,12 @@ async function executeBusinessRules(inputs, businessRules) {
  * the command queue to be very full with a very complicated workflow.
  * This also acts as a wrapper for the chiefCommander.enqueueCommand function.
  * @param {string} command The command to add to the command queue for executing.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/02/16
  */
 async function enqueueCommand(command) {
-  let functionName = enqueueCommand.name;
+  const functionName = enqueueCommand.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // command is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.ccommandIs + command);
@@ -1129,12 +1129,12 @@ async function enqueueCommand(command) {
  * Determines if the command queue is empty or not,
  * which also determines if the application should continue executing commands from the command queue
  * in sequential order or prompt for another command or exit.
- * @return {boolean} True or False to indicate if command execution should continue or not.
+ * @returns {boolean} True or False to indicate if command execution should continue or not.
  * @author Seth Hollingsead
  * @date 2022/02/16
  */
 async function isCommandQueueEmpty() {
-  let functionName = isCommandQueueEmpty.name;
+  const functionName = isCommandQueueEmpty.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   let returnData = false;
   returnData = await chiefCommander.isCommandQueueEmpty();
@@ -1149,13 +1149,13 @@ async function isCommandQueueEmpty() {
  * which will ultimately call chiefCommander.processCommand to process an individual command.
  * This is because a command could actually invoke a command workflow that might enqueue a bunch of commands
  * to the command queue. All of them must be executed in sequence as part of the main application loop.
- * @return {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/02/16
  */
 async function processCommandQueue() {
-  let functionName = processCommandQueue.name;
+  const functionName = processCommandQueue.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   let returnData = false;
   returnData = await chiefCommander.processCommandQueue();
@@ -1172,12 +1172,12 @@ async function processCommandQueue() {
  * Ex: businessRules.rules.stringParsing.countCamelCaseWords
  * @param {string} configurationName The key of the configuration setting.
  * @param {string|integer|boolean|double} configurationValue The value of the configuration setting.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/02/16
  */
 async function setConfigurationSetting(configurationNamespace, configurationName, configurationValue) {
-  let functionName = setConfigurationSetting.name;
+  const functionName = setConfigurationSetting.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // configurationNamespace is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cconfigurationNamespaceIs + configurationNamespace);
@@ -1199,12 +1199,12 @@ async function setConfigurationSetting(configurationNamespace, configurationName
  * @param {string} configurationNamespace The path in the configuration JSON object
  * where the configuration setting should be found.
  * @param {string} configurationName The key of the configuration setting.
- * @return {string|integer|boolean|double} The value of whatever was stored in the D[configuration].
+ * @returns {string|integer|boolean|double} The value of whatever was stored in the D[configuration].
  * @author Seth Hollingsead
  * @date 2022/02/16
  */
 async function getConfigurationSetting(configurationNamespace, configurationName) {
-  let functionName = getConfigurationSetting.name;
+  const functionName = getConfigurationSetting.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // configurationNamespace is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cconfigurationNamespaceIs + configurationNamespace);
@@ -1223,7 +1223,7 @@ async function getConfigurationSetting(configurationNamespace, configurationName
  * @description This is a wrapper function for the socketsServerLogTransmit.initLogTransmission function.
  * Initializes the websocket server log transmittion process following the pattern of dependency injection.
  * @param {function} inputData The function that should transmit the logs to all connected web socket clients.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2025/07/07
  */
@@ -1240,14 +1240,14 @@ async function initServerLogTransmission(inputData) {
  * @description This is just a wrapper for the loggers.consoleLog function.
  * @param {string} classPath The class path for the caller of this function file.function or class.method.
  * @param {string|boolean|integer|object} message The message or data content that should be dumped to the output.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/02/16
  * @NOTE We cannot instrument this code with calls to loggers.consoleLog as it would introduce yet another circular dependency.
  * We will have to stick with just hard coded console.logs in this case to debug at this level.
  */
 async function consoleLog(classPath, message) {
-  // let functionName = consoleLog.name;
+  // const functionName = consoleLog.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`classPath is: ${classPath}`);
   // console.log(`message is: ${message}`);
@@ -1262,12 +1262,12 @@ async function consoleLog(classPath, message) {
  * @param {string} classPath The class path for the caller of this function file.function or class.method.
  * @param {array<object>} tableData An array of objects that should be printed to the console as if it was data.
  * @param {array<string>} columnNames An array of column names that should be used when outputting the table.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2023/11/07
  */
 async function consoleTableLog(classPath, tableData, columnNames) {
-  // let functionName = consoleTableLog.name;
+  // const functionName = consoleTableLog.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`classPath is: ${classPath}`);
   // console.log(`tableData is: ${JSON.stringify(tableData)}`);

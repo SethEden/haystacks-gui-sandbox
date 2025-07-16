@@ -4,6 +4,7 @@
  * @description Contains all business rules for randomly generating strings of all kinds.
  * @requires module:ruleParsing
  * @requires module:loggers
+ * @requires module:data
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
  * @requires {@link https://www.npmjs.com/package/path|path}
  * @author Seth Hollingsead
@@ -14,12 +15,14 @@
 // Internal imports
 import ruleParsing from './ruleParsing.js';
 import loggers from '../../executrix/loggers.js';
+import D from '../../structures/data.js';
 // External imports
 import hayConst from '@haystacks/constants';
 import path from 'path';
 
 const {bas, biz, gen, lng, msg, num, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.businessRules.rules.stringGeneration.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + baseFileName + bas.cDot;
 
@@ -31,13 +34,13 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDo
  * @param {string} inputData The string that contains a number or how many
  * randomly generated mixed case alphabetic characters should be generated.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} A string of randomly generated mixed case letters where the
+ * @returns {string} A string of randomly generated mixed case letters where the
  * length of the string is defined by the input parameter.
  * @author Seth Hollingsead
  * @date 2022/01/26
  */
 async function generateRandomMixedCaseTextByLength(inputData, inputMetaData) {
-  let functionName = generateRandomMixedCaseTextByLength.name;
+  const functionName = generateRandomMixedCaseTextByLength.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -60,13 +63,13 @@ async function generateRandomMixedCaseTextByLength(inputData, inputMetaData) {
  * @param {string} inputData The string that contains a number for how many randomly
  * generated upper case english alphabetic characters should be generated.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} A string of randomly generated upper case letters where the
+ * @returns {string} A string of randomly generated upper case letters where the
  * length of the string is defined by the input parameter.
  * @author Seth Hollingsead
  * @date 2022/01/26
  */
 async function generateRandomUpperCaseTextByLength(inputData, inputMetaData) {
-  let functionName = generateRandomUpperCaseTextByLength.name;
+  const functionName = generateRandomUpperCaseTextByLength.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -89,13 +92,13 @@ async function generateRandomUpperCaseTextByLength(inputData, inputMetaData) {
  * @param {string} inputData The string that contains a number for how many randomly
  * generated lower case english alphabetic characters that should be generated.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} A string of randomly generated lower case letters where the
+ * @returns {string} A string of randomly generated lower case letters where the
  * length of the string is defined by the input parameter.
  * @author Seth Hollingsead
  * @date 2022/01/26
  */
 async function generateRandomLowerCaseTextByLength(inputData, inputMetaData) {
-  let functionName = generateRandomLowerCaseTextByLength.name;
+  const functionName = generateRandomLowerCaseTextByLength.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -123,13 +126,13 @@ async function generateRandomLowerCaseTextByLength(inputData, inputMetaData) {
  *  "!@#$%^&*()_+-=[]{};:',./<>?\|\"", // SpecialCharacters
  *  "English" // Language
  * ]
- * @return {string} A string of randomly generated mixed case letters and
+ * @returns {string} A string of randomly generated mixed case letters and
  * special characters where the length of the string is defined by the input parameter.
  * @author Seth Hollingsead
  * @date 2022/01/26
  */
 async function generateRandomMixedCaseTextWithSpecialCharactersByLength(inputData, inputMetaData) {
-  let functionName = generateRandomMixedCaseTextWithSpecialCharactersByLength.name;
+  const functionName = generateRandomMixedCaseTextWithSpecialCharactersByLength.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -157,13 +160,13 @@ async function generateRandomMixedCaseTextWithSpecialCharactersByLength(inputDat
  *  "!@#$%^&*()_+-=[]{};:',./<>?\|\"", // SpecialCharacters
  *  "English" // Language
  * ]
- * @return {string} A string of randomly generated upper case english letters and
+ * @returns {string} A string of randomly generated upper case english letters and
  * special characters where the length of the string is defined by the input parameter.
  * @author Seth Hollingsead
  * @date 2022/01/26
  */
 async function generateRandomUpperCaseTextWithSpecialCharactersByLength(inputData, inputMetaData) {
-  let functionName = generateRandomUpperCaseTextWithSpecialCharactersByLength.name;
+  const functionName = generateRandomUpperCaseTextWithSpecialCharactersByLength.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -193,13 +196,13 @@ async function generateRandomUpperCaseTextWithSpecialCharactersByLength(inputDat
  *  "!@#$%^&*()_+-=[]{};:',./<>?\|\"", // SpecialCharacters
  *  "English" // Language
  * ]
- * @return {string} A string of randomly generated lower case english letters and
+ * @returns {string} A string of randomly generated lower case english letters and
  * special characters where the length of the string is defined by the input parameter.
  * @author Seth Hollingsead
  * @date 2022/01/26
  */
 async function generateRandomLowerCaseTextWithSpecialCharactersByLength(inputData, inputMetaData) {
-  let functionName = generateRandomLowerCaseTextWithSpecialCharactersByLength.name;
+  const functionName = generateRandomLowerCaseTextWithSpecialCharactersByLength.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -224,13 +227,13 @@ async function generateRandomLowerCaseTextWithSpecialCharactersByLength(inputDat
  * @param {string} inputData The number of randomly generated mixed case letters and/or
  * numbers that should be generated.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} A string of randomly generated mixed case english letters and
+ * @returns {string} A string of randomly generated mixed case english letters and
  * numbers where the length of the string is defined by the input parameter.
  * @author Seth Hollingsead
  * @date 2022/01/26
  */
 async function generateRandomMixedCaseAlphaNumericCodeByLength(inputData, inputMetaData) {
-  let functionName = generateRandomMixedCaseAlphaNumericCodeByLength.name;
+  const functionName = generateRandomMixedCaseAlphaNumericCodeByLength.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -253,13 +256,13 @@ async function generateRandomMixedCaseAlphaNumericCodeByLength(inputData, inputM
  * @param {string} inputData The string that contains a number for how many randomly
  * generated upper case english letters and/or numbers that should be generated.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} A string of randomly generated upper case english letters and numbers
+ * @returns {string} A string of randomly generated upper case english letters and numbers
  * where the length of the string is defined by the input parameter.
  * @author Seth Hollingsead
  * @date 2022/01/26
  */
 async function generateRandomUpperCaseAlphaNumericCodeByLength(inputData, inputMetaData) {
-  let functionName = generateRandomUpperCaseAlphaNumericCodeByLength.name;
+  const functionName = generateRandomUpperCaseAlphaNumericCodeByLength.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -282,13 +285,13 @@ async function generateRandomUpperCaseAlphaNumericCodeByLength(inputData, inputM
  * @param {string} inputData The number of randomly generated lower case letters and/or
  * numbers that should be generated.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} A string of randomly generated lower case english letters and
+ * @returns {string} A string of randomly generated lower case english letters and
  * numbers where the length of the string is defined by the input parameter.
  * @author Seth Hollingsead
  * @date 2022/01/26
  */
 async function generateRandomLowerCaseAlphaNumericCodeByLength(inputData, inputMetaData) {
-  let functionName = generateRandomLowerCaseAlphaNumericCodeByLength.name;
+  const functionName = generateRandomLowerCaseAlphaNumericCodeByLength.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -309,13 +312,13 @@ async function generateRandomLowerCaseAlphaNumericCodeByLength(inputData, inputM
  * @description Generate the specified number of random numeric characters and string them together.
  * @param {string} inputData The number of randomly generated numeric characters that should be generated.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} A string of randomly generated numeric characters where the
+ * @returns {string} A string of randomly generated numeric characters where the
  * length of the string is defined by the input parameter.
  * @author Seth Hollingsead
  * @date 2022/01/26
  */
 async function generateRandomNumericCodeByLength(inputData, inputMetaData) {
-  let functionName = generateRandomNumericCodeByLength.name;
+  const functionName = generateRandomNumericCodeByLength.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -344,13 +347,13 @@ async function generateRandomNumericCodeByLength(inputData, inputMetaData) {
  *  "!@#$%^&*()_+-=[]{};:',./<>?\|\"", // SpecialCharacters
  *  "English" // Language
  * ]
- * @return {string} A string of randomly generated mixed case alpha numeric characters,
+ * @returns {string} A string of randomly generated mixed case alpha numeric characters,
  * and special characters where the length of the string is defined by the input parameter.
  * @author Seth Hollingsead
  * @date 2022/01/26
  */
 async function generateRandomMixedCaseAlphaNumericCodeWithSpecialCharactersByLength(inputData, inputMetaData) {
-  let functionName = generateRandomMixedCaseAlphaNumericCodeWithSpecialCharactersByLength.name;
+  const functionName = generateRandomMixedCaseAlphaNumericCodeWithSpecialCharactersByLength.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -381,13 +384,13 @@ async function generateRandomMixedCaseAlphaNumericCodeWithSpecialCharactersByLen
  *  "!@#$%^&*()_+-=[]{};:',./<>?\|\"", // SpecialCharacters
  *  "English" // Language
  * ]
- * @return {string} A string of randomly generated upper case alpha numeric characters,
+ * @returns {string} A string of randomly generated upper case alpha numeric characters,
  * and special characters where the length of the string is defined as one of the input parameters.
  * @author Seth Hollingsead
  * @date 2022/01/26
  */
 async function generateRandomUpperCaseAlphaNumericCodeWithSpecialCharactersByLength(inputData, inputMetaData) {
-  let functionName = generateRandomUpperCaseAlphaNumericCodeWithSpecialCharactersByLength.name;
+  const functionName = generateRandomUpperCaseAlphaNumericCodeWithSpecialCharactersByLength.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -418,13 +421,13 @@ async function generateRandomUpperCaseAlphaNumericCodeWithSpecialCharactersByLen
  *  "!@#$%^&*()_+-=[]{};:',./<>?\|\"", // SpecialCharacters
  *  "English" // Language
  * ]
- * @return {string} A string of randomly generated lower case alpha numeric characters,
+ * @returns {string} A string of randomly generated lower case alpha numeric characters,
  * and special characters where the length of the string is defined as one of the input parameters.
  * @author Seth Hollingsead
  * @date 2022/01/26
  */
 async function generateRandomLowerCaseAlphaNumericCodeWithSpecialCharactersByLength(inputData, inputMetaData) {
-  let functionName = generateRandomLowerCaseAlphaNumericCodeWithSpecialCharactersByLength.name;
+  const functionName = generateRandomLowerCaseAlphaNumericCodeWithSpecialCharactersByLength.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -448,13 +451,13 @@ async function generateRandomLowerCaseAlphaNumericCodeWithSpecialCharactersByLen
  * generate them and string them together to the specified length.
  * @param {string} inputData The number of randomly generated special characters that should be generated.
  * @param {string} inputMetaData The list of special characters that should be used during the generation process.
- * @return {string} A string of randomly generated characters from the list of
+ * @returns {string} A string of randomly generated characters from the list of
  * allowable special characters that are passed in where the length of the string is defined as one of the input parameters.
  * @author Seth Hollingsead
  * @date 2022/01/26
  */
 async function generateRandomSpecialCharacterCodeByLength(inputData, inputMetaData) {
-  let functionName = generateRandomSpecialCharacterCodeByLength.name;
+  const functionName = generateRandomSpecialCharacterCodeByLength.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -483,13 +486,13 @@ async function generateRandomSpecialCharacterCodeByLength(inputData, inputMetaDa
  * inputMetaData[1] - allowableSpecialCharacters - The list of allowable special characters as a string, only used if the {@code generateSpecialCharacters} boolean value is set to {@code TRUE}.
  * inputMetaData[2] - specifiedSuffixAndDomain - The specified suffix and domain to use after the "@" symbol in the email being generated, example "Yahoo.com".
  * inputMetaData[3] - language - The language that should be used to determine the alphabet that should be used for international characters.
- * @return {string} A string of randomly generated mixed case alpha numeric characters and optionally special characters
+ * @returns {string} A string of randomly generated mixed case alpha numeric characters and optionally special characters
  * where the length of the string is also defined as one of the input parameters, formatted as an email: a@b.com".
  * @author Seth Hollingsead
  * @date 2022/01/26
  */
 async function generateValidEmail(inputData, inputMetaData) {
-  let functionName = generateValidEmail.name;
+  const functionName = generateValidEmail.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -565,14 +568,14 @@ async function generateValidEmail(inputData, inputMetaData) {
  * inputMetaData[1] - allowableSpecialCharacters - The list of allowable special characters as a string, only used if the {@code generateSpecialCharacters} boolean value is set to {@code TRUE}.
  * inputMetaData[2] - specifiedSuffixAndDomain - The specified suffix and domain to use after the "@" symbol in the email being generated, example "Yahoo.com".
  * inputMetaData[3] - language - The language that should be used to determine the alphabet that should be used for international characters.
- * @return {string} A string of randomly generated mixed case alpha numeric characters and
+ * @returns {string} A string of randomly generated mixed case alpha numeric characters and
  * optionally special characters where the length of the string is also defined as one
  * of the input parameters, formatted as an email: "a@b.com".
  * @author Seth Hollingsead
  * @date 2022/01/26
  */
 async function generateInvalidEmail(inputData, inputMetaData) {
-  let functionName = generateInvalidEmail.name;
+  const functionName = generateInvalidEmail.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -648,7 +651,7 @@ async function generateInvalidEmail(inputData, inputMetaData) {
  * inputMetaData[1] - allowableSpecialCharacters - The list of allowable special characters as a string, only used if the {@code generateSpecialCharacters} boolean value is set to {@code TRUE}.
  * inputMetaData[2] - specifiedSuffixAndDomain - The specified suffix and domain to use after the "@" symbol in the email being generated, example "Yahoo.com".
  * inputMetaData[3] - language - The language that should be used to determine the alphabet that should be used for international characters.
- * @return {string} A string of randomly generated mixed case alpha numeric characters and optionally special characters
+ * @returns {string} A string of randomly generated mixed case alpha numeric characters and optionally special characters
  * where the length of the string is also defined as one of the input parameters, formatted as an email: "a@b.com".
  * @NOTE The number of characters in the {@code specifiedSuffixAndDomain} input variable must not
  * exceed the {@code numberOfCharactersToGenerate + 2} or the function/rule will return an empty string.
@@ -656,7 +659,7 @@ async function generateInvalidEmail(inputData, inputMetaData) {
  * @date 2022/01/26
  */
 async function generateValidEmailWithSpecificSuffixAndDomainName(inputData, inputMetaData) {
-  let functionName = generateValidEmailWithSpecificSuffixAndDomainName.name;
+  const functionName = generateValidEmailWithSpecificSuffixAndDomainName.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -705,13 +708,13 @@ async function generateValidEmailWithSpecificSuffixAndDomainName(inputData, inpu
  * inputMetaData[1] - allowableSpecialCharacters - The list of allowable special characters as a string, only used if the {@code generateSpecialCharacters} Boolean value is set to {@code TRUE}.
  * inputMetaData[2] - specifiedSuffixAndDomain - Not used for this business rule.
  * inputMetaData[3] - language - The language that should be used to determine the alphabet that should be used for international characters.
- * @return {string} A string of randomly generated mixed case alpha numeric characters adn optionally special characters
+ * @returns {string} A string of randomly generated mixed case alpha numeric characters adn optionally special characters
  * where the length of the string is also defined as one of the input parameters, formatted as an email "a@b.com".
  * @author Seth Hollingsead
  * @date 2022/01/26
  */
 async function generateRandomValidEmail(inputData, inputMetaData) {
-  let functionName = generateRandomValidEmail.name;
+  const functionName = generateRandomValidEmail.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -822,7 +825,7 @@ async function generateRandomValidEmail(inputData, inputMetaData) {
  * inputMetaData[1] - allowableSpecialCharacters - The list of allowable special characters as a string, only used if the {@code generateSpecialCharacters} Boolean value is set to {@code TRUE}.
  * inputMetaData[2] - specifiedSuffixAndDomain - The specified suffix and domain to use after the "@" symbol in the email being generated, example: "Yahoo.com".
  * inputMetaData[3] - language - The language that should be used to determine the alphabet that should be used for international characters.
- * @return {string} A string of randomly generated mixed case alpha numeric characters and optionally
+ * @returns {string} A string of randomly generated mixed case alpha numeric characters and optionally
  * special characters where the length of the string is also defined as one of the input parameters, formatted as an email "a@b.com".
  * @NOTE The number of characters in the {@code specifiedSuffixAndDomain} input variable must not
  * exceed the {@code numberOfCharactersToGenerate + 2} or the function/rule will return an empty string.
@@ -830,7 +833,7 @@ async function generateRandomValidEmail(inputData, inputMetaData) {
  * @date 2022/01/26
  */
 async function generateInvalidEmailWithSpecificSuffixAndDomainName(inputData, inputMetaData) {
-  let functionName = generateInvalidEmailWithSpecificSuffixAndDomainName.name;
+  const functionName = generateInvalidEmailWithSpecificSuffixAndDomainName.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -942,13 +945,13 @@ async function generateInvalidEmailWithSpecificSuffixAndDomainName(inputData, in
  * inputMetaData[1] - allowableSpecialCharacters - The list of allowable special characters as a string, only used if the {@code generateSpecialCharacters} Boolean value is set to {@code TRUE}.
  * inputMetaData[2] - specifiedSuffixAndDomain - Not used for this business rule.
  * inputMetaData[3] - language - The language that should be used to determine the alphabet that should be used for international characters.
- * @return {string} A string of randomly generated mixed case alpha numeric characters and optionally special characters
+ * @returns {string} A string of randomly generated mixed case alpha numeric characters and optionally special characters
  * where the length of the string is also defined as one of the input parameters, formatted as an email "a@b.com".
  * @author Seth Hollingsead
  * @date 2022/01/26
  */
 async function generateRandomInvalidEmail(inputData, inputMetaData) {
-  let functionName = generateRandomInvalidEmail.name;
+  const functionName = generateRandomInvalidEmail.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -1267,12 +1270,12 @@ async function generateRandomInvalidEmail(inputData, inputMetaData) {
  * Really the only difference is the default values. So this function is refactored to call a generic random color generator business rule.
  * @param {string|integer} inputData The number in either numeric or string format that represents the minimum range that should be used to generate the random color.
  * @param {string|integer} inputMetaData The number in either numeric or string format that represents the maximum range that should be used to generate the random color.
- * @return {array<integer,integer,integer>} An array of RGB values in the bright color spectrum range.
+ * @returns {array<integer,integer,integer>} An array of RGB values in the bright color spectrum range.
  * @author Seth Hollingsead
  * @date 2022/01/27
  */
 async function generateRandomBrightColor(inputData, inputMetaData) {
-  let functionName = generateRandomBrightColor.name;
+  const functionName = generateRandomBrightColor.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -1301,12 +1304,12 @@ async function generateRandomBrightColor(inputData, inputMetaData) {
  * Really the only difference is the default values. So this function is refactored to call a generic random color generator business rule.
  * @param {string|integer} inputData The number in either numeric or string format that represents the minimum range that should be used to generate the random color.
  * @param {string|integer} inputMetaData The number in either numeric or string format that represents the maximum range that should be used to generate the random color.
- * @return {array<integer,integer,integer>} An array of RGB values in the dark color spectrum range.
+ * @returns {array<integer,integer,integer>} An array of RGB values in the dark color spectrum range.
  * @author Seth Hollingsead
  * @date 2022/01/27
  */
 async function generateRandomDarkColor(inputData, inputMetaData) {
-  let functionName = generateRandomDarkColor.name;
+  const functionName = generateRandomDarkColor.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -1331,12 +1334,12 @@ async function generateRandomDarkColor(inputData, inputMetaData) {
  * @description Generates a random set of RGB values in the given color range.
  * @param {string|integer} inputData The number in either numeric or string format that represents the minimum range that should be used to generate the random color.
  * @param {string|integer} inputMetaData The number in either numeric or string format that represents the maximum range that should be used to generate the random color.
- * @return {array<integer,integer,integer>} An array of RGB values that will be used for a color value.
+ * @returns {array<integer,integer,integer>} An array of RGB values that will be used for a color value.
  * @author Seth Hollingsead
  * @date 2022/01/27
  */
 async function generateRandomColor(inputData, inputMetaData) {
-  let functionName = generateRandomColor.name;
+  const functionName = generateRandomColor.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));

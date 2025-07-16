@@ -71,7 +71,7 @@ process.on('unhandledRejection', reason => console.error('[process] unhandledRej
 /**
  * @function bootstrapApplication
  * @description Setup all the testHarness application data and configuration settings.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2025/06/19
  */
@@ -165,7 +165,7 @@ async function bootstrapApplication() {
  * @description This is the application startup orchestration function.
  * Manages the bootstrapping of the haystacks command environment, and calls the function to create the main application window.
  * Calls any additional processing as part of the startup process.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2025/06/22
  */
@@ -204,7 +204,7 @@ async function applicationInit() {
 /**
  * @function createWindows
  * @description This creates all the application windows according to the user configuration.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2025/06/22
  */
@@ -246,7 +246,7 @@ async function createWindows() {
 /**
  * @function launchInteractiveCli
  * @description This is the main program loop CLI, the init for the testHarness application.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2025/06/30
  */
@@ -369,7 +369,7 @@ async function mainPromptLoop() {
  * returns control to the mainPromptLoop for further input.
  * DO NOT await this function (fire-and-forget only).
  * All internal awaits are safe; they only affect internal sequencing.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2025/07/01
  * @NOTE DO NOT await at top level. Function is designed for cooperative concurrency with mainPromptLoop
@@ -621,7 +621,7 @@ app.on(app_sys.cwindowAllClosedEvent, async () => {
  * Use Cases:
  * - To provide end users with a native CLI shell alongside the Electron GUI for hybrid automation/testing workflows.
  * - For launching and managing a dedicated shell harness process in enterprise environments.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2025/07/09
  * @notes

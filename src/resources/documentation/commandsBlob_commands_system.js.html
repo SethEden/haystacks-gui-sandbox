@@ -69,7 +69,7 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.ccommandsBlob + bas.cDot
  * @param {array&lt;boolean|string|integer>} inputData String that should be echoed.
  * inputData[0] === 'echoCommand'
  * @param {string} inputMetaData Not used for this business rule.
- * @return {array&lt;boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
+ * @returns {array&lt;boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/02/04
@@ -102,7 +102,7 @@ async function echoCommand(inputData, inputMetaData) {
  * @param {array&lt;boolean|string|integer>} inputData Not used for this command.
  * inputData[0] === 'exit'
  * @param {string} inputMetaData Not used for this command.
- * @return {array&lt;boolean,string|integer|boolean|object|array>} An array with a boolean False value to
+ * @returns {array&lt;boolean,string|integer|boolean|object|array>} An array with a boolean False value to
  * indicate if the application exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/02/04
@@ -125,7 +125,7 @@ async function exit(inputData, inputMetaData) {
  * inputData[0] = 'version'
  * inputData[1] === 'application|framework' (optional)
  * @param {string} inputMetaData Not used for this command.
- * @return {array&lt;boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
+ * @returns {array&lt;boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/02/04
@@ -166,7 +166,7 @@ async function version(inputData, inputMetaData) {
  * inputData[0] === 'about'
  * inputData[1] === 'application|framework' (optional)
  * @param {string} inputMetaData Not used for this command.
- * @return {array&lt;boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
+ * @returns {array&lt;boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/02/04
@@ -211,7 +211,7 @@ async function about(inputData, inputMetaData) {
  * inputData[1] === 'application|framework' (optional)
  * inputData[2] === 'true|false' (optional)
  * @param {string} inputMetaData Not used for this command.
- * @return {array&lt;boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
+ * @returns {array&lt;boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/02/04
@@ -263,7 +263,7 @@ async function name(inputData, inputMetaData) {
  * @description Clears all data from the console cache by printing a bunch of blank lines to the screen.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array&lt;boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
+ * @returns {array&lt;boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/02/04
@@ -298,7 +298,7 @@ async function clearScreen(inputData, inputMetaData) {
  * inputData[n] = Could be additional list of command catagories to get help for if the user entered a space-separated list.
  * Options are: Framework,Platform,Application,App,Plugins,Plugin
  * @param {string} inputMetaData Not used for this command.
- * @return {array&lt;boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
+ * @returns {array&lt;boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/02/22
@@ -479,7 +479,7 @@ async function help(inputData, inputMetaData) {
  * inputData[n] = Could be additional list of command catagories to get help for if the user entered a space-separated list.
  * Options are: Framework,Platform,Application,App,Plugins,Plugin
  * @param {string} inputMetaData Not used for this command.
- * @return {array&lt;boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
+ * @returns {array&lt;boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/02/22
@@ -656,7 +656,7 @@ async function workflowHelp(inputData, inputMetaData) {
  * @description Prints out a RAW dump of the commands data structure, useful for debugging the commands in the live environment.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array&lt;boolean,array&lt;string>>} An array with a boolean True or False value to
+ * @returns {array&lt;boolean,array&lt;string>>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by an empty.
  * @author Seth Hollingsead
  * @date 2023/11/10
@@ -678,7 +678,7 @@ async function printCommands(inputData, inputMetaData) {
  * @description Prints out a RAW dump of the business rules data structure, useful for debugging the business rules in the live environment.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array&lt;boolean,array&lt;string>>} An array with a boolean True or False value to
+ * @returns {array&lt;boolean,array&lt;string>>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by an empty.
  * @author Seth Hollingsead
  * @date 2023/11/10
@@ -700,7 +700,7 @@ async function printBusinessRules(inputData, inputMetaData) {
  * @description Prints out the command log of all the commands the user has entered since the start of the application for this instance it was running.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array&lt;boolean,array&lt;string>>} An array with a boolean True or False value to
+ * @returns {array&lt;boolean,array&lt;string>>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by an array of strings that is the user entered commands.
  * @author Seth Hollingsead
  * @date 2023/02/14
@@ -738,7 +738,7 @@ async function printUserCommandsLog(inputData, inputMetaData) {
  * @description Prints out a log of all the commands executed by the system since the start of the application for this instance it was running.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array&lt;boolean,array&lt;string>>} An array with a boolean True or False value to
+ * @returns {array&lt;boolean,array&lt;string>>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by an array of strings that is the user entered commands.
  * @author Seth Hollingsead
  * @date 2023/02/14
@@ -776,7 +776,7 @@ async function printAllCommandsLog(inputData, inputMetaData) {
  * @description Wipes out the user command log, destroying all evidence of whatever commands the user has entered.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array&lt;boolean,boolean>} An array with a boolean True or False value to
+ * @returns {array&lt;boolean,boolean>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by another boolean value to indicate if the operation was successful or not.
  * @author Seth Hollingsead
  * @date 2023/02/14
@@ -810,7 +810,7 @@ async function clearUserCommandsLog(inputData, inputMetaData) {
  * @description Wipes out the all commands log, destroying all evidence of whatever commands were executed by the system.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array&lt;boolean,boolean>} An array with a boolean True or False value to
+ * @returns {array&lt;boolean,boolean>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by another boolean value to indicate if the operation was successful or not.
  * @author Seth Hollingsead
  * @date 2023/02/14

@@ -6,6 +6,7 @@
  * @requires module:ruleParsing
  * @requires module:configurator
  * @requires module:loggers
+ * @requires module:data
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
  * @requires {@link https://www.npmjs.com/package/path|path}
  * @author Seth Hollingsead
@@ -18,14 +19,47 @@ import stringParsingUtilities from '../stringParsingUtilities.js';
 import ruleParsing from '../ruleParsing.js';
 import configurator from '../../../executrix/configurator.js';
 import loggers from '../../../executrix/loggers.js';
+import D from '../../../structures/data.js';
 // External imports
 import hayConst from '@haystacks/constants';
 import path from 'path';
 
 const {bas, biz, cfg, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.businessRules.rules.arrayParsing.characterArrayParsing.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + wrd.carray + wrd.cParsing + bas.cDot + baseFileName + bas.cDot;
+
+const rulesMetaData = [
+  {[wrd.cName]: biz.creplaceCharacterWithCharacter, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.cutilitiesReplaceCharacterWithCharacter]},
+  {[wrd.cName]: biz.cdoesArrayContainCharacter, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cremoveCharacterFromArray, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.creplaceCharacterWithCharacter]},
+  {[wrd.cName]: biz.creplaceCharacterAtIndex, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []}
+];
+
+/**
+ * @function initCharacterArrayParsing
+ * @description Adds the initCharacterArrayParsing business rules meta-data to the
+ * D-data structure businessRulesMetaData-framework data structure.
+ * The meta-data is used to dynamically import all code dependencies such that a given business rule can be executed in a separate thread.
+ * Multi-threading allows for parallel processing and greatly improved performance!!
+ * @returns {boolean} True or False to indicate if the data structures were initialized or not.
+ * @author Seth Hollingsead
+ * @date 2025/07/15
+ */
+async function initCharacterArrayParsing() {
+  const functionName = initCharacterArrayParsing.name;
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+  let returnData = false;
+  // Add all of the rules meta-data to the D-data structure!
+  if (D[sys.cbusinessRulesMetaData] && D[sys.cbusinessRulesMetaData][wrd.cframework]) {
+    D[sys.cbusinessRulesMetaData][wrd.cframework].push(...rulesMetaData);
+    returnData = true;
+  }
+  await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+  return returnData;
+}
 
 /**
  * @function replaceCharacterWithCharacter
@@ -36,12 +70,12 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDo
  * inputMetaData[0] === character2Find - The character to be searched and replaced from the input string.
  * inputMetaData[1] === character2Replace - The character that should be used to replace
  * the character specified for replacement from the input data.
- * @return {string} The same as the input string but with specified characters converted to the other specified character.
+ * @returns {string} The same as the input string but with specified characters converted to the other specified character.
  * @author Seth Hollingsead
  * @date 2021/10/28
  */
 async function replaceCharacterWithCharacter(inputData, inputMetaData) {
-  let functionName = replaceCharacterWithCharacter.name;
+  const functionName = replaceCharacterWithCharacter.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`inputData is: ${inputData}`);
   // console.log(`inputMetaData is: ${JSON.stringify(inputMetaData)}`);
@@ -70,12 +104,12 @@ async function replaceCharacterWithCharacter(inputData, inputMetaData) {
  * @description Parses through all the elements of an array and determines if any one of them contains the input character.
  * @param {string|boolean|integer|object} inputData The character that should be searched for in the array of elements.
  * @param {array<string|boolean|integer|object>} inputMetaData The array that should be searched for the specified character/value/etc...
- * @return {boolean} True or False to indicate if the value was found or not found.
+ * @returns {boolean} True or False to indicate if the value was found or not found.
  * @author Seth Hollingsead
  * @date 2022/01/19
  */
 async function doesArrayContainCharacter(inputData, inputMetaData) {
-  let functionName = doesArrayContainCharacter.name;
+  const functionName = doesArrayContainCharacter.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -100,12 +134,12 @@ async function doesArrayContainCharacter(inputData, inputMetaData) {
  * @param {string|integer|boolean|float|object} inputData The character, integer, boolean, float or object
  * that should be removed from all instances of the input array.
  * @param {array<string|boolean|integer|object>} inputMetaData The array from which all instances of the input character, integer, etc...should be removed.
- * @return {array<string|boolean|integer|object>} The array after having the specified character removed from all elements of the input array.
+ * @returns {array<string|boolean|integer|object>} The array after having the specified character removed from all elements of the input array.
  * @author Seth Hollingsead
  * @date 2022/01/19
  */
 async function removeCharacterFromArray(inputData, inputMetaData) {
-  let functionName = removeCharacterFromArray.name;
+  const functionName = removeCharacterFromArray.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
@@ -135,13 +169,13 @@ async function removeCharacterFromArray(inputData, inputMetaData) {
  * @param {string} inputData The string which should have the specified character changed, then returned.
  * @param {array<integer,string>} inputMetaData An array with an integer of what index the character should be replaced,
  * and a string with the character or characters that should be inserted at the specified index.
- * @return {string} The modified string.
+ * @returns {string} The modified string.
  * @author Seth Hollingsead
  * @date 2022/01/21
  * @reference: {@link https://stackoverflow.com/questions/1431094/how-do-i-replace-a-character-at-a-particular-index-in-javascript}
  */
 async function replaceCharacterAtIndex(inputData, inputMetaData) {
-  let functionName = replaceCharacterAtIndex.name;
+  const functionName = replaceCharacterAtIndex.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -163,6 +197,7 @@ async function replaceCharacterAtIndex(inputData, inputMetaData) {
 }
 
 export default {
+  initCharacterArrayParsing,
   replaceCharacterWithCharacter,
   doesArrayContainCharacter,
   removeCharacterFromArray,

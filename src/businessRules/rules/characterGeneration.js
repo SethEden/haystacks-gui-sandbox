@@ -4,6 +4,7 @@
  * @description Contains all business rules for randomly generating characters of all kinds.
  * @requires module:ruleParsing
  * @requires module:loggers
+ * @requires module:data
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
  * @requires {@link https://www.npmjs.com/package/path|path}
  * @author Seth Hollingsead
@@ -14,14 +15,61 @@
 // Internal imports
 import ruleParsing from './ruleParsing.js';
 import loggers from '../../executrix/loggers.js';
+import D from '../../structures/data.js';
 // External imports
 import hayConst from '@haystacks/constants';
 import path from 'path';
 
 const {abt, bas, biz, gen, msg, num, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.businessRules.rules.characterGeneration.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + baseFileName + bas.cDot;
+
+const rulesMetaData = [
+  {[wrd.cName]: biz.crandomlyGenerateMixedCaseLetterOrSpecialCharacter, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.clanguageToAlphabet]},
+  {[wrd.cName]: biz.crandomlyGenerateUpperCaseLetterOrSpecialCharacter, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.clanguageToAlphabet]},
+  {[wrd.cName]: biz.crandomlyGenerateLowerCaseLetterOrSpecialCharacter, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.clanguageToAlphabet]},
+  {[wrd.cName]: biz.crandomlyGenerateEitherMixedCaseLetterOrNumberOrSpecialCharacter, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.clanguageToAlphabet]},
+  {[wrd.cName]: biz.crandomlyGenerateEitherUpperCaseLetterOrNumberOrSpecialCharacter, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.clanguageToAlphabet]},
+  {[wrd.cName]: biz.crandomlyGenerateEitherLowerCaseLetterOrNumberOrSpecialCharacter, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.clanguageToAlphabet]},
+  {[wrd.cName]: biz.crandomlyGenerateMixedCaseAlphaNumericCharacter, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.clanguageToAlphabet]},
+  {[wrd.cName]: biz.crandomlyGenerateUpperCaseAlphaNumericCharacter, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.clanguageToAlphabet]},
+  {[wrd.cName]: biz.crandomlyGenerateLowerCaseAlphaNumericCharacter, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.clanguageToAlphabet]},
+  {[wrd.cName]: biz.crandomlyGenerateNumericCharacter, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.crandomlyGenerateSpecialCharacter, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.crandomlyGenerateNumberInRange, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.cstringToBoolean]},
+  {[wrd.cName]: biz.crandomlyGenerateBooleanValue, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.crandomlyGenerateMixedCaseAlphabeticCharacter, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.clanguageToAlphabet]},
+  {[wrd.cName]: biz.crandomlyGenerateLowerCaseLetter, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.clanguageToAlphabet]},
+  {[wrd.cName]: biz.crandomlyGenerateUpperCaseLetter, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.clanguageToAlphabet]},
+  {[wrd.cName]: biz.cconvertNumberToUpperCaseLetter, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.clanguageToAlphabet]},
+  {[wrd.cName]: biz.cconvertNumberToLowerCaseLetter, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.clanguageToAlphabet]}
+];
+
+/**
+ * @function initCharacterGeneration
+ * @description Adds the characterGeneration business rules meta-data  to the
+ * D-data structure businessRulesMetaData-framework data structure.
+ * The meta-data is used to dynamically import all code dependencies such that a given business rule can be executed in a separate thread.
+ * Multi-threading allows for parallel processing and greatly improved performance!!
+ * @returns {boolean} True or False to indicate if the data structures were initialized or not.
+ * @author Seth Hollingsead
+ * @date 2025/07/15
+ */
+async function initCharacterGeneration() {
+  const functionName = initCharacterGeneration.name;
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+  let returnData = false;
+  // Add all of the rules meta-data to the D-data structure!
+  if (D[sys.cbusinessRulesMetaData] && D[sys.cbusinessRulesMetaData][wrd.cframework]) {
+    D[sys.cbusinessRulesMetaData][wrd.cframework].push(...rulesMetaData);
+    returnData = true;
+  }
+  await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+  return returnData;
+}
 
 /**
  * @function randomlyGenerateMixedCaseLetterOrSpecialCharacter
@@ -29,13 +77,13 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDo
  * a random special character from the input list of special characters.
  * @param {string} inputData The list of allowable special characters that should be used to randomly select from.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} Randomly returns a random mixed case letter of the english alphabet,
+ * @returns {string} Randomly returns a random mixed case letter of the english alphabet,
  * or a random special character from the list of allowable special characters.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
 async function randomlyGenerateMixedCaseLetterOrSpecialCharacter(inputData, inputMetaData) {
-  let functionName = randomlyGenerateMixedCaseLetterOrSpecialCharacter.name;
+  const functionName = randomlyGenerateMixedCaseLetterOrSpecialCharacter.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -54,13 +102,13 @@ async function randomlyGenerateMixedCaseLetterOrSpecialCharacter(inputData, inpu
  * a random special character from the input list of special characters.
  * @param {string} inputData The list of allowable special characters that should be used to randomly select from.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} Randomly returns a random upper case letter of the english alphabet,
+ * @returns {string} Randomly returns a random upper case letter of the english alphabet,
  * or a random special character from the ist of allowable special characters.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
 async function randomlyGenerateUpperCaseLetterOrSpecialCharacter(inputData, inputMetaData) {
-  let functionName = randomlyGenerateUpperCaseLetterOrSpecialCharacter.name;
+  const functionName = randomlyGenerateUpperCaseLetterOrSpecialCharacter.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -79,13 +127,13 @@ async function randomlyGenerateUpperCaseLetterOrSpecialCharacter(inputData, inpu
  * a random special character from the input list of special characters.
  * @param {string} inputData The list of allowable special characters that should be used to randomly select from.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} Randomly returns a random lower case letter of the english alphabet,
+ * @returns {string} Randomly returns a random lower case letter of the english alphabet,
  * or a random special character from the list of allowable special characters.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
 async function randomlyGenerateLowerCaseLetterOrSpecialCharacter(inputData, inputMetaData) {
-  let functionName = randomlyGenerateLowerCaseLetterOrSpecialCharacter.name;
+  const functionName = randomlyGenerateLowerCaseLetterOrSpecialCharacter.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -104,13 +152,13 @@ async function randomlyGenerateLowerCaseLetterOrSpecialCharacter(inputData, inpu
  * a random special character from the input ist of special characters.
  * @param {string} inputData The list of allowable special characters that should be used to randomly select from.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} Randomly returns a random number, a random mixed case letter of the english alphabet,
+ * @returns {string} Randomly returns a random number, a random mixed case letter of the english alphabet,
  * or a random special character from the ist of allowable special characters.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
 async function randomlyGenerateEitherMixedCaseLetterOrNumberOrSpecialCharacter(inputData, inputMetaData) {
-  let functionName = randomlyGenerateEitherMixedCaseLetterOrNumberOrSpecialCharacter.name;
+  const functionName = randomlyGenerateEitherMixedCaseLetterOrNumberOrSpecialCharacter.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -129,13 +177,13 @@ async function randomlyGenerateEitherMixedCaseLetterOrNumberOrSpecialCharacter(i
  * a random special character from the input ist of special characters.
  * @param {string} inputData The list of allowable special characters that should be used to randomly select from.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} Randomly returns a random number, a random upper case letter of the english alphabet,
+ * @returns {string} Randomly returns a random number, a random upper case letter of the english alphabet,
  * or a random special character from the list of allowable special characters.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
 async function randomlyGenerateEitherUpperCaseLetterOrNumberOrSpecialCharacter(inputData, inputMetaData) {
-  let functionName = randomlyGenerateEitherUpperCaseLetterOrNumberOrSpecialCharacter.name;
+  const functionName = randomlyGenerateEitherUpperCaseLetterOrNumberOrSpecialCharacter.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -154,13 +202,13 @@ async function randomlyGenerateEitherUpperCaseLetterOrNumberOrSpecialCharacter(i
  * a random special character from the input list of special characters.
  * @param {string} inputData The list of allowable special characters that should be used to randomly select from.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} Randomly returns a random number, a random lower case letter of the english alphabet,
+ * @returns {string} Randomly returns a random number, a random lower case letter of the english alphabet,
  * or a random special character from the list of allowable special characters.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
 async function randomlyGenerateEitherLowerCaseLetterOrNumberOrSpecialCharacter(inputData, inputMetaData) {
-  let functionName = randomlyGenerateEitherLowerCaseLetterOrNumberOrSpecialCharacter.name;
+  const functionName = randomlyGenerateEitherLowerCaseLetterOrNumberOrSpecialCharacter.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -178,12 +226,12 @@ async function randomlyGenerateEitherLowerCaseLetterOrNumberOrSpecialCharacter(i
  * @description Randomly generates an alpha-numeric code from a-z or A-Z or 0-9.
  * @param {string} inputData Not used for this business rule.
  * @param  {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} Either a random letter (could be upper case or lower case, which is also random) or a random number.
+ * @returns {string} Either a random letter (could be upper case or lower case, which is also random) or a random number.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
 async function randomlyGenerateMixedCaseAlphaNumericCharacter(inputData, inputMetaData) {
-  let functionName = randomlyGenerateMixedCaseAlphaNumericCharacter.name;
+  const functionName = randomlyGenerateMixedCaseAlphaNumericCharacter.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -201,12 +249,12 @@ async function randomlyGenerateMixedCaseAlphaNumericCharacter(inputData, inputMe
  * @description Randomly generates an alpha-numeric code from A-Z or 0-9.
  * @param {string} inputData Not used for this business rule.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} Either a random upper case letter or a random number.
+ * @returns {string} Either a random upper case letter or a random number.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
 async function randomlyGenerateUpperCaseAlphaNumericCharacter(inputData, inputMetaData) {
-  let functionName = randomlyGenerateUpperCaseAlphaNumericCharacter.name;
+  const functionName = randomlyGenerateUpperCaseAlphaNumericCharacter.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -224,12 +272,12 @@ async function randomlyGenerateUpperCaseAlphaNumericCharacter(inputData, inputMe
  * @description Randomly generates an alpha-numeric code from a-z or 0-9.
  * @param {string} inputData Not used for this business rule.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} Either a random lower case letter or a random number.
+ * @returns {string} Either a random lower case letter or a random number.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
 async function randomlyGenerateLowerCaseAlphaNumericCharacter(inputData, inputMetaData) {
-  let functionName = randomlyGenerateLowerCaseAlphaNumericCharacter.name;
+  const functionName = randomlyGenerateLowerCaseAlphaNumericCharacter.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -247,12 +295,12 @@ async function randomlyGenerateLowerCaseAlphaNumericCharacter(inputData, inputMe
  * @description Randomly generates a string character in the range of 0-9.
  * @param {string} inputData Not used for this business rule.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} A single randomly generated string character in the range of 0-9.
+ * @returns {string} A single randomly generated string character in the range of 0-9.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
 async function randomlyGenerateNumericCharacter(inputData, inputMetaData) {
-  let functionName = randomlyGenerateNumericCharacter.name;
+  const functionName = randomlyGenerateNumericCharacter.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -268,12 +316,12 @@ async function randomlyGenerateNumericCharacter(inputData, inputMetaData) {
  * @description Randomly select a special character from a list of allowable special characters.
  * @param {string} inputData The list of allowable special characters that should be used to randomly select from.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} A character randomly selected from the input list of allowable characters.
+ * @returns {string} A character randomly selected from the input list of allowable characters.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
 async function randomlyGenerateSpecialCharacter(inputData, inputMetaData) {
-  let functionName = randomlyGenerateSpecialCharacter.name;
+  const functionName = randomlyGenerateSpecialCharacter.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -299,12 +347,12 @@ async function randomlyGenerateSpecialCharacter(inputData, inputMetaData) {
  * inputMetaData[1] = includeMaximum - A True or False value that indicates if the maximum should be included or
  * excluded from the range of allowable range of values to return from.
  * inputMetaData[2] = addMinimum - A True or False value that indicates if the minimum should be added to the value or not.
- * @return {string} The new random number that was generated according to the input parameters.
+ * @returns {string} The new random number that was generated according to the input parameters.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
 async function randomlyGenerateNumberInRange(inputData, inputMetaData) {
-  let functionName = randomlyGenerateNumberInRange.name;
+  const functionName = randomlyGenerateNumberInRange.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -338,13 +386,13 @@ async function randomlyGenerateNumberInRange(inputData, inputMetaData) {
  * @description Randomly generates a boolean value {@code TRUE} or {@code FALSE}.
  * @param {string} inputData Not used for this business rule.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} A boolean value that is
+ * @returns {boolean} A boolean value that is
  * either {@code TRUE} or {@code FALSE} as a random 50-50 chance of one or the other.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
 async function randomlyGenerateBooleanValue(inputData, inputMetaData) {
-  let functionName = randomlyGenerateBooleanValue.name;
+  const functionName = randomlyGenerateBooleanValue.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -361,12 +409,12 @@ async function randomlyGenerateBooleanValue(inputData, inputMetaData) {
  * lower case random english alphabetic letter from a-z or A-Z.
  * @param {string} inputData Not used for this business rule.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} A randomly generated english alphabetic letter from a-z or A-Z.
+ * @returns {string} A randomly generated english alphabetic letter from a-z or A-Z.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
 async function randomlyGenerateMixedCaseAlphabeticCharacter(inputData, inputMetaData) {
-  let functionName = randomlyGenerateMixedCaseAlphabeticCharacter.name;
+  const functionName = randomlyGenerateMixedCaseAlphabeticCharacter.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -384,12 +432,12 @@ async function randomlyGenerateMixedCaseAlphabeticCharacter(inputData, inputMeta
  * @description Randomly generates a lower case english alphabetic letter from a-z.
  * @param {string} inputData Not used for this business rule.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} A randomly generated english alphabetic letter from a-z.
+ * @returns {string} A randomly generated english alphabetic letter from a-z.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
 async function randomlyGenerateLowerCaseLetter(inputData, inputMetaData) {
-  let functionName = randomlyGenerateLowerCaseLetter.name;
+  const functionName = randomlyGenerateLowerCaseLetter.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -407,12 +455,12 @@ async function randomlyGenerateLowerCaseLetter(inputData, inputMetaData) {
  * @description Randomly generates an upper case alphabetic letter from A-Z.
  * @param {string} inputData Not used for this business rule.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} A randomly generated alphabetic letter from A-Z.
+ * @returns {string} A randomly generated alphabetic letter from A-Z.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
 async function randomlyGenerateUpperCaseLetter(inputData, inputMetaData) {
-  let functionName = randomlyGenerateUpperCaseLetter.name;
+  const functionName = randomlyGenerateUpperCaseLetter.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -431,12 +479,12 @@ async function randomlyGenerateUpperCaseLetter(inputData, inputMetaData) {
  * @param {string} inputData A string that contains a number in the range of 1-26 that
  * should be converted to an upper case letter of the english alphabet.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} A letter of the alphabet where 1-26 is converted in a letter A-Z.
+ * @returns {string} A letter of the alphabet where 1-26 is converted in a letter A-Z.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
 async function convertNumberToUpperCaseLetter(inputData, inputMetaData) {
-  let functionName = convertNumberToUpperCaseLetter.name;
+  const functionName = convertNumberToUpperCaseLetter.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -461,12 +509,12 @@ async function convertNumberToUpperCaseLetter(inputData, inputMetaData) {
  * @param {string} inputData A string that contains a number in the range of 1-26 that
  * should be converted in a lower case letter of the english alphabet.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} A letter of the alphabet where 1-26 is converted to a letter a-z.
+ * @returns {string} A letter of the alphabet where 1-26 is converted to a letter a-z.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
 async function convertNumberToLowerCaseLetter(inputData, inputMetaData) {
-  let functionName = convertNumberToLowerCaseLetter.name;
+  const functionName = convertNumberToLowerCaseLetter.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -486,6 +534,7 @@ async function convertNumberToLowerCaseLetter(inputData, inputMetaData) {
 }
 
 export default {
+  initCharacterGeneration,
   randomlyGenerateMixedCaseLetterOrSpecialCharacter,
   randomlyGenerateUpperCaseLetterOrSpecialCharacter,
   randomlyGenerateLowerCaseLetterOrSpecialCharacter,

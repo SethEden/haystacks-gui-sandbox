@@ -34,6 +34,7 @@ import path from 'path';
 
 const {bas, biz, clr, cmd, cfg, msg, num, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.commandsBlob.commands.integrationTests.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.ccommandsBlob + bas.cDot + wrd.ccommands + bas.cDot + baseFileName + bas.cDot;
 
@@ -50,13 +51,13 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.ccommandsBlob + bas.cDot
  * inputData[n] = Could be additional list of constants validation data to validate if the user entered a space-separated list.
  * Options are: Framework,Platform,Application,App,Plugins,Plugin
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/03/25
  */
 async function validateConstants(inputData, inputMetaData) {
-  let functionName = validateConstants.name;
+  const functionName = validateConstants.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -297,13 +298,13 @@ async function validateConstants(inputData, inputMetaData) {
  * inputData[n] = Could be additional list of command alias list data to validate if the user entered a space-separated list.
  * Options are: Framework,Platform,Application,App,Plugins,Plugin
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/03/30
  */
 async function validateCommandAliases(inputData, inputMetaData) {
-  let functionName = validateCommandAliases.name;
+  const functionName = validateCommandAliases.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -508,13 +509,13 @@ async function validateCommandAliases(inputData, inputMetaData) {
  * inputData[n] = Could be additional list of workflow data types list to validate if the user entered a space-separated list.
  * Options are: Framework,Platform,Application,App,Plugins,Plugin
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/06/08
  */
 async function validateWorkflows(inputData, inputMetaData) {
-  let functionName = validateWorkflows.name;
+  const functionName = validateWorkflows.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -690,13 +691,13 @@ async function validateWorkflows(inputData, inputMetaData) {
  * inputData[n] = Could be additional list of workflow data types list to validate if the user entered a space-separated list.
  * Options are: Framework,Platform,Application,App,Plugins,Plugin
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2023/02/20
  */
 async function runAllValidations(inputData, inputMetaData) {
-  let functionName = runAllValidations.name;
+  const functionName = runAllValidations.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);

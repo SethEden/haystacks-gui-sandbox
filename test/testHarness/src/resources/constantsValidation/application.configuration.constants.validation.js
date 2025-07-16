@@ -14,7 +14,7 @@ import * as app_cfg from '../../constants/application.configuration.constants.js
 /**
  * @function applicationConfigurationConstantsValidation
  * @description Initializes the application configuration constants validation data objects array.
- * @return {array<Object<NamedCurve,Actual,Expected>>} An array of constants validation data objects.
+ * @returns {array<Object<NamedCurve,Actual,Expected>>} An array of constants validation data objects.
  * @author Seth Hollingsead
  * @date 2025/06/22
  */

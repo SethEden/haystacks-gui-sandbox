@@ -60,7 +60,7 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDo
   * represents the minimum range that should be used to generate the random color.
   * @param {string|integer} inputMetaData The number in either numeric or string format that
   * represents the maximum range that should be used to generate the random color.
-  * @return {array&lt;integer>} The minimum and maximum values returned in an array.
+  * @returns {array&lt;integer>} The minimum and maximum values returned in an array.
   * returnData[0] = minimum value.
   * returnData[1] = maximum value.
   * @author Seth Hollingsead
@@ -118,7 +118,7 @@ async function parseColorRangeInputs(inputData, inputMetaData) {
  * Looks up the named color data as loaded in the Haystacks engine.
  * @param {string} inputData The name of the color that should be looked up.
  * @param {array&lt;integer>} inputMetaData A default array, if the color isn't found.
- * @return {array&lt;integer>} An array of integers that represent RGB values.
+ * @returns {array&lt;integer>} An array of integers that represent RGB values.
  * @author Seth Hollingsead
  * @date 2023/03/02
  */
@@ -145,7 +145,7 @@ async function getNamedColorDataArray(inputData, inputMetaData) {
  * inputData[1] = Value to be searched for in the array.
  * the input array that should be searched for the given input value.
  * @param {function} inputMetaData The function that should be used to do the search.
- * @return {boolean} A True or False to indicate if the value was found in the array or not found.
+ * @returns {boolean} A True or False to indicate if the value was found in the array or not found.
  * @author Seth Hollingsead
  * @date 2022/01/21
  */

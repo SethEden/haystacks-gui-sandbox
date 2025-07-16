@@ -58,7 +58,7 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDo
  * @description Checks if an array contains a filename, after stripping off the path.
  * @param {array&lt;string>} inputData The array of file names that should be checked for the input file name we are looking for.
  * @param {string} inputMetaData The file name we are looking for in the input array.
- * @return {boolean} A True or False value to indicate if the file name was found or not.
+ * @returns {boolean} A True or False value to indicate if the file name was found or not.
  * @author Seth Hollingsead
  * @date 2022/01/19
  */
@@ -94,7 +94,7 @@ async function doesArrayContainFilename(inputData, inputMetaData) {
  * @param {string} inputData The path that should be scanned for files and their full paths.
  * @param {integer} inputMetaData Optional file limit, ignored if the configuration flag is not set to true,
  * if nothing is passed the configuration setting will be used.
- * @return {array&lt;string>} The array that contains the full path and file name for every file found under the specified path.
+ * @returns {array&lt;string>} The array that contains the full path and file name for every file found under the specified path.
  * @author Seth Hollingsead
  * @date 2022/01/21
  */

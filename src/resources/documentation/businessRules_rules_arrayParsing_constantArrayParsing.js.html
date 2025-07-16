@@ -62,7 +62,7 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDo
  * @description Determines what the longest string is in an array of strings.
  * @param {array&lt;string>} inputData The array for which we should find the longest length string in.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {integer} The length of the longest string in the array.
+ * @returns {integer} The length of the longest string in the array.
  * @author Seth Hollingsead
  * @date 2022/01/19
  * @NOTE https://stackoverflow.com/questions/6521245/finding-longest-string-in-array
@@ -88,7 +88,7 @@ async function getLengthOfLongestStringInArray(inputData, inputMetaData) {
  * Minimum string length to search is 3 characters.
  * @param {array&lt;string>} inputData The array of strings that should be searched for matching patterns.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {array&lt;string>} A string array of common string values found in more than 1 element of the array and 3 or more characters long.
+ * @returns {array&lt;string>} A string array of common string values found in more than 1 element of the array and 3 or more characters long.
  * @author Seth Hollingsead
  * @date 2022/01/19
  */
@@ -177,7 +177,7 @@ async function searchForPatternsInStringArray(inputData, inputMetaData) {
  * @description Scans through an array of strings and determines which ones are not yet implemented in the constants system.
  * @param {array&lt;string>} inputData The array of strings that should be checked if they are already implemented in the constants system or not.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} A coma separated list of constants that are not yet implemented.
+ * @returns {string} A coma separated list of constants that are not yet implemented.
  * @author Seth Hollingsead
  * @date 2022/01/20
  */

@@ -31,12 +31,12 @@ const namespacePrefix = wrd.cframework + bas.cDot + wrd.ccontrollers + bas.cDot 
 /**
  * @function initThemes
  * @description Initializes the themes data on the D-data structure.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/10/23
  */
  async function initThemes() {
-  let functionName = initThemes.name;
+  const functionName = initThemes.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await themeBroker.initThemeData();
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
@@ -49,12 +49,12 @@ const namespacePrefix = wrd.cframework + bas.cDot + wrd.ccontrollers + bas.cDot 
  * @param {object} themeData A JSON object that contains the externally defined theme data names and data paths.
  * @param {string} contextName A context name that indicates where the data is coming from.
  * Ex: Application, Plugins
- * @return {boolean} True or False to indicate if the merge was successful or not.
+ * @returns {boolean} True or False to indicate if the merge was successful or not.
  * @author Seth Hollingsead
  * @date 2022/10/27
  */
 async function addThemeData(themeData, contextName) {
-  let functionName = addThemeData.name;
+  const functionName = addThemeData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // themeData is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cthemeDataIs + JSON.stringify(themeData));
@@ -72,12 +72,12 @@ async function addThemeData(themeData, contextName) {
  * @description Scans the specified root path for folders and determines a list of theme names and theme paths,
  * returns this data as a JSON data object.
  * @param {string} themesRootPath The root path where the themes folders are located. This is the path that should be scanned.
- * @return {object} A JSON object that contains the theme names and theme paths from the specified root path.
+ * @returns {object} A JSON object that contains the theme names and theme paths from the specified root path.
  * @author Seth Hollingsead
  * @date 2022/10/25
  */
 async function generateThemeDataFromThemeRootPath(themesRootPath) {
-  let functionName = generateThemeDataFromThemeRootPath.name;
+  const functionName = generateThemeDataFromThemeRootPath.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // themesRootPath is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cthemesRootPathIs + themesRootPath);
@@ -94,12 +94,12 @@ async function generateThemeDataFromThemeRootPath(themesRootPath) {
  * then look up the specified path name and scan the path to determine all
  * of the theme debug config files that should be loaded.
  * @param {string} themeConfigPathName The configuration name of the path that should be looked up for scanningg purposes.
- * @return {array<string>} An array of file names and paths that should be used when loading the theme debug configuration files.
+ * @returns {array<string>} An array of file names and paths that should be used when loading the theme debug configuration files.
  * @author Seth Hollingsead
  * @date 2022/06/13
  */
 async function determineThemeDebugConfigFilesToLoad(themeConfigPathName) {
-  let functionName = determineThemeDebugConfigFilesToLoad.name;
+  const functionName = determineThemeDebugConfigFilesToLoad.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // themeConfigPathName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cthemeConfigPathNameIs + themeConfigPathName);

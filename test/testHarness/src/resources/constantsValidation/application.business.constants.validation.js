@@ -14,7 +14,7 @@ import * as app_biz from '../../constants/application.business.constants.js';
 /**
  * @function application.BusinessConstantsValidation
  * @description Initializes the application business rules constants validation data objects array.
- * @return {array<Object<NamedCurve,Actual,Expected>>} An array of constants validation data objects.
+ * @returns {array<Object<NamedCurve,Actual,Expected>>} An array of constants validation data objects.
  * @author Seth Hollingsead
  * @date 2025/06/22
  */

@@ -35,14 +35,14 @@ const namespacePrefix = wrd.cframework + bas.cDot + wrd.ccontrollers + bas.cDot 
  * that has the path for the appConfigPath.
  * @param {string} frameworkConfigPathName The name of the configuration setting
  * that has the path for the frameworkConfigPath.
- * @return {boolean} A True or False to indicate if the debugSettings was found to be
+ * @returns {boolean} A True or False to indicate if the debugSettings was found to be
  * true in either of the configuration settings (appConfig Or frameworkConfig).
  * @NOTE Cannot use the loggers here, because dependency data will have never been loaded.
  * @author Seth Hollingsead
  * @date 2022/01/18
  */
 async function searchForUniversalDebugConfigSetting(appConfigPathName, frameworkConfigPathName) {
-  // let functionName = searchForUniversalDebugConfigSetting.name;
+  // const functionName = searchForUniversalDebugConfigSetting.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`appConfigPathName is: ${appConfigPathName}`);
   // console.log(`frameworkConfigPathName is: ${frameworkConfigPathName}`);
@@ -71,12 +71,12 @@ async function searchForUniversalDebugConfigSetting(appConfigPathName, framework
  * @description Loads the specified file, parses it and converts all the data to the appropriate format.
  * @param {string} pathAndFilename The path and file name of the CSV file that should be loaded and parsed into JSON objects.
  * @param {string} contextName The name that should be used when adding the objects to the D data structure for data-sharing.
- * @return {object} A parsed CSV JSON object where all the values have been converted from their string representation into actual values of appropriate type.
+ * @returns {object} A parsed CSV JSON object where all the values have been converted from their string representation into actual values of appropriate type.
  * @author Seth Hollingsead
  * @date 2022/02/17
  */
 async function getAndProcessCsvData(pathAndFilename, contextName) {
-  let functionName = getAndProcessCsvData.name;
+  const functionName = getAndProcessCsvData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pathAndFilename is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpathAndFilenameIs + pathAndFilename);
@@ -94,12 +94,12 @@ async function getAndProcessCsvData(pathAndFilename, contextName) {
  * @function getAndProcessXmlData
  * @description Loads the specified file, parses it and converts all values into their appropriate data types.
  * @param {string} pathAndFilename The path and file name of the XML file that should be loaded and parsed into JSON objects.
- * @return {object} A parsed XML JSON object where all the values have been converted from their string representation into actual values of appropriate type.
+ * @returns {object} A parsed XML JSON object where all the values have been converted from their string representation into actual values of appropriate type.
  * @author Seth Hollingsead
  * @date 2022/02/17
  */
 async function getAndProcessXmlData(pathAndFilename) {
-  let functionName = getAndProcessXmlData.name;
+  const functionName = getAndProcessXmlData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pathAndFilename is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpathAndFilenameIs + pathAndFilename);
@@ -118,12 +118,12 @@ async function getAndProcessXmlData(pathAndFilename) {
  * @description Sets up all of the specified CSV data.
  * @param {string} dataPathConfigurationName The name of the configuration setting that has the path we should search.
  * @param {string} contextName The context name that should be used when adding data to the D data structure.
- * @return {object} A JSON object that contains all of the data that was loaded from all the CSV files and merged together.
+ * @returns {object} A JSON object that contains all of the data that was loaded from all the CSV files and merged together.
  * @author Seth Hollingsead
  * @date 2022/02/17
  */
 async function setupAllCsvData(dataPathConfigurationName, contextName) {
-  let functionName = setupAllCsvData.name;
+  const functionName = setupAllCsvData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // dataPathConfigurationName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cdataPathConfigurationNameIs + dataPathConfigurationName);
@@ -149,12 +149,12 @@ async function setupAllCsvData(dataPathConfigurationName, contextName) {
  * @description Sets up all of the specified XML data.
  * @param {string} dataPathConfigurationName The name of the configuration setting that has the path we should search.
  * @param {string} contextName The context name that should be used when adding data to the D data structure.
- * @return {object} A JSON object that contains all of the data that was loaded from all the XML files and merged together.
+ * @returns {object} A JSON object that contains all of the data that was loaded from all the XML files and merged together.
  * @author Seth Hollingsead
  * @date 2022/02/17
  */
 async function setupAllXmlData(dataPathConfigurationName, contextName) {
-  let functionName = setupAllXmlData.name;
+  const functionName = setupAllXmlData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // dataPathConfigurationName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cdataPathConfigurationNameIs + dataPathConfigurationName);
@@ -182,12 +182,12 @@ async function setupAllXmlData(dataPathConfigurationName, contextName) {
  * @param {string} dataPathConfigurationName The fully qualified path to the data files that should be loaded and parsed or
  * the name of the configuration setting that has the path we should search.
  * @param {string} contextName The context name that should describe the kind of data that is being loaded and parsed.
- * @return {object} A JSON object that contains all of the data that was loaded from all the XML files and merged together.
+ * @returns {object} A JSON object that contains all of the data that was loaded from all the XML files and merged together.
  * @author Seth Hollingsead
  * @date 2022/10/21
  */
 async function setupAllXmlPluginData(dataPathConfigurationName, contextName) {
-  let functionName = setupAllXmlPluginData.name;
+  const functionName = setupAllXmlPluginData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // dataPathConfigurationName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cdataPathConfigurationNameIs + dataPathConfigurationName);
@@ -226,13 +226,13 @@ async function setupAllXmlPluginData(dataPathConfigurationName, contextName) {
  * @description Sets up all of the JSON data at the specified configuration path.
  * @param {string} dataPathConfigurationName The name of the configuration setting that has the path we should search.
  * @param {string} contextName The context name that should be used when adding data to the D data structure.
- * @return {object} A JSON object that contains all of the data that was loaded and merged together.
+ * @returns {object} A JSON object that contains all of the data that was loaded and merged together.
  * @author Seth Hollingsead
  * @date 2021/03/31
  * @NOTE Cannot use the loggers here, because dependency data will have never been loaded.
  */
 async function setupAllJsonConfigData(dataPathConfigurationName, contextName) {
-  // let functionName = setupAllJsonConfigData.name;
+  // const functionName = setupAllJsonConfigData.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`dataPathConfigurationName is: ${dataPathConfigurationName}`);
   // console.log(`contextName is: ${contextName}`);
@@ -276,7 +276,7 @@ async function setupAllJsonConfigData(dataPathConfigurationName, contextName) {
  * the same way the setupAllJsonConfigData does it. The path must be passed directly.
  */
 async function setupAllJsonConfigPluginData(configFilesPath, contextName) {
-  let functionName = setupAllJsonConfigPluginData.name;
+  const functionName = setupAllJsonConfigPluginData.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`configFilesPath is: ${configFilesPath}`);
   // console.log(`contextName is: ${contextName}`);
@@ -303,12 +303,12 @@ async function setupAllJsonConfigPluginData(configFilesPath, contextName) {
  * Can be used to load account data, transaction history logs, activity logs, or any other kind of JSON data.
  * @param {string|array<string>} dataPath The path to the JSON files that should be loaded.
  * @param {string} contextName The type of data that should be loaded.
- * @return {object} A JSON object that contains all of the data that was loaded and merged together.
+ * @returns {object} A JSON object that contains all of the data that was loaded and merged together.
  * @author Seth Hollingsead
  * @date 2023/02/27
  */
 async function loadAllJsonData(dataPath, contextName) {
-  let functionName = loadAllJsonData.name;
+  const functionName = loadAllJsonData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // dataPath is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cdataPathIs + dataPath);
@@ -338,12 +338,12 @@ async function loadAllJsonData(dataPath, contextName) {
  * @description Stores all of the schema data on the D-data structure by calling the data broker to get the work done.
  * @param {array<object>} schemaDataObjects An array of JSON objects that contain sets of schema data, loaded from JSON files.
  * These schema objects control the behavior of the system for certain logical operations in the code base.
- * @return {boolean} True or False to indicate if the data was stored successfully or not.
+ * @returns {boolean} True or False to indicate if the data was stored successfully or not.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
 async function storeAllSchemaData(schemaDataObjects) {
-  let functionName = storeAllSchemaData.name;
+  const functionName = storeAllSchemaData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // schemaDataObjects is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cschemaDataObjectsIs + JSON.stringify(schemaDataObjects));
@@ -373,13 +373,13 @@ async function storeAllSchemaData(schemaDataObjects) {
  * @function getSchemaData
  * @description Gets a specific named schema data object, that should be stored in the system, or all schema data if no name is specified.
  * @param {string} schemaName The name of the schema object that should exist in the list of currently loaded schemas.
- * @return {object} A JSON object that contains the schema content for the named schema, if it exists, or all schema data if no name is specified.
+ * @returns {object} A JSON object that contains the schema content for the named schema, if it exists, or all schema data if no name is specified.
  * @author Seth Hollingsead
  * @date 2024/11/22
  * @NOTE Cannot use the loggers here, because of a circular dependency.
  */
 async function getSchemaData(schemaName) {
-  // let functionName = getSchemaData.name;
+  // const functionName = getSchemaData.name;
   // await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // await loggers.consoleLog(namespacePrefix + functionName, msg.cschemaNameIs + schemaName);
   let returnData = false;
@@ -394,12 +394,12 @@ async function getSchemaData(schemaName) {
  * @description Persist some data to the data storage in the D-data structure.
  * @param {string} dataName The name of the data, unique name used to store the data in the data structure.
  * @param {object|string|boolean|number|array} data The data that should be stored.
- * @return {boolean} True or False to indicate if the data was stored successfully or not.
+ * @returns {boolean} True or False to indicate if the data was stored successfully or not.
  * @author Seth Hollingsead
  * @date 2023/02/27
  */
 async function storeData(dataName, data) {
-  let functionName = storeData.name;
+  const functionName = storeData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // dataName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cdataNameIs + dataName);
@@ -416,12 +416,12 @@ async function storeData(dataName, data) {
  * @function getData
  * @description Gets data from the D-Data structure data storage data hive.
  * @param {string} dataName The unique name the data should be stored under.
- * @return {object|string|boolean|number|array} The data element or object that was stored if any was found.
+ * @returns {object|string|boolean|number|array} The data element or object that was stored if any was found.
  * @author Seth Hollingsead
  * @date 2023/02/27
  */
 async function getData(dataName) {
-  let functionName = getData.name;
+  const functionName = getData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // dataName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cdataNameIs + dataName);
@@ -437,12 +437,12 @@ async function getData(dataName) {
  * @description Wipes out the data using the unique specified data name,
  * if any is found in the D-0data structure data storage data hive.
  * @param {string} dataName The unique name of the data that should be cleared.
- * @return {boolean} True or False to indicate if the data was cleared successfully or not.
+ * @returns {boolean} True or False to indicate if the data was cleared successfully or not.
  * @author Seth Hollingsead
  * @date 2023/02/27
  */
 async function clearData(dataName) {
-  let functionName = clearData.name;
+  const functionName = clearData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // dataName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cdataNameIs + dataName);

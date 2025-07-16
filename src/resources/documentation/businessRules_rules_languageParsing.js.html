@@ -59,7 +59,7 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDo
  * So an input of Spanish will return: áéíóú¿¡üñ
  * @param {string} inputData The name of the language that it's alphabet of special characters should be returned for.
  * @param {string} inputMetaData Case sensitivity, UPPER CASE, or lower case.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/09
  */
@@ -111,7 +111,7 @@ async function languageToAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
@@ -139,7 +139,7 @@ async function getEnglishAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
@@ -161,7 +161,7 @@ async function getChineseSimplifiedAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
@@ -183,7 +183,7 @@ async function getChineseTraditionalAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
@@ -211,7 +211,7 @@ async function getCzechAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
@@ -239,7 +239,7 @@ async function getFrenchAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
@@ -267,7 +267,7 @@ async function getGermanAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
@@ -295,7 +295,7 @@ async function getHungarianAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
@@ -323,7 +323,7 @@ async function getItalianAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
@@ -345,7 +345,7 @@ async function getJapaneseAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
@@ -373,7 +373,7 @@ async function getKoreanAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
@@ -395,7 +395,7 @@ async function getMiscellaneousAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
@@ -423,7 +423,7 @@ async function getPolishAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
@@ -451,7 +451,7 @@ async function getPortugueseAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
@@ -479,7 +479,7 @@ async function getRussianAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */

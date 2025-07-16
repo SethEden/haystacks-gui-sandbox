@@ -5,6 +5,7 @@
  * @requires module:ruleParsing
  * @requires module:configurator
  * @requires module:loggers
+ * @requires module:data
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
  * @requires {@link https://mathjs.org/index.html|math}
  * @requires {@link https://www.npmjs.com/package/chalk|chalk}
@@ -18,6 +19,7 @@
 import ruleParsing from '../ruleParsing.js';
 import configurator from '../../../executrix/configurator.js';
 import loggers from '../../../executrix/loggers.js';
+import D from '../../../structures/data.js';
 // External imports
 import hayConst from '@haystacks/constants';
 import * as math from 'mathjs';
@@ -26,21 +28,52 @@ import path from 'path';
 
 const {bas, biz, cfg, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.businessRules.rules.arrayParsing.constantArrayParsing.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + wrd.carray + wrd.cParsing + bas.cDot + baseFileName + bas.cDot;
+
+const rulesMetaData = [
+  {[wrd.cName]: biz.cgetLengthOfLongestStringInArray, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.csearchForPatternsInStringArray, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.cdoesArrayContainValue]},
+  {[wrd.cName]: biz.cvalidatePatternsThatNeedImplementation, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []}
+];
+
+/**
+ * @function initConstantArrayParsing
+ * @description Adds the constantArrayParsing business rules meta-data to the
+ * D-data structure businessRulesMetaData-framework data structure.
+ * The meta-data is used to dynamically import all code dependencies such that a given business rule can be executed in a separate thread.
+ * Multi-threading allows for parallel processing and greatly improved performance!!
+ * @returns {boolean} True or False to indicate if the data structures were initialized or not.
+ * @author Seth Hollingsead
+ * @date 2025/07/15
+ */
+async  function initConstantArrayParsing() {
+  const functionName = initConstantArrayParsing.name;
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+  let returnData = false;
+  // Add all of the rules meta-data to the D-data structure!
+  if (D[sys.cbusinessRulesMetaData] && D[sys.cbusinessRulesMetaData][wrd.cframework]) {
+    D[sys.cbusinessRulesMetaData][wrd.cframework].push(...rulesMetaData);
+    returnData = true;
+  }
+  await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+  return returnData;
+}
 
 /**
  * @function getLengthOfLongestStringInArray
  * @description Determines what the longest string is in an array of strings.
  * @param {array<string>} inputData The array for which we should find the longest length string in.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {integer} The length of the longest string in the array.
+ * @returns {integer} The length of the longest string in the array.
  * @author Seth Hollingsead
  * @date 2022/01/19
  * @NOTE https://stackoverflow.com/questions/6521245/finding-longest-string-in-array
  */
 async function getLengthOfLongestStringInArray(inputData, inputMetaData) {
-  let functionName = getLengthOfLongestStringInArray.name;
+  const functionName = getLengthOfLongestStringInArray.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -60,12 +93,12 @@ async function getLengthOfLongestStringInArray(inputData, inputMetaData) {
  * Minimum string length to search is 3 characters.
  * @param {array<string>} inputData The array of strings that should be searched for matching patterns.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {array<string>} A string array of common string values found in more than 1 element of the array and 3 or more characters long.
+ * @returns {array<string>} A string array of common string values found in more than 1 element of the array and 3 or more characters long.
  * @author Seth Hollingsead
  * @date 2022/01/19
  */
 async function searchForPatternsInStringArray(inputData, inputMetaData) {
-  let functionName = searchForPatternsInStringArray.name;
+  const functionName = searchForPatternsInStringArray.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -132,7 +165,7 @@ async function searchForPatternsInStringArray(inputData, inputMetaData) {
         } // End-for (let b = minStringLength; b <= maxStringLength; b++)
       } else { // Else-clause if (currentMaserStringArrayElement.includes(bas.cSpace) === false)
         // WARNING: The current string being searched contains a space character, we are going to skip comparison.
-        await loggers.consoleLog(namespacePrefix + functionName, msg.cSearchForPatternsInSringArrayMessage5 + msg.cSearchForPatternsInStringArrayMessage6);
+        await loggers.consoleLog(namespacePrefix + functionName, msg.cSearchForPatternsInStringArrayMessage5 + msg.cSearchForPatternsInStringArrayMessage6);
       }
     } // End-for (let a = 0; a < inputData.length; a++)
   } else { // Else-clause if (inputData && inputData.length > 0)
@@ -149,12 +182,12 @@ async function searchForPatternsInStringArray(inputData, inputMetaData) {
  * @description Scans through an array of strings and determines which ones are not yet implemented in the constants system.
  * @param {array<string>} inputData The array of strings that should be checked if they are already implemented in the constants system or not.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} A coma separated list of constants that are not yet implemented.
+ * @returns {string} A coma separated list of constants that are not yet implemented.
  * @author Seth Hollingsead
  * @date 2022/01/20
  */
 async function validatePatternsThatNeedImplementation(inputData, inputMetaData) {
-  let functionName = validatePatternsThatNeedImplementation.name;
+  const functionName = validatePatternsThatNeedImplementation.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -202,7 +235,8 @@ async function validatePatternsThatNeedImplementation(inputData, inputMetaData) 
 }
 
 export default {
+  initConstantArrayParsing,
   getLengthOfLongestStringInArray,
   searchForPatternsInStringArray,
-  validatePatternsThatNeedImplementation,
+  validatePatternsThatNeedImplementation
 };

@@ -4,6 +4,7 @@
  * @description Contains all system defined business rules for parsing strings as related to data.
  * @requires module:ruleParsing
  * @requires module:loggers
+ * @requires module:data
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
  * @requires {@link https://nodejs.org/api/crypto.html|crypto}
  * @requires {@link https://nodejs.org/api/buffer.html|buffer}
@@ -16,6 +17,7 @@
 // Internal imports
 import ruleParsing from '../ruleParsing.js';
 import loggers from '../../../executrix/loggers.js';
+import D from '../../../structures/data.js';
 // External imports
 import hayConst from '@haystacks/constants';
 import crypto from 'crypto';
@@ -24,20 +26,60 @@ import path from 'path';
 
 const {bas, biz, gen, msg, num, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.businessRules.rules.stringParsing.dataStringParsing.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + wrd.cstring + wrd.cParsing + bas.cDot + baseFileName + bas.cDot;
+
+const rulesMetaData = [
+  {[wrd.cName]: biz.cgetAttributeName, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.creplaceCharacterWithCharacter]},
+  {[wrd.cName]: biz.cgetAttributeValue, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.creplaceCharacterWithCharacter]},
+  {[wrd.cName]: biz.cgetValueFromAssignmentOperationString, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetDataCategoryFromDataContextName, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetDataCategoryDetailNameFromDataContextName, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetKeywordNameFromDataContextName, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cloadDataFile, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.cgetXmlData, biz.cgetCsvData, biz.cgetJsonData, biz.csupportedFileFormatsAre, biz.cstoreData]},
+  {[wrd.cName]: biz.csaveDataFile, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.csupportedFileFormatsAre, biz.cwriteJsonData]},
+  {[wrd.cName]: biz.cgetUserNameFromEmail, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cencryptStringAes256, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cdecryptStringAes256, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cobfuscateString, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []}
+];
+
+/**
+ * @function initDataStringParsing
+ * @description Adds the dataStringParsing business rules meta-data to the
+ * D-data structure businessRulesMetaData-framework data structure.
+ * The meta-data is used to dynamically import all code dependencies such that a given business rule can be executed in a separate thread.
+ * Multi-threading allows for parallel processing and greatly improved performance!!
+ * @returns {boolean} True or False to indicate if the data structures were initialized or not.
+ * @author Seth Hollingsead
+ * @date 2025/07/15
+ */
+async function initDataStringParsing() {
+  const functionName = initDataStringParsing.name;
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+  let returnData = false;
+  // Add all of the rules meta-data to the D-data structure!
+  if (D[sys.cbusinessRulesMetaData] && D[sys.cbusinessRulesMetaData][wrd.cframework]) {
+    D[sys.cbusinessRulesMetaData][wrd.cframework].push(...rulesMetaData);
+    returnData = true;
+  }
+  await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+  return returnData;
+}
 
 /**
  * @function getAttributeName
  * @description Takes a string representation of a JSON attribute and gets the name (left hand assignment key).
  * @param {string} inputData The string representation of the JSON attribute that should be parsed.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The name of the attribute.
+ * @returns {string} The name of the attribute.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
 async function getAttributeName(inputData, inputMetaData) {
-  let functionName = getAttributeName.name;
+  const functionName = getAttributeName.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -61,12 +103,12 @@ async function getAttributeName(inputData, inputMetaData) {
  * @description Takes a string representation of a JSON attribute and gets the value (Right hand assignment value).
  * @param {string} inputData The string representation of the JSON attribute that should be parsed.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The value of the attribute.
+ * @returns {string} The value of the attribute.
  * @author Seth Hollingsead
  * @date 2022/01/10
  */
 async function getAttributeValue(inputData, inputMetaData) {
-  let functionName = getAttributeValue.name;
+  const functionName = getAttributeValue.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -90,12 +132,12 @@ async function getAttributeValue(inputData, inputMetaData) {
  * @description Parses the input string and finds the value on the right side of the '=' sign.
  * @param {string} inputData The string that should be parsed for the value on the right side of the assignment operator.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string value of whatever is on the right side of the assignment operator.
+ * @returns {string} The string value of whatever is on the right side of the assignment operator.
  * @author Seth Hollingsead
  * @date 2022/01/23
  */
 async function getValueFromAssignmentOperationString(inputData, inputMetaData) {
-  let functionName = getValueFromAssignmentOperationString.name;
+  const functionName = getValueFromAssignmentOperationString.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -116,12 +158,12 @@ async function getValueFromAssignmentOperationString(inputData, inputMetaData) {
  * @description Gets the data category from the context name, E.g. Input: Page_ProjectList, data category is 'Page'.
  * @param {string} inputData The data context name, which should also contain the data category separated by underscore.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The data category, such as Page or Test.
+ * @returns {string} The data category, such as Page or Test.
  * @author Seth Hollingsead
  * @date 2022/01/24
  */
 async function getDataCategoryFromDataContextName(inputData, inputMetaData) {
-  let functionName = getDataCategoryFromDataContextName.name;
+  const functionName = getDataCategoryFromDataContextName.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -143,12 +185,12 @@ async function getDataCategoryFromDataContextName(inputData, inputMetaData) {
  * @param {string} inputData The data context name, which should also contain the
  * data category and data category detail name separated by an underscore.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The data category detail name, such as ProjectDetails or ProjectList.
+ * @returns {string} The data category detail name, such as ProjectDetails or ProjectList.
  * @author Seth Hollingsead
  * @date 2022/01/24
  */
 async function getDataCategoryDetailNameFromDataContextName(inputData, inputMetaData) {
-  let functionName = getDataCategoryDetailNameFromDataContextName.name;
+  const functionName = getDataCategoryDetailNameFromDataContextName.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -170,12 +212,12 @@ async function getDataCategoryDetailNameFromDataContextName(inputData, inputMeta
  * @param {string} inputData The data context name, which should also contain the
  * data category and data category detail name and keyword name separated by an underscore.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The keyword name, such as DeleteEntireProject or EditProjectInfoClick.
+ * @returns {string} The keyword name, such as DeleteEntireProject or EditProjectInfoClick.
  * @author Seth Hollingsead
  * @date 2022/01/24
  */
 async function getKeywordNameFromDataContextName(inputData, inputMetaData) {
-  let functionName = getKeywordNameFromDataContextName.name;
+  const functionName = getKeywordNameFromDataContextName.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -196,12 +238,12 @@ async function getKeywordNameFromDataContextName(inputData, inputMetaData) {
  * @description Loads data from a specified file and stores it in the specified data hive path.
  * @param {string} inputData The full path and file name for the file that should be loaded into memory.
  * @param {string} inputMetaData The data hive path where the data should be stored once it is loaded.
- * @return {boolean} The data that was loaded, because sometimes a client command might need to use this to load data.
+ * @returns {boolean} The data that was loaded, because sometimes a client command might need to use this to load data.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
 async function loadDataFile(inputData, inputMetaData) {
-  let functionName = loadDataFile.name;
+  const functionName = loadDataFile.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -225,7 +267,7 @@ async function loadDataFile(inputData, inputMetaData) {
       loadedData = await ruleParsing.processRulesInternal([inputData, ''], [biz.cgetJsonData]);
     } else {
       // WARNING: Invalid file format, file formats supported are:
-      await loggers.consoleLog(namespacePrefix + functionName, msg.cloadedDataFileMessage3 + await ruleParsing.processRulesInternal(['', ''], [biz.csupportedFileFormatsAre]));
+      await loggers.consoleLog(namespacePrefix + functionName, msg.cloadDataFileMessage3 + await ruleParsing.processRulesInternal(['', ''], [biz.csupportedFileFormatsAre]));
     }
     // Loaded data is:
     await loggers.consoleLog(namespacePrefix + functionName, msg.cLoadedDataIs + JSON.stringify(loadedData));
@@ -244,12 +286,12 @@ async function loadDataFile(inputData, inputMetaData) {
  * @description Saves data from a specified data to a specified path and file name.
  * @param {string} inputData The full path and file name were the data should be saved.
  * @param {object} inputMetaData The data that should be saved out to the specified file.
- * @return {boolean} True or False value to indicate if the file was saved successfully or not.
+ * @returns {boolean} True or False value to indicate if the file was saved successfully or not.
  * @author Seth Hollingsead
  * @date 2022/03/17
  */
 async function saveDataFile(inputData, inputMetaData) {
-  let functionName = saveDataFile.name;
+  const functionName = saveDataFile.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -282,12 +324,12 @@ async function saveDataFile(inputData, inputMetaData) {
  * @description Converts an email input into a username.
  * @param {string} inputData A string that contains an email address value.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} A string value of the sub-string from before the '@' symbol.
+ * @returns {string} A string value of the sub-string from before the '@' symbol.
  * @author Seth Hollingsead
  * @date 2022/01/21
  */
 async function getUserNameFromEmail(inputData, inputMetaData) {
-  let functionName = getUserNameFromEmail.name;
+  const functionName = getUserNameFromEmail.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -310,12 +352,12 @@ async function getUserNameFromEmail(inputData, inputMetaData) {
  * @param {string} inputData The string to be encrypted.
  * @param {string} inputMetaData Another string that will be used as the encryption seed.
  * Can be formatted with and "_", with a prefix and post-fix for public/private keys.
- * @return {string} The encrypted string.
+ * @returns {string} The encrypted string.
  * @author Seth Hollingsead
  * @date 2024/09/23
  */
 async function encryptStringAes256(inputData, inputMetaData) {
-  let functionName = encryptStringAes256.name;
+  const functionName = encryptStringAes256.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -356,12 +398,12 @@ async function encryptStringAes256(inputData, inputMetaData) {
  * @description Takes an encrypted string and decrypts it using the AES-256 algorithm, returning the original string.
  * @param {string} inputData The encrypted string to decrypt.
  * @param {string} inputMetaData The string used as the decryption seed (same key used for encryption).
- * @return {string} The decrypted string.
+ * @returns {string} The decrypted string.
  * @author Seth Hollingsead
  * @date 2024/09/23
  */
 export async function decryptStringAes256(inputData, inputMetaData) {
-  let functionName = decryptStringAes256.name;
+  const functionName = decryptStringAes256.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -409,12 +451,12 @@ export async function decryptStringAes256(inputData, inputMetaData) {
  * In our case we will convert the string into all stars '*', just like as if the string was a password.
  * @param {string} inputData The string to be obfuscated, or converted into all stars of the same length.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} A string of '*' characters of the same length as the input string.
+ * @returns {string} A string of '*' characters of the same length as the input string.
  * @author Seth Hollingsead
  * @date 2024/09/23
  */
 export async function obfuscateString(inputData, inputMetaData) {
-  let functionName = obfuscateString.name;
+  const functionName = obfuscateString.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -435,6 +477,7 @@ export async function obfuscateString(inputData, inputMetaData) {
 }
 
 export default {
+  initDataStringParsing,
   getAttributeName,
   getAttributeValue,
   getValueFromAssignmentOperationString,

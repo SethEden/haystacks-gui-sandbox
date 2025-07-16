@@ -5,6 +5,7 @@
  * @requires module:ruleParsing
  * @requires module:configurator
  * @requires module:loggers
+ * @requires module:data
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
  * @requires {@link https://www.npmjs.com/package/path|path}
  * @author Seth Hollingsead
@@ -16,26 +17,57 @@
 import ruleParsing from '../ruleParsing.js';
 import configurator from '../../../executrix/configurator.js';
 import loggers from '../../../executrix/loggers.js';
+import D from '../../../structures/data.js';
 // External imports
 import hayConst from '@haystacks/constants';
 import path from 'path';
 
 const {bas, biz, cfg, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.businessRules.rules.arrayParsing.pathArrayParsing.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + wrd.carray + wrd.cParsing + bas.cDot + baseFileName + bas.cDot;
+
+const rulesMetaData = [
+  {[wrd.cName]: biz.cdoesArrayContainFilename, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.cdoesArrayContainValue]},
+  {[wrd.cName]: biz.cgetFileAndPathListForPath, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.cscanDirectoryContents]}
+];
+
+/**
+ * @function initPathArrayParsing
+ * @description Adds the pathArrayParsing business rules meta-data to the
+ * D-data structure businessRulesMetaData-framework data structure.
+ * The meta-data is used to dynamically import all code dependencies such that a given business rule can be executed in a separate thread.
+ * Multi-threading allows for parallel processing and greatly improved performance!!
+ * @returns {boolean} True or False to indicate if the data structures were initialized or not.
+ * @author Seth Hollingsead
+ * @date 2025/07/15
+ */
+async function initPathArrayParsing() {
+  const functionName = initPathArrayParsing.name;
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+  let returnData = false;
+  // Add all of the rules meta-data to the D-data structure!
+  if (D[sys.cbusinessRulesMetaData] && D[sys.cbusinessRulesMetaData][wrd.cframework]) {
+    D[sys.cbusinessRulesMetaData][wrd.cframework].push(...rulesMetaData);
+    returnData = true;
+  }
+  await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+  return returnData;
+}
 
 /**
  * @function doesArrayContainFilename
  * @description Checks if an array contains a filename, after stripping off the path.
  * @param {array<string>} inputData The array of file names that should be checked for the input file name we are looking for.
  * @param {string} inputMetaData The file name we are looking for in the input array.
- * @return {boolean} A True or False value to indicate if the file name was found or not.
+ * @returns {boolean} A True or False value to indicate if the file name was found or not.
  * @author Seth Hollingsead
  * @date 2022/01/19
  */
 async function doesArrayContainFilename(inputData, inputMetaData) {
-  let functionName = doesArrayContainFilename.name;
+  const functionName = doesArrayContainFilename.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -66,12 +98,12 @@ async function doesArrayContainFilename(inputData, inputMetaData) {
  * @param {string} inputData The path that should be scanned for files and their full paths.
  * @param {integer} inputMetaData Optional file limit, ignored if the configuration flag is not set to true,
  * if nothing is passed the configuration setting will be used.
- * @return {array<string>} The array that contains the full path and file name for every file found under the specified path.
+ * @returns {array<string>} The array that contains the full path and file name for every file found under the specified path.
  * @author Seth Hollingsead
  * @date 2022/01/21
  */
 async function getFileAndPathListForPath(inputData, inputMetaData) {
-  let functionName = getFileAndPathListForPath.name;
+  const functionName = getFileAndPathListForPath.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -95,6 +127,7 @@ async function getFileAndPathListForPath(inputData, inputMetaData) {
 }
 
 export default {
+  initPathArrayParsing,
   doesArrayContainFilename,
   getFileAndPathListForPath
 };

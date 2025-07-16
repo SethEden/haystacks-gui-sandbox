@@ -60,7 +60,7 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDo
  * @description Takes a string representation of a JSON attribute and gets the name (left hand assignment key).
  * @param {string} inputData The string representation of the JSON attribute that should be parsed.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The name of the attribute.
+ * @returns {string} The name of the attribute.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
@@ -89,7 +89,7 @@ async function getAttributeName(inputData, inputMetaData) {
  * @description Takes a string representation of a JSON attribute and gets the value (Right hand assignment value).
  * @param {string} inputData The string representation of the JSON attribute that should be parsed.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The value of the attribute.
+ * @returns {string} The value of the attribute.
  * @author Seth Hollingsead
  * @date 2022/01/10
  */
@@ -118,7 +118,7 @@ async function getAttributeValue(inputData, inputMetaData) {
  * @description Parses the input string and finds the value on the right side of the '=' sign.
  * @param {string} inputData The string that should be parsed for the value on the right side of the assignment operator.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string value of whatever is on the right side of the assignment operator.
+ * @returns {string} The string value of whatever is on the right side of the assignment operator.
  * @author Seth Hollingsead
  * @date 2022/01/23
  */
@@ -144,7 +144,7 @@ async function getValueFromAssignmentOperationString(inputData, inputMetaData) {
  * @description Gets the data category from the context name, E.g. Input: Page_ProjectList, data category is 'Page'.
  * @param {string} inputData The data context name, which should also contain the data category separated by underscore.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The data category, such as Page or Test.
+ * @returns {string} The data category, such as Page or Test.
  * @author Seth Hollingsead
  * @date 2022/01/24
  */
@@ -171,7 +171,7 @@ async function getDataCategoryFromDataContextName(inputData, inputMetaData) {
  * @param {string} inputData The data context name, which should also contain the
  * data category and data category detail name separated by an underscore.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The data category detail name, such as ProjectDetails or ProjectList.
+ * @returns {string} The data category detail name, such as ProjectDetails or ProjectList.
  * @author Seth Hollingsead
  * @date 2022/01/24
  */
@@ -198,7 +198,7 @@ async function getDataCategoryDetailNameFromDataContextName(inputData, inputMeta
  * @param {string} inputData The data context name, which should also contain the
  * data category and data category detail name and keyword name separated by an underscore.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The keyword name, such as DeleteEntireProject or EditProjectInfoClick.
+ * @returns {string} The keyword name, such as DeleteEntireProject or EditProjectInfoClick.
  * @author Seth Hollingsead
  * @date 2022/01/24
  */
@@ -224,7 +224,7 @@ async function getKeywordNameFromDataContextName(inputData, inputMetaData) {
  * @description Loads data from a specified file and stores it in the specified data hive path.
  * @param {string} inputData The full path and file name for the file that should be loaded into memory.
  * @param {string} inputMetaData The data hive path where the data should be stored once it is loaded.
- * @return {boolean} The data that was loaded, because sometimes a client command might need to use this to load data.
+ * @returns {boolean} The data that was loaded, because sometimes a client command might need to use this to load data.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
@@ -272,7 +272,7 @@ async function loadDataFile(inputData, inputMetaData) {
  * @description Saves data from a specified data to a specified path and file name.
  * @param {string} inputData The full path and file name were the data should be saved.
  * @param {object} inputMetaData The data that should be saved out to the specified file.
- * @return {boolean} True or False value to indicate if the file was saved successfully or not.
+ * @returns {boolean} True or False value to indicate if the file was saved successfully or not.
  * @author Seth Hollingsead
  * @date 2022/03/17
  */
@@ -310,7 +310,7 @@ async function saveDataFile(inputData, inputMetaData) {
  * @description Converts an email input into a username.
  * @param {string} inputData A string that contains an email address value.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} A string value of the sub-string from before the '@' symbol.
+ * @returns {string} A string value of the sub-string from before the '@' symbol.
  * @author Seth Hollingsead
  * @date 2022/01/21
  */
@@ -338,7 +338,7 @@ async function getUserNameFromEmail(inputData, inputMetaData) {
  * @param {string} inputData The string to be encrypted.
  * @param {string} inputMetaData Another string that will be used as the encryption seed.
  * Can be formatted with and "_", with a prefix and post-fix for public/private keys.
- * @return {string} The encrypted string.
+ * @returns {string} The encrypted string.
  * @author Seth Hollingsead
  * @date 2024/09/23
  */
@@ -384,7 +384,7 @@ async function encryptStringAes256(inputData, inputMetaData) {
  * @description Takes an encrypted string and decrypts it using the AES-256 algorithm, returning the original string.
  * @param {string} inputData The encrypted string to decrypt.
  * @param {string} inputMetaData The string used as the decryption seed (same key used for encryption).
- * @return {string} The decrypted string.
+ * @returns {string} The decrypted string.
  * @author Seth Hollingsead
  * @date 2024/09/23
  */
@@ -437,7 +437,7 @@ export async function decryptStringAes256(inputData, inputMetaData) {
  * In our case we will convert the string into all stars '*', just like as if the string was a password.
  * @param {string} inputData The string to be obfuscated, or converted into all stars of the same length.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} A string of '*' characters of the same length as the input string.
+ * @returns {string} A string of '*' characters of the same length as the input string.
  * @author Seth Hollingsead
  * @date 2024/09/23
  */

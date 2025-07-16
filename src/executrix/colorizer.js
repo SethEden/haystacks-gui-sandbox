@@ -33,12 +33,12 @@ const namespacePrefix = wrd.cframework + bas.cDot + wrd.cexecutrix + bas.cDot + 
  * @param {array<integers>} colorArray The RGB color array that describes the color that should be applied to the message.
  * @param {boolean} isForeground A True or False to indicate if the color setting should be applied to the foreground or not.
  * If False, then apply to the background.
- * @return {string} The message with the color setting applied.
+ * @returns {string} The message with the color setting applied.
  * @author Seth Hollingsead
  * @date 2022/03/29
  */
 async function colorizeMessageSimple(message, colorArray, isForeground) {
-  // let functionName = colorizeMessageSimple.name;
+  // const functionName = colorizeMessageSimple.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`message is: ${message}`);
   // console.log(`colorArray is: ${JSON.stringify(colorArray)}`);
@@ -74,12 +74,12 @@ async function colorizeMessageSimple(message, colorArray, isForeground) {
  * We will probably do some additional processing either way, but there is a difference in the workflows.
  * For one a non-flat message will certainly have to replace a "%%" ith the class path (className,functionName),
  * and the associated formatting that goes with that according to the settings.
- * @return {string} A colorized version of the message.
+ * @returns {string} A colorized version of the message.
  * @author Seth Hollingsead
  * @date 2022/01/28
  */
 async function colorizeMessage(message, className, callerFunctionName, debugFilesSetting, debugFunctionsSetting, flatMessageLog) {
-  // let functionName = colorizeMessage.name;
+  // const functionName = colorizeMessage.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`message is: ${message}`);
   // console.log(`className is: ${className}`);
@@ -326,12 +326,12 @@ async function colorizeMessage(message, className, callerFunctionName, debugFile
  * @param {string} settingValue2 The function level setting from the configuration file.
  * @param {array<integer>} defaultColorArray The default color value that should be used.
  * @param {boolean} processAsFontSetting A True or False value to indicate if we are processing True = font setting, False = color setting.
- * @return {array<boolean>} An array of booleans, [0] = underline setting True or False; [1] = bold setting True or False.
+ * @returns {array<boolean>} An array of booleans, [0] = underline setting True or False; [1] = bold setting True or False.
  * @author Seth Hollingsead
  * @date 2022/01/31
  */
 async function aggregateStyleSetting(settingValue1, settingValue2, defaultColorArray, processAsFontSetting) {
-  // let functionName = aggregateStyleSetting.name;
+  // const functionName = aggregateStyleSetting.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`settingValue1 is: ${settingValue1}`);
   // console.log(`settingValue2 is: ${settingValue2}`);
@@ -367,12 +367,12 @@ async function aggregateStyleSetting(settingValue1, settingValue2, defaultColorA
  * @function getFontStyleSettingsFromSetting
  * @description Parses the font setting to determine if values should be set for bold and/or underline.
  * @param {string} settingValue The setting value that should be parsed.
- * @return {array<boolean>} An array of booleans, [0] = underline setting True or False; [1] = bold setting True or False.
+ * @returns {array<boolean>} An array of booleans, [0] = underline setting True or False; [1] = bold setting True or False.
  * @author Seth Hollingsead
  * @date 2022/01/31
  */
 async function getFontStyleSettingsFromSetting(settingValue) {
-  // let functionName = getFontStyleSettingsFromSetting.name;
+  // const functionName = getFontStyleSettingsFromSetting.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`settingValue is: ${settingValue}`);
   let fontStyles = [false, false];
@@ -419,12 +419,12 @@ async function getFontStyleSettingsFromSetting(settingValue) {
  * @description Parses the color setting to determine if the value should be parsed or loaded from the color data tables by unique color name.
  * @param {string} settingValue The setting value, which could be RGB as in R,G,B or it could be a string-name as in a unique color name.
  * @param {array<integer>} defaultColorArray The default color value that should be used.
- * @return {object} A JSON object with three integers that represent RGB values, labeled as "Red", "Green", "Blue".
+ * @returns {object} A JSON object with three integers that represent RGB values, labeled as "Red", "Green", "Blue".
  * @author Seth Hollingsead
  * @date 2022/01/31
  */
 async function getColorStyleSettingFromSetting(settingValue, defaultColorArray) {
-  // let functionName = getColorStyleSettingFromSetting.name;
+  // const functionName = getColorStyleSettingFromSetting.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`settingValue is: ${settingValue}`);
   let colorStyle = {Red: 0, Green: 0, Blue: 0};
@@ -454,12 +454,12 @@ async function getColorStyleSettingFromSetting(settingValue, defaultColorArray) 
  * All of this data should have been loaded from the Colors.csv file.
  * @param {string} colorName The name of the color who's RGB value we should look up from the color data structure.
  * @param {array<integer>} defaultColorArray The default color that should be used.
- * @return {array<integer>} An array of integers that represent RGB values.
+ * @returns {array<integer>} An array of integers that represent RGB values.
  * @author Seth Hollingsead
  * @date 2022/01/31
  */
 async function getNamedColorData(colorName, defaultColorArray) {
-  // let functionName = getNamedColorData.name;
+  // const functionName = getNamedColorData.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`colorName is: ${colorName}`);
   let returnColorData = defaultColorArray;
@@ -488,12 +488,12 @@ async function getNamedColorData(colorName, defaultColorArray) {
  * @description Examines the underline setting value and determines if the underline font setting should be applied to the message component or not.
  * @param {string} messageComponent The message to which the underline font setting should be applied if the setting value calls for it.
  * @param {boolean} underlineSettingValue A True or False value to indicate if the underline font setting should be applied or not applied.
- * @return {string} The same as the input string, except perhaps it might have an underline setting applied to it.
+ * @returns {string} The same as the input string, except perhaps it might have an underline setting applied to it.
  * @author Seth Hollingsead
  * @date 2022/01/31
  */
 async function setUnderlineFontStyleOnMessageComponentAccordingToSetting(messageComponent, underlineSettingValue) {
-  // let functionName = setUnderlineFontStyleOnMessageComponentAccordingToSetting.name;
+  // const functionName = setUnderlineFontStyleOnMessageComponentAccordingToSetting.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`messageComponent is: ${messageComponent}`);
   // console.log(`underlineSettingValue is: ${underlineSettingValue}`);
@@ -514,12 +514,12 @@ async function setUnderlineFontStyleOnMessageComponentAccordingToSetting(message
  * @description Examines the bold setting value and determines if the bold font setting should be applied to the message component or not.
  * @param {string} messageComponent The message to which the bold font setting should be applied if the setting value calls for it.
  * @param {boolean} boldSettingValue A True or False value to indicate if the bold font setting should be applied or not applied.
- * @return {string} The same as the input string, except perhaps it might have a bold setting applied to it.
+ * @returns {string} The same as the input string, except perhaps it might have a bold setting applied to it.
  * @author Seth Hollingsead
  * @date 2022/01/31
  */
 async function setBoldFontStyleOnMessageComponentAccordingToSetting(messageComponent, boldSettingValue) {
-  // let functionName = setBoldFontStyleOnMessageComponentAccordingToSetting.name;
+  // const functionName = setBoldFontStyleOnMessageComponentAccordingToSetting.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`messageComponent is: ${messageComponent}`);
   // console.log(`boldSettingValue is: ${boldSettingValue}`);
@@ -541,12 +541,12 @@ async function setBoldFontStyleOnMessageComponentAccordingToSetting(messageCompo
  * if not False then it is assumed to be an array of RGB values which are assigned to the message foreground component using chalk.
  * @param {string} messageComponent The message to which the foreground color setting should be applied if the color setting value != false.
  * @param {boolean|array<integer>} colorSettingValue A value of False or an array of integers for RGB values. False if no color should be applied.
- * @return {string} The same as the input string, except perhaps it might have a foreground color setting applied to it.
+ * @returns {string} The same as the input string, except perhaps it might have a foreground color setting applied to it.
  * @author Seth Hollingsead
  * @date 2022/01/31
  */
 async function setFontForegroundColorOnMessageComponentAccordingToSetting(messageComponent, colorSettingValue) {
-  // let functionName = setFontForegroundColorOnMessageComponentAccordingToSetting.name;
+  // const functionName = setFontForegroundColorOnMessageComponentAccordingToSetting.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`messageComponent is: ${messageComponent}`);
   // console.log(`colorSettingValue is: ${JSON.stringify(colorSettingValue)}`);
@@ -574,12 +574,12 @@ async function setFontForegroundColorOnMessageComponentAccordingToSetting(messag
  * if not False then it is assumed to be an array of RGB values which are assigned to the message background using chalk.
  * @param {string} messageComponent The message to which the background color setting should be applied if the color setting value != false.
  * @param {boolean|array<integer>} colorSettingValue A value of False or an array of integers for RGB values. False if not color should be applied.
- * @return {string} The same as the input string, except perhaps it might have a background color setting applied to it.
+ * @returns {string} The same as the input string, except perhaps it might have a background color setting applied to it.
  * @author Seth Hollingsead
  * @date 2022/01/31
  */
 async function setFontBackgroundColorOnMessageComponentAccordingToSetting(messageComponent, colorSettingValue) {
-  // let functionName = setFontBackgroundColorOnMessageComponentAccordingToSetting.name;
+  // const functionName = setFontBackgroundColorOnMessageComponentAccordingToSetting.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`messageComponent is: ${messageComponent}`);
   // console.log(`colorSettingValue is: ${JSON.stringify(colorSettingValue)}`);
@@ -607,13 +607,13 @@ async function setFontBackgroundColorOnMessageComponentAccordingToSetting(messag
  * @param {string} message The string message that has formatting applied to it where the formatting should be removed:
  * Example: [48;2;255;255;255m[38;2;0;0;0mBEGIN main program loop[39m[49m
  * Return: BEGIN main program loop
- * @return {string} The string without all the extra formatting.
+ * @returns {string} The string without all the extra formatting.
  * @author Seth Hollingsead
  * @date 2022/01/31
  * @reference: {@link https://stackoverflow.com/questions/25245716/remove-all-ansi-colors-styles-from-strings}
  */
 async function removeFontStyles(message) {
-  // let functionName = removeFontStyles.name;
+  // const functionName = removeFontStyles.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`message is: ${message}`);
   let returnMessage = '';

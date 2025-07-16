@@ -29,12 +29,12 @@ const namespacePrefix = wrd.cframework + bas.cDot + wrd.cbrokers + bas.cDot + ba
 /**
  * @function initializeConstantsValidationData
  * @description Initializes the constants validation data structure.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/03/22
  */
  async function initializeConstantsValidationData() {
-  let functionName = initializeConstantsValidationData.name;
+  const functionName = initializeConstantsValidationData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   D[sys.cConstantsValidationData] = {};
   D[sys.cConstantsValidationData][wrd.cFramework] = {};
@@ -50,12 +50,12 @@ const namespacePrefix = wrd.cframework + bas.cDot + wrd.cbrokers + bas.cDot + ba
 /**
  * @function generateFrameworkConstantsValidationData
  * @description Generate all of the framework constants validation data so that it cn be used to validate all of the framework constants.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/03/22
  */
 async function generateFrameworkConstantsValidationData() {
-  let functionName = generateFrameworkConstantsValidationData.name;
+  const functionName = generateFrameworkConstantsValidationData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   let constantsPath = await configurator.getConfigurationSetting(wrd.csystem, cfg.cframeworkConstantsPath);
   // constantsPath is:
@@ -351,12 +351,12 @@ async function generateFrameworkConstantsValidationData() {
  * @param {object} constantsValidationData The JSON object that contains the constants validation data that should be added to the validation data for the purpose of validation.
  * @param {string} contextName The type of data that should be added.
  * Ex: Framework, Application, Plugin:PluginOne, Plugin:D-CAF
- * @return {boolean} True or False to indicate if the data was added successfully or not.
+ * @returns {boolean} True or False to indicate if the data was added successfully or not.
  * @author Seth Hollingsead
  * @date 2022/10/28
  */
 async function addConstantsValidationData(constantsValidationData, contextName) {
-  let functionName = addConstantsValidationData.name;
+  const functionName = addConstantsValidationData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // constantsValidationData is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cconstantsValidationDataIs + JSON.stringify(constantsValidationData));
@@ -400,12 +400,12 @@ async function addConstantsValidationData(constantsValidationData, contextName) 
  * @description Parses through the constants validation data and finds the constants validation data data associated with the named plugin.
  * Then removes that data shredding it from existence at the edge of a black hole.
  * @param {string} pluginName The name of the plugin that should have its constants vaidation data removed from the D-data structure.
- * @return {boolean} True or False to indicate if the removal of the data was completed successfully or not.
+ * @returns {boolean} True or False to indicate if the removal of the data was completed successfully or not.
  * @author Seth Hollingsead
  * @date 2023/02/01
  */
 async function removePluginConstantsValidationData(pluginName) {
-  let functionName = removePluginConstantsValidationData.name;
+  const functionName = removePluginConstantsValidationData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginNameIs + pluginName);

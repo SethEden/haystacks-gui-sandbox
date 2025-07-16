@@ -32,6 +32,7 @@ import path from 'path';
 
 const {bas, biz, cfg, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.commandsBlob.commands.system.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.ccommandsBlob + bas.cDot + wrd.ccommands + bas.cDot + baseFileName + bas.cDot;
 
@@ -41,13 +42,13 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.ccommandsBlob + bas.cDot
  * @param {array<boolean|string|integer>} inputData String that should be echoed.
  * inputData[0] === 'echoCommand'
  * @param {string} inputMetaData Not used for this business rule.
- * @return {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/02/04
  */
 async function echoCommand(inputData, inputMetaData) {
-  let functionName = echoCommand.name;
+  const functionName = echoCommand.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -74,13 +75,13 @@ async function echoCommand(inputData, inputMetaData) {
  * @param {array<boolean|string|integer>} inputData Not used for this command.
  * inputData[0] === 'exit'
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string|integer|boolean|object|array>} An array with a boolean False value to
+ * @returns {array<boolean,string|integer|boolean|object|array>} An array with a boolean False value to
  * indicate if the application exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/02/04
  */
 async function exit(inputData, inputMetaData) {
-  let functionName = exit.name;
+  const functionName = exit.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -97,13 +98,13 @@ async function exit(inputData, inputMetaData) {
  * inputData[0] = 'version'
  * inputData[1] === 'application|framework' (optional)
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/02/04
  */
 async function version(inputData, inputMetaData) {
-  let functionName = version.name;
+  const functionName = version.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -111,16 +112,16 @@ async function version(inputData, inputMetaData) {
   let configVersion = '';
   let appContext = '';
   if (inputData.length === 2) {
-     appContext = inputData[1];
-     if (appContext.toUpperCase() === wrd.cAPPLICATION) {
-        configVersion = await configurator.getConfigurationSetting(wrd.csystem, sys.cApplicationVersionNumber);
-     } else if (appContext.toUpperCase() === wrd.cFRAMEWORK) {
-        configVersion = await configurator.getConfigurationSetting(wrd.csystem, sys.cFrameworkVersionNumber);
-     } else if (appContext.toUpperCase().includes(wrd.cPLUGIN)) {
+    appContext = inputData[1];
+    if (appContext.toUpperCase() === wrd.cAPPLICATION) {
+      configVersion = await configurator.getConfigurationSetting(wrd.csystem, sys.cApplicationVersionNumber);
+    } else if (appContext.toUpperCase() === wrd.cFRAMEWORK) {
+      configVersion = await configurator.getConfigurationSetting(wrd.csystem, sys.cFrameworkVersionNumber);
+    } else if (appContext.toUpperCase().includes(wrd.cPLUGIN)) {
       configVersion = await configurator.getConfigurationSetting(wrd.csystem, sys.cPluginVersionNumber);
-     } else {
-        configVersion = await configurator.getConfigurationSetting(wrd.csystem, sys.cApplicationVersionNumber);
-     }
+    } else {
+      configVersion = await configurator.getConfigurationSetting(wrd.csystem, sys.cApplicationVersionNumber);
+    }
   } else {
     configVersion = await configurator.getConfigurationSetting(wrd.csystem, sys.cApplicationVersionNumber);
   }
@@ -138,13 +139,13 @@ async function version(inputData, inputMetaData) {
  * inputData[0] === 'about'
  * inputData[1] === 'application|framework' (optional)
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/02/04
  */
 async function about(inputData, inputMetaData) {
-  let functionName = about.name;
+  const functionName = about.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -183,13 +184,13 @@ async function about(inputData, inputMetaData) {
  * inputData[1] === 'application|framework' (optional)
  * inputData[2] === 'true|false' (optional)
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/02/04
  */
 async function name(inputData, inputMetaData) {
-  let functionName = name.name;
+  const functionName = name.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -235,14 +236,14 @@ async function name(inputData, inputMetaData) {
  * @description Clears all data from the console cache by printing a bunch of blank lines to the screen.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/02/04
  */
 // eslint-disable-next-line no-unused-vars
 async function clearScreen(inputData, inputMetaData) {
-  let functionName = clearScreen.name;
+  const functionName = clearScreen.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   // loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -270,14 +271,14 @@ async function clearScreen(inputData, inputMetaData) {
  * inputData[n] = Could be additional list of command catagories to get help for if the user entered a space-separated list.
  * Options are: Framework,Platform,Application,App,Plugins,Plugin
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/02/22
  */
 // eslint-disable-next-line no-unused-vars
 async function help(inputData, inputMetaData) {
-  let functionName = help.name;
+  const functionName = help.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   let returnData = [true, []];
   let commandNamespaceTypesInputArray = []; // Use this to process any inputs the user may have entered.
@@ -451,13 +452,13 @@ async function help(inputData, inputMetaData) {
  * inputData[n] = Could be additional list of command catagories to get help for if the user entered a space-separated list.
  * Options are: Framework,Platform,Application,App,Plugins,Plugin
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2022/02/22
  */
 async function workflowHelp(inputData, inputMetaData) {
-  let functionName = workflowHelp.name;
+  const functionName = workflowHelp.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -628,13 +629,13 @@ async function workflowHelp(inputData, inputMetaData) {
  * @description Prints out a RAW dump of the commands data structure, useful for debugging the commands in the live environment.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,array<string>>} An array with a boolean True or False value to
+ * @returns {array<boolean,array<string>>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by an empty.
  * @author Seth Hollingsead
  * @date 2023/11/10
  */
 async function printCommands(inputData, inputMetaData) {
-  let functionName = printCommands.name;
+  const functionName = printCommands.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -650,13 +651,13 @@ async function printCommands(inputData, inputMetaData) {
  * @description Prints out a RAW dump of the business rules data structure, useful for debugging the business rules in the live environment.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,array<string>>} An array with a boolean True or False value to
+ * @returns {array<boolean,array<string>>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by an empty.
  * @author Seth Hollingsead
  * @date 2023/11/10
  */
 async function printBusinessRules(inputData, inputMetaData) {
-  let functionName = printBusinessRules.name;
+  const functionName = printBusinessRules.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -672,13 +673,13 @@ async function printBusinessRules(inputData, inputMetaData) {
  * @description Prints out the command log of all the commands the user has entered since the start of the application for this instance it was running.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,array<string>>} An array with a boolean True or False value to
+ * @returns {array<boolean,array<string>>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by an array of strings that is the user entered commands.
  * @author Seth Hollingsead
  * @date 2023/02/14
  */
 async function printUserCommandsLog(inputData, inputMetaData) {
-  let functionName = printUserCommandsLog.name;
+  const functionName = printUserCommandsLog.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -710,13 +711,13 @@ async function printUserCommandsLog(inputData, inputMetaData) {
  * @description Prints out a log of all the commands executed by the system since the start of the application for this instance it was running.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,array<string>>} An array with a boolean True or False value to
+ * @returns {array<boolean,array<string>>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by an array of strings that is the user entered commands.
  * @author Seth Hollingsead
  * @date 2023/02/14
  */
 async function printAllCommandsLog(inputData, inputMetaData) {
-  let functionName = printAllCommandsLog.name;
+  const functionName = printAllCommandsLog.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -748,13 +749,13 @@ async function printAllCommandsLog(inputData, inputMetaData) {
  * @description Wipes out the user command log, destroying all evidence of whatever commands the user has entered.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,boolean>} An array with a boolean True or False value to
+ * @returns {array<boolean,boolean>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by another boolean value to indicate if the operation was successful or not.
  * @author Seth Hollingsead
  * @date 2023/02/14
  */
 async function clearUserCommandsLog(inputData, inputMetaData) {
-  let functionName = clearUserCommandsLog.name;
+  const functionName = clearUserCommandsLog.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -782,13 +783,13 @@ async function clearUserCommandsLog(inputData, inputMetaData) {
  * @description Wipes out the all commands log, destroying all evidence of whatever commands were executed by the system.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,boolean>} An array with a boolean True or False value to
+ * @returns {array<boolean,boolean>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by another boolean value to indicate if the operation was successful or not.
  * @author Seth Hollingsead
  * @date 2023/02/14
  */
 async function clearAllCommandsLog(inputData, inputMetaData) {
-  let functionName = clearAllCommandsLog.name;
+  const functionName = clearAllCommandsLog.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);

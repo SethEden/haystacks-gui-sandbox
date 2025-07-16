@@ -22,6 +22,7 @@ import path from 'path';
 
 const {bas, cfg, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.commandsBlob.commands.threads.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.ccommandsBlob + bas.cDot + wrd.ccommands + bas.cDot + baseFileName + bas.cDot;
 
@@ -31,7 +32,7 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.ccommandsBlob + bas.cDot
  * @param {array<boolean|string|integer>} inputData Not used for this command.
  * <inputData[0] = 'threadTest'
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string|integer|boolean|object|array>} An array with a boolean False value to
+ * @returns {array<boolean,string|integer|boolean|object|array>} An array with a boolean False value to
  * indicate if the application exit, followed by the command output.
  * @author Seth Hollingsead
  * @date 2025/07/14

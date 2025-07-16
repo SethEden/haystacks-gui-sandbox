@@ -14,7 +14,7 @@ import * as app_cmd from '../../constants/application.command.constants.js';
 /**
  * @function applicationCommandConstantsValidation
  * @description Initializes the application command constants validation data objects array.
- * @return {array<Object<NamedCurve,Actual,Expected>>} An array of constants validation data objects.
+ * @returns {array<Object<NamedCurve,Actual,Expected>>} An array of constants validation data objects.
  * @author Seth Hollingsead
  * @date 2025/06/22
  */

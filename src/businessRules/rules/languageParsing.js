@@ -20,10 +20,58 @@ import D from '../../structures/data.js';
 import hayConst from '@haystacks/constants';
 import path from 'path';
 
-const {abt, bas, msg, sys, wrd} = hayConst;
+const {abt, biz, bas, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.businessRules.rules.mathOperations.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + baseFileName + bas.cDot;
+
+const rulesMetaData = [
+  {[wrd.cName]: biz.clanguageToAlphabet, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [
+   biz.cgetEnglishAlphabet, biz.cgetChineseSimplifiedAlphabet, biz.cgetChineseTraditionalAlphabet, biz.cgetCzechAlphabet, biz.cgetFrenchAlphabet,
+   biz.cgetGermanAlphabet, biz.cgetHungarianAlphabet, biz.cgetItalianAlphabet, biz.cgetJapaneseAlphabet, biz.cgetKoreanAlphabet,
+   biz.cgetMiscellaneousAlphabet, biz.cgetPolishAlphabet, biz.cgetPortugueseAlphabet, biz.cgetRussianAlphabet, biz.cgetSpanishAlphabet
+  ]},
+  {[wrd.cName]: biz.cgetEnglishAlphabet, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetChineseSimplifiedAlphabet, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetChineseTraditionalAlphabet, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetCzechAlphabet, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetFrenchAlphabet, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetGermanAlphabet, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetHungarianAlphabet, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetItalianAlphabet, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetJapaneseAlphabet, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetKoreanAlphabet, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetMiscellaneousAlphabet, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetPolishAlphabet, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetPortugueseAlphabet, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetRussianAlphabet, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetSpanishAlphabet, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []}
+];
+
+/**
+ * @function initLanguageParsing
+ * @description Adds the languageParsing business rules meta-data to the
+ * D-data structure businessRulesMetaData-framework data structure.
+ * The meta-data is used to dynamically import all code dependencies such that a given business rule can be executed in a separate thread.
+ * Multi-threading allows for parallel processing and greatly improved performance!!
+ * @returns {boolean} True or False to indicate if the data structures were initialized or not.
+ * @author Seth Hollingsead
+ * @date 2025/07/15
+ */
+async function initLanguageParsing() {
+   const functionName = initLanguageParsing.name;
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+   let returnData = false;
+   // Add all of the rules meta-data to the D-data structure!
+   if (D[sys.cbusinessRulesMetaData] && D[sys.cbusinessRulesMetaData][wrd.cframework]) {
+     D[sys.cbusinessRulesMetaData][wrd.cframework].push(...rulesMetaData);
+     returnData = true;
+   }
+   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+   return returnData;
+}
 
 /**
  * @function languageToAlphabet
@@ -31,50 +79,50 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDo
  * So an input of Spanish will return: áéíóú¿¡üñ
  * @param {string} inputData The name of the language that it's alphabet of special characters should be returned for.
  * @param {string} inputMetaData Case sensitivity, UPPER CASE, or lower case.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/09
  */
 async function languageToAlphabet(inputData, inputMetaData) {
-  let functionName = languageToAlphabet.name;
-  await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
-  await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
-  await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
-  let returnData = '';
-  // Load the language schema once
-  const languageSchema = D[wrd.cSchemas].languageSchema || {};
-  // languageSchema is:
-  await loggers.consoleLog(namespacePrefix + functionName, msg.clanguageSchemaIs + JSON.stringify(languageSchema));
-  // Convert inputData (language) to lowercase to match schema key
-  let languageKey = inputData ? inputData.toLowerCase() : '';
-  // languageKey is:
-  await loggers.consoleLog(namespacePrefix + functionName, msg.clanguageKeyIs + languageKey);
-  let languageRule = languageKey ? languageSchema[languageKey] : null; // Retrieve language data from schema
-  // languageRule is:
-  await loggers.consoleLog(namespacePrefix + functionName, msg.clanguageRuleIs + JSON.stringify(languageRule));
+   const functionName = languageToAlphabet.name;
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
+   let returnData = '';
+   // Load the language schema once
+   const languageSchema = D[wrd.cSchemas].languageSchema || {};
+   // languageSchema is:
+   await loggers.consoleLog(namespacePrefix + functionName, msg.clanguageSchemaIs + JSON.stringify(languageSchema));
+   // Convert inputData (language) to lowercase to match schema key
+   let languageKey = inputData ? inputData.toLowerCase() : '';
+   // languageKey is:
+   await loggers.consoleLog(namespacePrefix + functionName, msg.clanguageKeyIs + languageKey);
+   let languageRule = languageKey ? languageSchema[languageKey] : null; // Retrieve language data from schema
+   // languageRule is:
+   await loggers.consoleLog(namespacePrefix + functionName, msg.clanguageRuleIs + JSON.stringify(languageRule));
 
-  if (inputData && inputMetaData && typeof inputData === wrd.cstring &&
-  typeof inputMetaData === wrd.cstring && inputData != '' && inputMetaData != '') {
-    if (languageRule?.[sys.cbusinessRule]) {
-      returnData = await ruleParsing.processRulesInternal([inputMetaData, ''], [languageRule[sys.cbusinessRule]]);
-    } else {
+   if (inputData && inputMetaData && typeof inputData === wrd.cstring &&
+   typeof inputMetaData === wrd.cstring && inputData != '' && inputMetaData != '') {
+      if (languageRule?.[sys.cbusinessRule]) {
+         returnData = await ruleParsing.processRulesInternal([inputMetaData, ''], [languageRule[sys.cbusinessRule]]);
+      } else {
+         returnData = await getEnglishAlphabet('', '');
+      }
+   } else if (inputData && typeof inputData === wrd.cstring && inputData != '') {
+      if (languageRule?.[sys.cbusinessRule]) {
+         returnData = await ruleParsing.processRulesInternal(['', ''], [languageRule[sys.cbusinessRule]]);
+      } else {
+         returnData = await getEnglishAlphabet('', '');
+      }
+   } else {
+      // Invalid input string, default to English alphabet
+      await loggers.consoleLog(wrd.cError, msg.cErrorInvalidInputString);
+      await loggers.consoleLog(namespacePrefix + functionName, msg.cErrorInvalidInputString);
       returnData = await getEnglishAlphabet('', '');
-    }
-  } else if (inputData && typeof inputData === wrd.cstring && inputData != '') {
-    if (languageRule?.[sys.cbusinessRule]) {
-      returnData = await ruleParsing.processRulesInternal(['', ''], [languageRule[sys.cbusinessRule]]);
-    } else {
-      returnData = await getEnglishAlphabet('', '');
-    }
-  } else {
-    // Invalid input string, default to English alphabet
-    await loggers.consoleLog(wrd.cError, msg.cErrorInvalidInputString);
-    await loggers.consoleLog(namespacePrefix + functionName, msg.cErrorInvalidInputString);
-    returnData = await getEnglishAlphabet('', '');
-  }
-  await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
-  await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
-  return returnData;
+   }
+   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+   return returnData;
 }
 
 /**
@@ -83,26 +131,26 @@ async function languageToAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
 async function getEnglishAlphabet(inputData, inputMetaData) {
- let functionName = getEnglishAlphabet.name;
- await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
- let returnData = '';
- if (inputData?.toLowerCase()?.includes(wrd.cupper)) {
-    returnData = abt.cUpperCaseEnglishAlphabet;
- } else if (inputData?.toLowerCase()?.includes(wrd.clower)) {
-    returnData = abt.cLowerCaseEnglishAlphabet
- } else {
-    returnData = abt.cUpperCaseEnglishAlphabet + abt.cLowerCaseEnglishAlphabet;
- }
- await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
- return returnData;
+   const functionName = getEnglishAlphabet.name;
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
+   let returnData = '';
+   if (inputData?.toLowerCase()?.includes(wrd.cupper)) {
+      returnData = abt.cUpperCaseEnglishAlphabet;
+   } else if (inputData?.toLowerCase()?.includes(wrd.clower)) {
+      returnData = abt.cLowerCaseEnglishAlphabet
+   } else {
+      returnData = abt.cUpperCaseEnglishAlphabet + abt.cLowerCaseEnglishAlphabet;
+   }
+   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+   return returnData;
 }
 
 /**
@@ -111,20 +159,20 @@ async function getEnglishAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
 async function getChineseSimplifiedAlphabet(inputData, inputMetaData) {
- let functionName = getChineseSimplifiedAlphabet.name;
- await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
- let returnData = '';
- returnData = abt.cChineseSimplified;
- await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
- return returnData;
+   const functionName = getChineseSimplifiedAlphabet.name;
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
+   let returnData = '';
+   returnData = abt.cChineseSimplified;
+   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+   return returnData;
 }
 
 /**
@@ -133,20 +181,20 @@ async function getChineseSimplifiedAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
 async function getChineseTraditionalAlphabet(inputData, inputMetaData) {
- let functionName = getChineseTraditionalAlphabet.name;
- await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
- let returnData = '';
- returnData = abt.cChineseTraditional;
- await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
- return returnData;
+   const functionName = getChineseTraditionalAlphabet.name;
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
+   let returnData = '';
+   returnData = abt.cChineseTraditional;
+   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+   return returnData;
 }
 
 /**
@@ -155,26 +203,26 @@ async function getChineseTraditionalAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
 async function getCzechAlphabet(inputData, inputMetaData) {
- let functionName = getCzechAlphabet.name;
- await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
- let returnData = '';
- if (inputData?.toLowerCase()?.includes(wrd.cupper)) {
-    returnData = abt.cUpperCaseCzech;
- } else if (inputData?.toLowerCase()?.includes(wrd.clower)) {
-    returnData = abt.cLowerCaseCzech;
- } else {
-    returnData = abt.cUpperCaseCzech + abt.cLowerCaseCzech;
- }
- await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
- return returnData;
+   const functionName = getCzechAlphabet.name;
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
+   let returnData = '';
+   if (inputData?.toLowerCase()?.includes(wrd.cupper)) {
+      returnData = abt.cUpperCaseCzech;
+   } else if (inputData?.toLowerCase()?.includes(wrd.clower)) {
+      returnData = abt.cLowerCaseCzech;
+   } else {
+      returnData = abt.cUpperCaseCzech + abt.cLowerCaseCzech;
+   }
+   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+   return returnData;
 }
 
 /**
@@ -183,26 +231,26 @@ async function getCzechAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
 async function getFrenchAlphabet(inputData, inputMetaData) {
- let functionName = getFrenchAlphabet.name;
- await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
- let returnData = '';
- if (inputData?.toLowerCase()?.includes(wrd.cupper)) {
-    returnData = abt.cUpperCaseFrench;
- } else if (inputData?.toLowerCase()?.includes(wrd.clower)) {
-    returnData = abt.cLowerCaseFrench;
- } else {
-    returnData = abt.cUpperCaseFrench + abt.cLowerCaseFrench;
- }
- await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
- return returnData;
+   const functionName = getFrenchAlphabet.name;
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
+   let returnData = '';
+   if (inputData?.toLowerCase()?.includes(wrd.cupper)) {
+      returnData = abt.cUpperCaseFrench;
+   } else if (inputData?.toLowerCase()?.includes(wrd.clower)) {
+      returnData = abt.cLowerCaseFrench;
+   } else {
+      returnData = abt.cUpperCaseFrench + abt.cLowerCaseFrench;
+   }
+   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+   return returnData;
 }
 
 /**
@@ -211,26 +259,26 @@ async function getFrenchAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
 async function getGermanAlphabet(inputData, inputMetaData) {
- let functionName = getGermanAlphabet.name;
- await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
- let returnData = '';
- if (inputData?.toLowerCase()?.includes(wrd.cupper)) {
-    returnData = abt.cUpperCaseGerman;
- } else if (inputData?.toLowerCase()?.includes(wrd.clower)) {
-    returnData = abt.cLowerCaseGerman;
- } else {
-    returnData = abt.cUpperCaseGerman + abt.cLowerCaseGerman;
- }
- await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
- return returnData;
+   const functionName = getGermanAlphabet.name;
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
+   let returnData = '';
+   if (inputData?.toLowerCase()?.includes(wrd.cupper)) {
+      returnData = abt.cUpperCaseGerman;
+   } else if (inputData?.toLowerCase()?.includes(wrd.clower)) {
+      returnData = abt.cLowerCaseGerman;
+   } else {
+      returnData = abt.cUpperCaseGerman + abt.cLowerCaseGerman;
+   }
+   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+   return returnData;
 }
 
 /**
@@ -239,26 +287,26 @@ async function getGermanAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
 async function getHungarianAlphabet(inputData, inputMetaData) {
- let functionName = getHungarianAlphabet.name;
- await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
- let returnData = '';
- if (inputData?.toLowerCase()?.includes(wrd.cupper)) {
-    returnData = abt.cUpperCaseHungarian;
- } else if (inputData?.toLowerCase()?.includes(wrd.clower)) {
-    returnData = abt.cLowerCaseHungarian;
- } else {
-    returnData = abt.cUpperCaseHungarian + abt.cLowerCaseHungarian;
- }
- await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
- return returnData;
+   const functionName = getHungarianAlphabet.name;
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
+   let returnData = '';
+   if (inputData?.toLowerCase()?.includes(wrd.cupper)) {
+      returnData = abt.cUpperCaseHungarian;
+   } else if (inputData?.toLowerCase()?.includes(wrd.clower)) {
+      returnData = abt.cLowerCaseHungarian;
+   } else {
+      returnData = abt.cUpperCaseHungarian + abt.cLowerCaseHungarian;
+   }
+   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+   return returnData;
 }
 
 /**
@@ -267,26 +315,26 @@ async function getHungarianAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
 async function getItalianAlphabet(inputData, inputMetaData) {
- let functionName = getItalianAlphabet.name;
- await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
- let returnData = '';
- if (inputData?.toLowerCase()?.includes(wrd.cupper)) {
-    returnData = abt.cUpperCaseItalian;
- } else if (inputData?.toLowerCase()?.includes(wrd.clower)) {
-    returnData = abt.cLowerCaseItalian;
- } else {
-    returnData = abt.cUpperCaseItalian + abt.cLowerCaseItalian;
- }
- await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
- return returnData;
+   const functionName = getItalianAlphabet.name;
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
+   let returnData = '';
+   if (inputData?.toLowerCase()?.includes(wrd.cupper)) {
+      returnData = abt.cUpperCaseItalian;
+   } else if (inputData?.toLowerCase()?.includes(wrd.clower)) {
+      returnData = abt.cLowerCaseItalian;
+   } else {
+      returnData = abt.cUpperCaseItalian + abt.cLowerCaseItalian;
+   }
+   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+   return returnData;
 }
 
 /**
@@ -295,20 +343,20 @@ async function getItalianAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
 async function getJapaneseAlphabet(inputData, inputMetaData) {
- let functionName = getJapaneseAlphabet.name;
- await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
- let returnData = '';
- returnData = abt.cJapanese;
- await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
- return returnData;
+   const functionName = getJapaneseAlphabet.name;
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
+   let returnData = '';
+   returnData = abt.cJapanese;
+   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+   return returnData;
 }
 
 /**
@@ -317,26 +365,26 @@ async function getJapaneseAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
 async function getKoreanAlphabet(inputData, inputMetaData) {
- let functionName = getKoreanAlphabet.name;
- await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
- let returnData = '';
- if (inputData?.toLowerCase()?.includes(wrd.cupper)) {
-    returnData = abt.cUpperCaseKorean;
- } else if (inputData?.toLowerCase()?.includes(wrd.clower)) {
-    returnData = abt.cLowerCaseKorean;
- } else {
-    returnData = abt.cKorean + abt.cUpperCaseKorean;
- }
- await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
- return returnData;
+   const functionName = getKoreanAlphabet.name;
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
+   let returnData = '';
+   if (inputData?.toLowerCase()?.includes(wrd.cupper)) {
+      returnData = abt.cUpperCaseKorean;
+   } else if (inputData?.toLowerCase()?.includes(wrd.clower)) {
+      returnData = abt.cLowerCaseKorean;
+   } else {
+      returnData = abt.cKorean + abt.cUpperCaseKorean;
+   }
+   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+   return returnData;
 }
 
 /**
@@ -345,20 +393,20 @@ async function getKoreanAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
 async function getMiscellaneousAlphabet(inputData, inputMetaData) {
- let functionName = getMiscellaneousAlphabet.name;
- await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
- let returnData = '';
- returnData = abt.cMisc;
- await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
- return returnData;
+   const functionName = getMiscellaneousAlphabet.name;
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
+   let returnData = '';
+   returnData = abt.cMisc;
+   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+   return returnData;
 }
 
 /**
@@ -367,26 +415,26 @@ async function getMiscellaneousAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
 async function getPolishAlphabet(inputData, inputMetaData) {
- let functionName = getPolishAlphabet.name;
- await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
- let returnData = '';
- if (inputData?.toLowerCase()?.includes(wrd.cupper)) {
-    returnData = abt.cUpperCasePolish;
- } else if (inputData?.toLowerCase()?.includes(wrd.clower)) {
-    returnData = abt.cLowerCasePolish;
- } else {
-    returnData = abt.cUpperCasePolish + abt.cLowerCasePolish;
- }
- await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
- return returnData;
+   const functionName = getPolishAlphabet.name;
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
+   let returnData = '';
+   if (inputData?.toLowerCase()?.includes(wrd.cupper)) {
+      returnData = abt.cUpperCasePolish;
+   } else if (inputData?.toLowerCase()?.includes(wrd.clower)) {
+      returnData = abt.cLowerCasePolish;
+   } else {
+      returnData = abt.cUpperCasePolish + abt.cLowerCasePolish;
+   }
+   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+   return returnData;
 }
 
 /**
@@ -395,26 +443,26 @@ async function getPolishAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
 async function getPortugueseAlphabet(inputData, inputMetaData) {
- let functionName = getPortugueseAlphabet.name;
- await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
- let returnData = '';
- if (inputData?.toLowerCase()?.includes(wrd.cupper)) {
-    returnData = abt.cUpperCasePortuguese;
- } else if (inputData?.toLowerCase()?.includes(wrd.clower)) {
-    returnData = abt.cLowerCasePortuguese;
- } else {
-    returnData = abt.cUpperCasePortuguese + abt.cLowerCasePortuguese;
- }
- await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
- return returnData;
+   const functionName = getPortugueseAlphabet.name;
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
+   let returnData = '';
+   if (inputData?.toLowerCase()?.includes(wrd.cupper)) {
+      returnData = abt.cUpperCasePortuguese;
+   } else if (inputData?.toLowerCase()?.includes(wrd.clower)) {
+      returnData = abt.cLowerCasePortuguese;
+   } else {
+      returnData = abt.cUpperCasePortuguese + abt.cLowerCasePortuguese;
+   }
+   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+   return returnData;
 }
 
 /**
@@ -423,26 +471,26 @@ async function getPortugueseAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
 async function getRussianAlphabet(inputData, inputMetaData) {
- let functionName = getRussianAlphabet.name;
- await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
- let returnData = '';
- if (inputData?.toLowerCase()?.includes(wrd.cupper)) {
-    returnData = abt.cUpperCaseRussian;
- } else if (inputData?.toLowerCase()?.includes(wrd.clower)) {
-    returnData = abt.cLowerCaseRussian;
- } else {
-    returnData = abt.cUpperCaseRussian + abt.cLowerCaseRussian;
- }
- await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
- return returnData;
+   const functionName = getRussianAlphabet.name;
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
+   let returnData = '';
+   if (inputData?.toLowerCase()?.includes(wrd.cupper)) {
+      returnData = abt.cUpperCaseRussian;
+   } else if (inputData?.toLowerCase()?.includes(wrd.clower)) {
+      returnData = abt.cLowerCaseRussian;
+   } else {
+      returnData = abt.cUpperCaseRussian + abt.cLowerCaseRussian;
+   }
+   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+   return returnData;
 }
 
 /**
@@ -451,43 +499,44 @@ async function getRussianAlphabet(inputData, inputMetaData) {
  * @param {string} inputData Case sensitivity, UPPER CASE, or lowercase. if an empty string is provided or the language does not support upper or lower case,
  * then combined case is used.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string of special alphabetic characters for a given language.
+ * @returns {string} The string of special alphabetic characters for a given language.
  * @author Seth Hollingsead
  * @date 2024/10/23
  */
 async function getSpanishAlphabet(inputData, inputMetaData) {
- let functionName = getSpanishAlphabet.name;
- await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
- let returnData = '';
- if (inputData?.toLowerCase()?.includes(wrd.cupper)) {
-    returnData = abt.cUpperCaseSpanish;
- } else if (inputData?.toLowerCase()?.includes(wrd.clower)) {
-    returnData = abt.cLowerCaseSpanish;
- } else {
-    returnData = abt.cUpperCaseSpanish + abt.cLowerCaseSpanish;
- }
- await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
- await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
- return returnData;
+   const functionName = getSpanishAlphabet.name;
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
+   let returnData = '';
+   if (inputData?.toLowerCase()?.includes(wrd.cupper)) {
+      returnData = abt.cUpperCaseSpanish;
+   } else if (inputData?.toLowerCase()?.includes(wrd.clower)) {
+      returnData = abt.cLowerCaseSpanish;
+   } else {
+      returnData = abt.cUpperCaseSpanish + abt.cLowerCaseSpanish;
+   }
+   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + returnData);
+   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+   return returnData;
 }
 
 export default {
-  languageToAlphabet,
-  getEnglishAlphabet,
-  getChineseSimplifiedAlphabet,
-  getChineseTraditionalAlphabet,
-  getCzechAlphabet,
-  getFrenchAlphabet,
-  getGermanAlphabet,
-  getHungarianAlphabet,
-  getItalianAlphabet,
-  getJapaneseAlphabet,
-  getKoreanAlphabet,
-  getMiscellaneousAlphabet,
-  getPolishAlphabet,
-  getPortugueseAlphabet,
-  getRussianAlphabet,
-  getSpanishAlphabet
+   initLanguageParsing,
+   languageToAlphabet,
+   getEnglishAlphabet,
+   getChineseSimplifiedAlphabet,
+   getChineseTraditionalAlphabet,
+   getCzechAlphabet,
+   getFrenchAlphabet,
+   getGermanAlphabet,
+   getHungarianAlphabet,
+   getItalianAlphabet,
+   getJapaneseAlphabet,
+   getKoreanAlphabet,
+   getMiscellaneousAlphabet,
+   getPolishAlphabet,
+   getPortugueseAlphabet,
+   getRussianAlphabet,
+   getSpanishAlphabet
 };

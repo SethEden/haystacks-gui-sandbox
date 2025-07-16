@@ -49,7 +49,7 @@ const clients = new Map(); // id => socket
  * Must be a valid, writable socket instance.
  * @param {string|object} payload The data to send to the client. If an object, it will be stringified to JSON automatically.
  * Appends the MESSAGE_DELIMITER for safe framing. Handles chunking for long messages.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2025/07/03
  * @notes
@@ -90,7 +90,7 @@ function sendToClient(socket, payload) {
  * Any clients that are disconnected or have closed their sockets will be silently ignored.
  * @param {string|object} payload The message or data object to send to all connected clients.
  * If an object is provided, it will be stringified before transmission.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2025/07/03
  * @notes
@@ -123,7 +123,7 @@ function broadcast(payload) {
  *   - Signature: `callback(command: string, clientId: string): void`
  *   - `command` is the parsed command string sent from the shell client.
  *   - `clientId` is the unique identifier of the client that sent the command.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2025/07/04
  * @notes
@@ -148,7 +148,7 @@ function setShellCommandHandler(callback) {
  * The handler supports multiple concurrent CLI or shell clients, allowing for
  * interactive bidirectional messaging between the main Electron process and all shells.
  * @param {object} socket The net.Socket instance representing the connected client.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2025/07/03
  * @notes
@@ -224,7 +224,7 @@ const server = net.createServer((socket) => {
  *  - Synchronous responses for user-initiated shell actions
  * @param {string} clientId The unique identifier for the connected shell client (e.g., 'client-1').
  * @param {string|object} output The message or payload to send to the client. If not a string, it will be stringified.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2025/07/04
  * @notes
@@ -245,7 +245,7 @@ function sendShellOutput(clientId, output) {
  * from the main Electron process or business logic to all CLI shell windows simultaneously.
  * Ensures all clients receive a synchronized copy of the output for display or logging.
  * @param {string|object} output The message, string, or payload object to broadcast to all connected shell clients.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2025/07/04
  * @notes
@@ -268,7 +268,7 @@ function broadcastShellOutput(output) {
  * the socket server and all connected clients, preventing orphaned processes or dangling sockets.
  * Typically invoked as part of the full application shutdown process to guarantee all inter-process
  * communication channels are gracefully terminated.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2025/07/09
  * @notes

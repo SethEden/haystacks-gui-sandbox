@@ -35,13 +35,13 @@ const namespacePrefix = wrd.cframework + bas.cDot + wrd.cexecutrix + bas.cDot + 
  * Ex: businessRules.rules.stringParsing.countCamelCaseWords
  * @param {string} configurationName The key of the configuration setting.
  * @param {string|integer|boolean|double} configurationValue The value of the configuration setting.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2021/10/13
  * @NOTE Cannot use the loggers here, because of a circular dependency.
  */
 async function setConfigurationSetting(configurationNamespace, configurationName, configurationValue) {
-  // let functionName = setConfigurationSetting.name;
+  // const functionName = setConfigurationSetting.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`configurationNamespace is: ${configurationNamespace}`);
   // console.log(`configurationName is: ${configurationName}`);
@@ -65,14 +65,14 @@ async function setConfigurationSetting(configurationNamespace, configurationName
  * Ex: businessRules.rules.stringParsing.countCamelCaseWords 
  * @param {string} configurationName The key of the configuration setting. 
  * @param {string|integer|boolean|double} configurationValue The value of the configuration setting.
- * @return {object} The modified input object with the new configuration value added in the appropriate location.
+ * @returns {object} The modified input object with the new configuration value added in the appropriate location.
  * @author Seth Hollingsead
  * @date 2022/10/20
  * @NOTE Technically we could have the logger get used here, but it would cause the appearance of a circular dependency.
  * So we should avoid usage here anyway.
  */
 async function setPluginConfigurationSetting(dataStructure, configurationNamespace, configurationName, configurationValue) {
-  // let functionName = setPluginConfigurationSetting.name;
+  // const functionName = setPluginConfigurationSetting.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`dataStructure is ${JSON.stringify(dataStructure)}`);
   // console.log(`configurationNamespace is: ${configurationNamespace}`);
@@ -109,13 +109,13 @@ async function setPluginConfigurationSetting(dataStructure, configurationNamespa
  * @param {string} configurationNamespace The path in the configuration JSON object
  * where the configuration setting should be found.
  * @param {string} configurationName The key of the configuration setting.
- * @return {string|integer|boolean|double} The value of whatever was stored in the D[configuration].
+ * @returns {string|integer|boolean|double} The value of whatever was stored in the D[configuration].
  * @author Seth Hollingsead
  * @date 2021/10/13
  * @NOTE Cannot use the loggers here, because of a circular dependency.
  */
 async function getConfigurationSetting(configurationNamespace, configurationName) {
-  // let functionName = getConfigurationSetting.name;
+  // const functionName = getConfigurationSetting.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`configurationNamespace is: ${configurationNamespace}`);
   // console.log(`configurationName is: ${configurationName}`);
@@ -142,13 +142,13 @@ async function getConfigurationSetting(configurationNamespace, configurationName
  * @function processConfigurationNameRules
  * @description Processes a fully qualified name and extracts the configuration name without the namespace.
  * @param {string} fullyQualifiedName The fully qualified name with the namespace included.
- * @return {string} The name of the configuration setting without the namespace.
+ * @returns {string} The name of the configuration setting without the namespace.
  * @author Seth Hollingsead
  * @date 2021/10/26
  * @NOTE Cannot use the loggers here, because of a circular dependency.
  */
 async function processConfigurationNameRules(fullyQualifiedName) {
-  // let functionName = processConfigurationNameRules.name;
+  // const functionName = processConfigurationNameRules.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`fullyQualifiedName is: ${fullyQualifiedName}`);
   let returnValue;
@@ -163,13 +163,13 @@ async function processConfigurationNameRules(fullyQualifiedName) {
  * @function processConfigurationNamespaceRules
  * @description Processes a fully qualified name and extracts the namespace.
  * @param {string} fullyQualifiedName The fully qualified name with the namespace included.
- * @return {string} The namespace of the configuration setting, without the configuration name.
+ * @returns {string} The namespace of the configuration setting, without the configuration name.
  * @author Seth Hollingsead
  * @date 2021/10/26
  * @NOTE Cannot use the loggers here, because of a circular dependency.
  */
 async function processConfigurationNamespaceRules(fullyQualifiedName) {
-  // let functionName = processConfigurationNamespaceRules.name;
+  // const functionName = processConfigurationNamespaceRules.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`fullyQualifiedName is: ${fullyQualifiedName}`);
   let returnValue;
@@ -197,13 +197,13 @@ async function processConfigurationNamespaceRules(fullyQualifiedName) {
  * to actual data objects needed by the configuration system.
  * @param {string} name The name of the configuration variable, without the namespace.
  * @param {string} value The value of the configuration variable.
- * @return {string|boolean|integer|float|object} A value that is appropriately processed.
+ * @returns {string|boolean|integer|float|object} A value that is appropriately processed.
  * @author Seth Hollingsead
  * @date 2021/10/26
  * @NOTE Cannot use the loggers here, because of a circular dependency.
  */
 async function processConfigurationValueRules(name, value) {
-  // let functionName = processConfigurationValueRules.name;
+  // const functionName = processConfigurationValueRules.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`name is: ${name}`);
   // console.log(`value is: ${value}`);
@@ -235,14 +235,14 @@ async function processConfigurationValueRules(name, value) {
  * @param {string} optionalFunctionNameAppendix An optional function name appendix that could
  * potentially be added to the end of the function name.
  * Ex: @ModuleFontBackgroundColor
- * @return {object|boolean} The parent of the object found at the specified namespace address in the configuration data object,
+ * @returns {object|boolean} The parent of the object found at the specified namespace address in the configuration data object,
  * or False if nothing was found.
  * @author Seth Hollingsead
  * @date 2021/10/26
  * @NOTE Cannot use the loggers here, because of a circular dependency.
  */
 async function getParentConfigurationNamespaceObject(configurationNamespace, optionalFunctionNameAppendix) {
-  // let functionName = getParentConfigurationNamespaceObject.name;
+  // const functionName = getParentConfigurationNamespaceObject.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`configurationNamespace is: ${configurationNamespace}`);
   // console.log(`optionalFunctionNameAppendix is: ${optionalFunctionNameAppendix}`);
@@ -266,7 +266,7 @@ async function getParentConfigurationNamespaceObject(configurationNamespace, opt
  * @description Navigates the configuration JSON data object tree to find the namespace of configuration settings.
  * @param {array<string>} configurationNamespace The path in the configuration JSON object where the
  * configuration setting should be set, or returned.
- * @return {object|boolean} The object found at the specified namespace address in the configuration data object,
+ * @returns {object|boolean} The object found at the specified namespace address in the configuration data object,
  * or False if nothing was found.
  * @author Seth Hollingsead
  * @date 2021/10/26
@@ -275,7 +275,7 @@ async function getParentConfigurationNamespaceObject(configurationNamespace, opt
  * @NOTE NOT A PUBLIC FUNCTION!!
  */
 async function getConfigurationNamespaceObject(configurationNamespace) {
-  // let functionName = getConfigurationNamespaceObject.name;
+  // const functionName = getConfigurationNamespaceObject.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`configurationNamespace is: ${configurationNamespace}`);
   let returnValue = true; // DO NOT CHANGE! It will break the boot-strap protection mechanisms.
@@ -312,7 +312,7 @@ async function getConfigurationNamespaceObject(configurationNamespace) {
  * @param {object} dataStructure The input data structure upon which the configuration setting should be set and then returned.
  * @param {object|boolean} configurationNamespace The object found at the specified namespace address in the input data structure configuration data object,
  * or False if nothing was found.
- * @return {object|boolean} The object found at the specified plugin namespace address in the configuration data object,
+ * @returns {object|boolean} The object found at the specified plugin namespace address in the configuration data object,
  * or False if nothing was found.
  * @author Seth Hollingsead
  * @date 2022/10/20
@@ -321,7 +321,7 @@ async function getConfigurationNamespaceObject(configurationNamespace) {
  * @NOTE NOT A PUBLIC FUNCTION!!
  */
 async function getPluginConfigurationNamespaceObject(dataStructure, configurationNamespace) {
-  // let functionName = getConfigurationNamespaceObject.name;
+  // const functionName = getConfigurationNamespaceObject.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`dataStructure is ${JSON.stringify(dataStructure)}`);
   // console.log(`configurationNamespace is: ${configurationNamespace}`);
@@ -351,12 +351,12 @@ async function getPluginConfigurationNamespaceObject(dataStructure, configuratio
  * @description Merges plugin defined configuration data with the system defined configuration data.
  * @param {string} pluginName The name of the current plugin these configuration settings belong to.
  * @param {object} pluginConfigData A JSON object that contains all of the configuration settings for the current plugin.
- * @return {boolean} True or False to indicate if the merge was successful or not.
+ * @returns {boolean} True or False to indicate if the merge was successful or not.
  * @author Seth Hollingsead
  * @date 2022/10/24
  */
 async function addPluginConfigurationData(pluginName, pluginConfigData) {
-  // let functionName = addPluginConfigurationData.name;
+  // const functionName = addPluginConfigurationData.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // pluginName is:
   // console.log(msg.cpluginNameIs + pluginName);
@@ -402,13 +402,13 @@ async function addPluginConfigurationData(pluginName, pluginConfigData) {
  * @param {object} dataSource The source data where the data element should be captured from.
  * @param {array<string>} possibleDataNamesArray An array of possible names the could be stored under.
  * Ex: ["name","Name","NAME"]
- * @return {string|integer|boolean|float|object} Whatever data element that was found that matches one of the input keys.
+ * @returns {string|integer|boolean|float|object} Whatever data element that was found that matches one of the input keys.
  * @author Seth Hollingsead
  * @date 2023/04/27
  * @NOTE This function assumes the input data source is a flat data structure with no hierarchy.
  */
 async function getAmbiguousDataElement(dataSource, possibleDataNamesArray) {
-  // let functionName = getAmbiguousDataElement.name;
+  // const functionName = getAmbiguousDataElement.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // dataSource is:
   // console.log(msg.cdataSourceIs + JSON.stringify(dataSource));

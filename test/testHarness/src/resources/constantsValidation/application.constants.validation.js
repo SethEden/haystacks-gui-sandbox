@@ -13,7 +13,7 @@ import * as apc from '../../constants/application.constants.js';
 /**
  * @function applicationConstantsValidation
  * @description Initializes the application constants validation data objects array.
- * @return {array<object<Name,Actual,Expected>>} An array of constants validation data objects.
+ * @returns {array<object<Name,Actual,Expected>>} An array of constants validation data objects.
  * @author Seth Hollingsead
  * @date 2025/06/22
  */

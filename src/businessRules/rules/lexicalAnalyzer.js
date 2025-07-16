@@ -5,6 +5,7 @@
  * @requires module:ruleParsing
  * @requires module:configurator
  * @requires module:loggers
+ * @requires module:data
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
  * @requires {@link https://www.npmjs.com/package/path|path}
  * @author Seth Hollingsead
@@ -16,12 +17,14 @@
 import ruleParsing from './ruleParsing.js';
 import configurator from '../../executrix/configurator.js';
 import loggers from '../../executrix/loggers.js';
+import D from '../../structures/data.js';
 // External imports
 import hayConst from '@haystacks/constants';
 import path from 'path';
 
 const {bas, biz, cfg, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.businessRules.rules.lexicalAnalyzer.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + baseFileName + bas.cDot;
 
@@ -31,12 +34,12 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDo
  * doing required operations on it to convert it to valid input for a command as necessary.
  * @param {string|array<string|integer|boolean|object>} inputData The value of the argument, could be an array or a string.
  * @param {integer} inputMetaData The index of the argument (1, 2, 3, 4).
- * @return {string|array<string|integer|boolean|object>} The value of the argument as it should be passed into the business rule call.
+ * @returns {string|array<string|integer|boolean|object>} The value of the argument as it should be passed into the business rule call.
  * @author Seth Hollingsead
  * @date 2022/05/03
  */
 async function parseBusinessRuleArgument(inputData, inputMetaData) {
-  let functionName = parseBusinessRuleArgument.name;
+  const functionName = parseBusinessRuleArgument.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
@@ -96,12 +99,12 @@ async function parseBusinessRuleArgument(inputData, inputMetaData) {
  * using the RegExp constructor, then the RegExp object will be returned as part of the return object.
  * @param {string} inputData The argument string that needs additional parsing.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string|array<string|integer|boolean|object>} The argument that should be returned and used by the system after all necessary parsing.
+ * @returns {string|array<string|integer|boolean|object>} The argument that should be returned and used by the system after all necessary parsing.
  * @author Seth Hollingsead
  * @date 2022/05/03
  */
 async function analyzeArgument(inputData, inputMetaData) {
-  let functionName = analyzeArgument.name;
+  const functionName = analyzeArgument.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
@@ -188,12 +191,12 @@ async function analyzeArgument(inputData, inputMetaData) {
  * @description Analyzes the argument value to determine if it incudes a regular expression or no regular expression.
  * @param {string} inputData The business rule argument that should be analyzed to determine if it includes a regular expression or not regular expression.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} True or False to indicate if the argument contains a regular expression or no regular expression.
+ * @returns {boolean} True or False to indicate if the argument contains a regular expression or no regular expression.
  * @author Seth Hollingsead
  * @date 2022/05/03
  */
 async function analyzeForRegularExpression(inputData, inputMetaData) {
-  let functionName = analyzeForRegularExpression.name;
+  const functionName = analyzeForRegularExpression.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -219,12 +222,12 @@ async function analyzeForRegularExpression(inputData, inputMetaData) {
  * @description Parses the argument as a regular expression and returns a new RegExp object.
  * @param {string} inputData The argument string that should be parsed as a RegExp.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {object} A RegExp object.
+ * @returns {object} A RegExp object.
  * @author Seth Hollingsead
  * @date 2022/05/03
  */
 async function parseArgumentAsRegularExpression(inputData, inputMetaData) {
-  let functionName = parseArgumentAsRegularExpression.name;
+  const functionName = parseArgumentAsRegularExpression.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -268,12 +271,12 @@ async function parseArgumentAsRegularExpression(inputData, inputMetaData) {
  * @param {string} inputData A string that contains an array, we will use the
  * secondary command delimiter to split the string into an array.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {array<string>} An array of strings.
+ * @returns {array<string>} An array of strings.
  * @author Seth Hollingsead
  * @date 2022/05/03
  */
 async function parseArgumentAsArray(inputData, inputMetaData) {
-  let functionName = parseArgumentAsArray.name;
+  const functionName = parseArgumentAsArray.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
@@ -361,12 +364,12 @@ async function parseArgumentAsArray(inputData, inputMetaData) {
  * @param {array<string>} inputData The argument array that should have the string literal tags removed.
  * The string literal tag is the tilde character: "~"
  * @param {string} inputMetaData Not used for this business rule.
- * @return {array<string>} The same as the input, but just with the string literal tags removed from all array elements.
+ * @returns {array<string>} The same as the input, but just with the string literal tags removed from all array elements.
  * @author Seth Hollingsead
  * @date 2022/05/03
  */
 async function removeStringLiteralTagsFromArray(inputData, inputMetaData) {
-  let functionName = removeStringLiteralTagsFromArray.name;
+  const functionName = removeStringLiteralTagsFromArray.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));

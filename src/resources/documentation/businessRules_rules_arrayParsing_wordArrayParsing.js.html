@@ -56,7 +56,7 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDo
  * @description Takes a string in camelCase and returns an array of the words.
  * @param {string} inputData String to decompose into an array.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {array&lt;string>} The array of words that were composed in the original string.
+ * @returns {array&lt;string>} The array of words that were composed in the original string.
  * @author Seth Hollingsead
  * @date 2022/01/18
  * @NOTE Might not work so well with numbers as part of the string, they are not treated as capital letters.
@@ -96,7 +96,7 @@ async function convertCamelCaseStringToArray(inputData, inputMetaData) {
  * automatically determining how the words are delimited based on common word delimiters: camel case, space, period, dash &amp; underscore.
  * @param {string} inputData The string that should be broken down into words and returned as an array.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {array&lt;string>} The array of words found in the string.
+ * @returns {array&lt;string>} The array of words found in the string.
  * @author Seth Hollingsead
  * @date 2022/01/18
  */
@@ -140,7 +140,7 @@ async function getWordsArrayFromString(inputData, inputMetaData) {
  * So this function lets us recombine and teh re-parse the string with another delimiter.
  * @param {array&lt;string>} inputData The array of strings that should be recombined.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The string array with spaces between array elements.
+ * @returns {string} The string array with spaces between array elements.
  * @author Seth Hollingsead
  * @date 2022/01/19
  */
@@ -167,7 +167,7 @@ async function recombineStringArrayWithSpaces(inputData, inputMetaData) {
  * @description Takes an array of words and returns a camelCase string of the input words.
  * @param {array&lt;string>} inputData The array of words that should be strung together into a single long string.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} A string that contains all of the words from the input array put together in sequential order.
+ * @returns {string} A string that contains all of the words from the input array put together in sequential order.
  * @author Seth Hollingsead
  * @date 2022/01/19
  */
@@ -191,7 +191,7 @@ async function convertArrayToCamelCaseString(inputData, inputMetaData) {
  * @description Checks if an array contains a string, comparison made by lowerCaseAndConsolidatedString().
  * @param {array&lt;string>} inputData The array of strings that should be checked if it contains the specified string.
  * @param {string} inputMetaData The string we are looking for in the array.
- * @return {boolean} A Boolean to indicate if the string is found in the array or not.
+ * @returns {boolean} A Boolean to indicate if the string is found in the array or not.
  * @author Seth Hollingsead
  * @date 2022/01/19
  */
@@ -230,7 +230,7 @@ async function doesArrayContainLowerCaseConsolidatedString(inputData, inputMetaD
  * @description Determines if to values are identical. Needed for completeness of comparison for nested arrays.
  * @param {array&lt;string|boolean|integer|float|object>} inputData An array that should be compared for equality.
  * @param {array&lt;string|boolean|integer|float|object>} inputMetaData Second array that should be compared for equality.
- * @return {boolean} True or False to indicate array equality or not.
+ * @returns {boolean} True or False to indicate array equality or not.
  * @author Seth Hollingsead
  * @date 2022/01/19
  */

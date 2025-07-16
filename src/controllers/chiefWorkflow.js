@@ -39,12 +39,12 @@ const namespacePrefix = wrd.cframework + bas.cDot + wrd.ccontrollers + bas.cDot 
  * contextName = "framework" => D['CommandWorkflows']['Framework']
  * contextName = "application" => D['CommandWorkflows']['Application']
  * contextName = "plugin" => D['CommandWorkflows']['Plugins']['<pluginName>']
- * @return {boolean|object} True or False if the data to be loaded is not from a plugin, returns a JSON object is the data to be loaded is from a plugin.
+ * @returns {boolean|object} True or False if the data to be loaded is not from a plugin, returns a JSON object is the data to be loaded is from a plugin.
  * @author Seth Hollingsead
  * @date 2022/02/04
  */
 async function loadCommandWorkflowsFromPath(commandWorkflowFilePathConfigurationName, contextName) {
-  let functionName = loadCommandWorkflowsFromPath.name;
+  const functionName = loadCommandWorkflowsFromPath.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // commandWorkflowFilePathConfigurationName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.ccommandWorkflowFilePathConfigurationNameIs + commandWorkflowFilePathConfigurationName);

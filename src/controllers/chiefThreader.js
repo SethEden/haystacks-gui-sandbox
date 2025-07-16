@@ -38,7 +38,7 @@ const namespacePrefix = wrd.cframework + bas.cDot + wrd.ccontrollers + bas.cDot 
  * @function initChiefThreader
  * @description Initializes the chief threader interface and related required data structures.
  * @param {object} configuration A JSON object that contains all threader configuration settings.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2025/07/11
  */
@@ -57,7 +57,7 @@ async function initChiefThreader(configuration) {
  * @function submitJob
  * @description Adds a given job to a thread pool for execution.
  * @param {object} jobData A JSON object that contains all the job data.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2025/07/11
  */

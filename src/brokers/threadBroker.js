@@ -33,7 +33,7 @@ const namespacePrefix = wrd.cframework + bas.cDot + wrd.cbrokers + bas.cDot + ba
  * @function initThreadBroker
  * @description Initializes a threader broker object with a given thread-pool size.
  * @param {integer} poolSize The size of the thread pool for the current thread broker.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2025/07/11
  */
@@ -52,7 +52,7 @@ async function initTheadBroker(poolSize) {
  * @function startJob
  * @description A wrapper for the threader.startThread function.
  * @param {object} jobData A function or data block to feed a thread job for execution.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2025/07/11
  */

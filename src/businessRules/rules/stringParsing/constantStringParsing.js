@@ -27,8 +27,61 @@ import path from 'path';
 
 const {bas, biz, cfg, gen, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.businessRules.rules.stringParsing.constantStringParsing.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + wrd.cstring + wrd.cParsing + bas.cDot + baseFileName + bas.cDot;
+
+const rulesMetaData = [
+  {[wrd.cName]: biz.cvalidateConstantsDataValidation, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.cloadAsciiFileFromPath, biz.cgetFileNameFromPath]},
+  {[wrd.cName]: biz.cdetermineConstantsContextQualifiedPrefix, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cdetermineSuggestedConstantsValidationLineOfCode, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cvalidateConstantsDataValidationLineItemName, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetConstantsValidationNamespaceParentObject, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetConstantsValidationNamespaceObject, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cdoesConstantNamespaceExist, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cdoesConstantExist, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cdoesConstantExistInConstantLibraryObject, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetConstantTypeInConstantLibraryObject, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetConstantNameInConstantLibraryObject, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetConstantActualValueInConstantLibraryObject, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cdoesConstantExistInConstantNamespaceObject, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetConstantNameInConstantNamespaceObject, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetConstantActualValueInConstantNamespaceObject, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetConstantType, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetConstantActualValue, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetConstantName, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cfindConstantName, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cisConstantTypeValid, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cconvertConstantTypeToConstantPrefix, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cconstantsOptimizedFulfillmentSystem, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cconstantsFulfillmentSystem, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cvalidateConstantsDataValues, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cisConstantValid, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []}
+];
+
+/**
+ * @function initConstantStringParsing
+ * @description Adds the constantStringParsing business rules meta-data to the
+ * D-data structure businessRulesMetaData-framework data structure.
+ * The meta-data is used to dynamically import all code dependencies such that a given business rule can be executed in a separate thread.
+ * Multi-threading allows for parallel processing and greatly improved performance!!
+ * @returns {boolean} True or False to indicate if the data structures were initialized or not.
+ * @author Seth Hollingsead
+ * @date 2025/07/15
+ */
+async function initConstantStringParsing() {
+  const functionName = initConstantStringParsing.name;
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+  let returnData = false;
+  // Add all of the rules meta-data to the D-data structure!
+  if (D[sys.cbusinessRulesMetaData] && D[sys.cbusinessRulesMetaData][wrd.cframework]) {
+    D[sys.cbusinessRulesMetaData][wrd.cframework].push(...rulesMetaData);
+    returnData = true;
+  }
+  await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+  return returnData;
+}
 
 /**
  * @function validateConstantsDataValidation
@@ -36,12 +89,12 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDo
  * constants validation data matches with the actual constants definitions.
  * @param {string} inputData The path of the constants file that should be validated.
  * @param {string} inputMetaData The name of the data hive that contains the appropriate matching constants validation data.
- * @return {boolean} True or False to indicate if all of the contents of the constants are fully validated or not.
+ * @returns {boolean} True or False to indicate if all of the contents of the constants are fully validated or not.
  * @author Seth Hollingsead
  * @date 2022/01/23
  */
 async function validateConstantsDataValidation(inputData, inputMetaData) {
-  let functionName = validateConstantsDataValidation.name;
+  const functionName = validateConstantsDataValidation.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -143,12 +196,12 @@ async function validateConstantsDataValidation(inputData, inputMetaData) {
  * @param {string} inputData The filename of the constants file or
  * the full path and file name of the constants file. (Should work just the same with either one)
  * @param {string} inputMetaData The name of the data hive that contains the appropriate matching constants validation data.
- * @return {string} A string code that represents the method to reference a constants file in the code.
+ * @returns {string} A string code that represents the method to reference a constants file in the code.
  * @author Seth Hollingsead
  * @date 2022/01/24
  */
 async function determineConstantsContextQualifiedPrefix(inputData, inputMetaData) {
-  let functionName = determineConstantsContextQualifiedPrefix.name;
+  const functionName = determineConstantsContextQualifiedPrefix.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -178,12 +231,12 @@ async function determineConstantsContextQualifiedPrefix(inputData, inputMetaData
  * This will make it really easy for developers to maintain the constants validation system.
  * @param {string} inputData The name of the constant file that is missing and should have a line of code generated for it.
  * @param {string} inputMetaData The prefix used to reference the constants file in the code.
- * @return {string} The suggested line of code that should be added to the appropriate constants validation code file.
+ * @returns {string} The suggested line of code that should be added to the appropriate constants validation code file.
  * @author Seth Hollingsead
  * @date 2022/01/24
  */
 async function determineSuggestedConstantsValidationLineOfCode(inputData, inputMetaData) {
-  let functionName = determineSuggestedConstantsValidationLineOfCode.name;
+  const functionName = determineSuggestedConstantsValidationLineOfCode.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -221,12 +274,12 @@ async function determineSuggestedConstantsValidationLineOfCode(inputData, inputM
  * @description Loops through all of the constants validation data and verifies if a matching constant definition can be found, or not found.
  * @param {string} inputData The constant definition that should be searched for.
  * @param {string} inputMetaData The name of the data hive that contains the appropriate matching constants validation data.
- * @return {boolean} True or False to indicate if a match was found or not found.
+ * @returns {boolean} True or False to indicate if a match was found or not found.
  * @author Seth Hollingsead
  * @date 2022/01/24
  */
 async function validateConstantsDataValidationLineItemName(inputData, inputMetaData) {
-  let functionName = validateConstantsDataValidationLineItemName.name;
+  const functionName = validateConstantsDataValidationLineItemName.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -266,13 +319,13 @@ async function validateConstantsDataValidationLineItemName(inputData, inputMetaD
  * which contains all the meta-data necessary to generate failure messages and suggested line of code information.
  * @param {string} inputData The name of the constants data hive that we should search for and find as a namespace object.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {object} A JSON object that contains the constants short names, file names, prefixes and file paths,
+ * @returns {object} A JSON object that contains the constants short names, file names, prefixes and file paths,
  * validation messages and related constants validation data. In short the constants validation parent context object.
  * @author Seth Hollingsead
  * @date 2022/12/16
  */
 async function getConstantsValidationNamespaceParentObject(inputData, inputMetaData) {
-  let functionName = getConstantsValidationNamespaceParentObject.name;
+  const functionName = getConstantsValidationNamespaceParentObject.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -309,13 +362,13 @@ async function getConstantsValidationNamespaceParentObject(inputData, inputMetaD
  * framework, applications, plugins for the specified namespace and returns the JSON object.
  * @param {string} inputData The name of the constants data hive that we should search for and find as a namespace object.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {object} A JSON object that contains the constants validation data for the specified constants validation data-set,
+ * @returns {object} A JSON object that contains the constants validation data for the specified constants validation data-set,
  * False if nothing is found.
  * @author Seth Hollingsead
  * @date 2022/11/16
  */
 async function getConstantsValidationNamespaceObject(inputData, inputMetaData) {
-  let functionName = getConstantsValidationNamespaceObject.name;
+  const functionName = getConstantsValidationNamespaceObject.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -351,12 +404,12 @@ async function getConstantsValidationNamespaceObject(inputData, inputMetaData) {
  * @description Searches through the input data structure to determine if it contains the specified constant namespace or not.
  * @param {string} inputData The name of the data element that should be searched for.
  * @param {object} inputMetaData The data that should be searched for the specified named data parameter.
- * @return {boolean} True or False to indicate if a matching namespace was found in the specified data structure or not.
+ * @returns {boolean} True or False to indicate if a matching namespace was found in the specified data structure or not.
  * @author Seth Hollingsead
  * @date 2022/12/16
  */
 async function doesConstantNamespaceExist(inputData, inputMetaData) {
-  let functionName = doesConstantNamespaceExist.name;
+  const functionName = doesConstantNamespaceExist.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -387,12 +440,12 @@ async function doesConstantNamespaceExist(inputData, inputMetaData) {
  * checks to see if any of the expected values match the string that is passed in.
  * @param {string} inputData The value that should be looked for in all the constants files.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} True or False to indicate if a matching constant definition was found or not.
+ * @returns {boolean} True or False to indicate if a matching constant definition was found or not.
  * @author Seth Hollingsead
  * @date 2022/01/24
  */
 async function doesConstantExist(inputData, inputMetaData) {
-  let functionName = doesConstantExist.name;
+  const functionName = doesConstantExist.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -441,12 +494,12 @@ async function doesConstantExist(inputData, inputMetaData) {
  * This function provides a re-usability function so we don't need to have repeated code in the doesConstantExist function.
  * @param {string} inputData The value that should be looked for in the constants validation data library, that is also provided as input.
  * @param {object} inputMetaData A JSON data object that contains all of the constants validation data namespace objects that should be searched.
- * @return {boolean} True or False to indicate if a matching constant definition was found or not.
+ * @returns {boolean} True or False to indicate if a matching constant definition was found or not.
  * @author Seth Hollingsead
  * @date 2022/12/21
  */
 async function doesConstantExistInConstantLibraryObject(inputData, inputMetaData) {
-  let functionName = doesConstantExistInConstantLibraryObject.name;
+  const functionName = doesConstantExistInConstantLibraryObject.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -483,12 +536,12 @@ async function doesConstantExistInConstantLibraryObject(inputData, inputMetaData
  * inputData[0] = The value of the constant that should be searched for to find a match and return the type.
  * inputData[1] = True or False value to indicate if the search should continue after finding the first match or not.
  * @param {object} inputMetaData A JSON data object that contains all of the constants validation data namespace objects that should be search.
- * @return {boolean|string} A string that contains the name of the matching constant type or False if its matching constant definition is not found.
+ * @returns {boolean|string} A string that contains the name of the matching constant type or False if its matching constant definition is not found.
  * @author Seth Hollingsead
  * @date 2022/12/21
  */
 async function getConstantTypeInConstantLibraryObject(inputData, inputMetaData) {
-  let functionName = getConstantTypeInConstantLibraryObject.name;
+  const functionName = getConstantTypeInConstantLibraryObject.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -529,12 +582,12 @@ async function getConstantTypeInConstantLibraryObject(inputData, inputMetaData) 
  * This function provides a re-usability function so we don't need to have repeated code in the getConstantName function.
  * @param {string} inputData The value that should be looked for in the constants validation data library, that is also provided as input.
  * @param {object} inputMetaData A JSON data object that contains all of the constants validation data namespace objects that should be searched.
- * @return {string|boolean} The name of the constant if a match is found, False if no match is found.
+ * @returns {string|boolean} The name of the constant if a match is found, False if no match is found.
  * @author Seth Hollingsead
  * @date 2022/12/21
  */
 async function getConstantNameInConstantLibraryObject(inputData, inputMetaData) {
-  let functionName = getConstantNameInConstantLibraryObject.name;
+  const functionName = getConstantNameInConstantLibraryObject.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -569,12 +622,12 @@ async function getConstantNameInConstantLibraryObject(inputData, inputMetaData) 
  * This function provides a re-usability function so we don't need to have repeated code in the getConstantName function.
  * @param {string} inputData The value that should be looked for in the constants validation data library that is also provided as input.
  * @param {object} inputMetaData A JSON data object that contains all of the constants validation data namespace objects that should be searched.
- * @return {string|boolean} The actual value of the constant if a match is found, False if no match is found.
+ * @returns {string|boolean} The actual value of the constant if a match is found, False if no match is found.
  * @author Seth Hollingsead
  * @date 2022/12/21
  */
 async function getConstantActualValueInConstantLibraryObject(inputData, inputMetaData) {
-  let functionName = getConstantActualValueInConstantLibraryObject.name;
+  const functionName = getConstantActualValueInConstantLibraryObject.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -607,12 +660,12 @@ async function getConstantActualValueInConstantLibraryObject(inputData, inputMet
  * Checks to see if any of the expected values match the string that is passed in.
  * @param {string} inputData The value that should be looked for in all the constants data that is provided also as input.
  * @param {object} inputMetaData The constants validation data structure that should be searched.
- * @return {boolean} True or False to indicate if a matching constant definition was found or not.
+ * @returns {boolean} True or False to indicate if a matching constant definition was found or not.
  * @author Seth Hollingsead
  * @date 2022/12/21
  */
 async function doesConstantExistInConstantNamespaceObject(inputData, inputMetaData) {
-  let functionName = doesConstantExistInConstantNamespaceObject.name;
+  const functionName = doesConstantExistInConstantNamespaceObject.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -641,12 +694,12 @@ async function doesConstantExistInConstantNamespaceObject(inputData, inputMetaDa
  * Checks to see if any of the expected values match the string that is passed in and returns the name of a match if/when it's found.
  * @param {string} inputData The value that should be looked for in all the constants data that is provided also as input.
  * @param {object} inputMetaData The constants validation data structure that should be searched.
- * @return {string|boolean} The name of the constant or False if it is not found.
+ * @returns {string|boolean} The name of the constant or False if it is not found.
  * @author Seth Hollingsead
  * @date 2022/12/21
  */
 async function getConstantNameInConstantNamespaceObject(inputData, inputMetaData) {
-  let functionName = getConstantNameInConstantNamespaceObject.name;
+  const functionName = getConstantNameInConstantNamespaceObject.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -675,12 +728,12 @@ async function getConstantNameInConstantNamespaceObject(inputData, inputMetaData
  * Checks to see if any of the expected values match the string that is passed in and returns the actual value of a match if/when it's found.
  * @param {string} inputData The value that should be looked for in all the constants data that is provided also as input.
  * @param {object} inputMetaData The constants validation data structure that should be searched.
- * @return {string|boolean} The actual value of the constant or False if it is not found.
+ * @returns {string|boolean} The actual value of the constant or False if it is not found.
  * @author Seth Hollingsead
  * @date 2022/12/21
  */
 async function getConstantActualValueInConstantNamespaceObject(inputData, inputMetaData) {
-  let functionName = getConstantActualValueInConstantNamespaceObject.name;
+  const functionName = getConstantActualValueInConstantNamespaceObject.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -712,12 +765,12 @@ async function getConstantActualValueInConstantNamespaceObject(inputData, inputM
  * Passing in a True to the inputMetaData will cause the function to exit upon first discovered match.
  * @param {string} inputData The string value that should be searched in all of the constants libraries.
  * @param {boolean} inputMetaData True or False to indicate if the function should exit on first discovery or continue to discover all possible matches.
- * @return {string} A list of constants libraries where the constant was found to be defined in.
+ * @returns {string} A list of constants libraries where the constant was found to be defined in.
  * @author Seth Hollingsead
  * @date 2022/01/24
  */
 async function getConstantType(inputData, inputMetaData) {
-  let functionName = getConstantType.name;
+  const functionName = getConstantType.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -797,12 +850,12 @@ async function getConstantType(inputData, inputMetaData) {
  * @description Determines the actual value of the named constant given the constant type.
  * @param {string} inputData The name of the constant we are looking for to get the actual value of the constant.
  * @param {string} inputMetaData (OPTIONAL) The type or library where the constant should be found.
- * @return {string} The actual value of the string.
+ * @returns {string} The actual value of the string.
  * @author Seth Hollingsead
  * @date 2022/01/24
  */
 async function getConstantActualValue(inputData, inputMetaData) {
-  let functionName = getConstantActualValue.name;
+  const functionName = getConstantActualValue.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -857,12 +910,12 @@ async function getConstantActualValue(inputData, inputMetaData) {
  * Can only return the first instance.
  * @param {string} inputData The constant string value that should be used when getting the constant name.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The name of the constant: eg: cSystem
+ * @returns {string} The name of the constant: eg: cSystem
  * @author Seth Hollingsead
  * @date 2022/01/24
  */
 async function getConstantName(inputData, inputMetaData) {
-  let functionName = getConstantName.name;
+  const functionName = getConstantName.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -909,12 +962,12 @@ async function getConstantName(inputData, inputMetaData) {
  * @description Looks through a string and tries to weed out a constant name.
  * @param {string} inputData The string that should be searched for a constant name.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The name of the constant that was found.
+ * @returns {string} The name of the constant that was found.
  * @author Seth Hollingsead
  * @date 2022/01/24
  */
 async function findConstantName(inputData, inputMetaData) {
-  let functionName = findConstantName.name;
+  const functionName = findConstantName.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -934,13 +987,13 @@ async function findConstantName(inputData, inputMetaData) {
  * @description Determines if a string is a valid constant type/library or not.
  * @param {string} inputData The string that should be validated if it is a valid constant type or not.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} True or False to indicate if the string is a
+ * @returns {boolean} True or False to indicate if the string is a
  * valid constant type/library that exists within the system or not.
  * @author Seth Hollingsead
  * @date 2022/01/24
  */
 async function isConstantTypeValid(inputData, inputMetaData) {
-  let functionName = isConstantTypeValid.name;
+  const functionName = isConstantTypeValid.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -964,12 +1017,12 @@ async function isConstantTypeValid(inputData, inputMetaData) {
  * @description Converts the constant type to a constant prefix so it can be used to assist with defining an optimized constant definition.
  * @param {string} inputData The constant type that should be used when converting to a constant prefix.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The appropriate constant prefix.
+ * @returns {string} The appropriate constant prefix.
  * @author Seth Hollingsead
  * @date 2022/01/24
  */
 async function convertConstantTypeToConstantPrefix(inputData, inputMetaData) {
-  let functionName = convertConstantTypeToConstantPrefix.name;
+  const functionName = convertConstantTypeToConstantPrefix.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -996,12 +1049,12 @@ async function convertConstantTypeToConstantPrefix(inputData, inputMetaData) {
  * @description Determines what is the most optimized way to define a string using existing constant strings.
  * @param {string} inputData The string that should be determined or find a constant to fulfill part of the string.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} A constant that represents part of the input string.
+ * @returns {string} A constant that represents part of the input string.
  * @author Seth Hollingsead
  * @date 2022/01/24
  */
 async function constantsOptimizedFulfillmentSystem(inputData, inputMetaData) {
-  let functionName = constantsOptimizedFulfillmentSystem.name;
+  const functionName = constantsOptimizedFulfillmentSystem.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -1035,12 +1088,12 @@ async function constantsOptimizedFulfillmentSystem(inputData, inputMetaData) {
  * @param {string} inputData The constant to be defined/fulfilled.
  * @param {string} inputMetaData The original user-defined constant to be fulfilled,
  * so the recursive algorithm can continue processing the rest of the string, after a first match is found.
- * @return {string} The fully optimized definition for the new constant.
+ * @returns {string} The fully optimized definition for the new constant.
  * @author Seth Hollingsead
  * @date 2022/01/24
  */
 async function constantsFulfillmentSystem(inputData, inputMetaData) {
-  let functionName = constantsFulfillmentSystem.name;
+  const functionName = constantsFulfillmentSystem.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -1080,13 +1133,13 @@ async function constantsFulfillmentSystem(inputData, inputMetaData) {
  * @param {string} inputData The name of the data-hive that should contain all of
  * the validation data that should be used to execute the validation procedures.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} True or False to indicate if the validation passed for the
+ * @returns {boolean} True or False to indicate if the validation passed for the
  * entire data hive or if it did not pass.
  * @author Seth Hollingsead
  * @date 2022/01/24
  */
 async function validateConstantsDataValues(inputData, inputMetaData) {
-  let functionName = validateConstantsDataValues.name;
+  const functionName = validateConstantsDataValues.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -1154,12 +1207,12 @@ async function validateConstantsDataValues(inputData, inputMetaData) {
  * @description Determines if the user entered some valid input constant string or not. User must have entered more than 4 characters.
  * @param {string} inputData The value of the constant as a string.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} True or False to indicate if the user entered a valid constant or not.
+ * @returns {boolean} True or False to indicate if the user entered a valid constant or not.
  * @author Seth Hollingsead
  * @date 2022/01/24
  */
 async function isConstantValid(inputData, inputMetaData) {
-  let functionName = isConstantValid.name;
+  const functionName = isConstantValid.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -1175,6 +1228,7 @@ async function isConstantValid(inputData, inputMetaData) {
 }
 
 export default {
+  initConstantStringParsing,
   validateConstantsDataValidation,
   determineConstantsContextQualifiedPrefix,
   determineSuggestedConstantsValidationLineOfCode,

@@ -31,7 +31,7 @@ const namespacePrefix = wrd.capplication + bas.cDot + apc.cApplicationName + bas
  * If the application doesn't load any plugins, then no plugin constants validation will be executed.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string>} An array with a boolean True or False value to
+ * @returns {array<boolean,string>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by an empty string.
  * @author Seth Hollingsead
  * @date 2025/06/23
@@ -54,7 +54,7 @@ async function validateApplicationConstants(inputData, inputMetaData) {
  * If the application doesn't load any plugins, then no plugin command alias validation will be executed.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string>} An array with a boolean True or False value to
+ * @returns {array<boolean,string>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by an empty string.
  * @author Seth Hollingsead
  * @date 2025/06/23
@@ -77,7 +77,7 @@ async function validateApplicationCommandAliases(inputData, inputMetaData) {
  * If the application doesn't load any plugins, then no plugin workflow validation will be executed.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string>} An array with a boolean True or False value to
+ * @returns {array<boolean,string>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by an empty string.
  * @author Seth Hollingsead
  * @date 2025/06/23
@@ -100,7 +100,7 @@ async function validateApplicationWorkflows(inputData, inputMetaData) {
  * This is better to have here so we can define short name command aliases for this command, rather than having a long workflow name.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string>} An array with a boolean True or False value to
+ * @returns {array<boolean,string>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by an empty string.
  * @author Seth Hollingsead
  * @date 2025/06/23

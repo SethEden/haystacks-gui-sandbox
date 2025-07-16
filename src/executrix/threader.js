@@ -39,7 +39,7 @@ const namespacePrefix =  wrd.cframework + bas.cDot + wrd.cexecutrix + bas.cDot +
  * @function startThread
  * @description Actual thread/worker logic (thin wrapper around NodeJS Worker Threads)
  * @param {object} jobData A function or data block to feed a thread job for execution.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2025/07/11
  */

@@ -6,6 +6,7 @@
  * @requires module:ruleParsing
  * @requires module:configurator
  * @requires module:loggers
+ * @requires module:data
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
  * @requires {@link https://www.npmjs.com/package/path|path}
  * @author Seth Hollingsead
@@ -18,14 +19,58 @@ import characterArrayParsing from '../arrayParsing/characterArrayParsing.js';
 import ruleParsing from '../ruleParsing.js';
 import configurator from '../../../executrix/configurator.js';
 import loggers from '../../../executrix/loggers.js';
+import D from '../../../structures/data.js';
 // External imports
 import hayConst from '@haystacks/constants';
 import path from 'path';
 
 const {abt, bas, biz, cfg, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.businessRules.rules.stringParsing.characterStringParsing.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + wrd.cstring + wrd.cParsing + bas.cDot + baseFileName + bas.cDot;
+
+const rulesMetaData = [
+  {[wrd.cName]: biz.csingleQuoteSwapAfterEquals, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cswapForwardSlashToBackSlash, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.creplaceCharacterWithCharacter]},
+  {[wrd.cName]: biz.cswapBackSlashToForwardSlash, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.creplaceCharacterWithCharacter]},
+  {[wrd.cName]: biz.cswapDoubleForwardSlashToSingleForwardSlash, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.creplaceCharacterWithCharacter]},
+  {[wrd.cName]: biz.cswapDoubleBackSlashToSingleBackSlash, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.creplaceCharacterWithCharacter]},
+  {[wrd.cName]: biz.creplaceSpacesWithPlus, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.creplaceCharacterWithCharacter]},
+  {[wrd.cName]: biz.creplaceColonWithUnderscore, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.creplaceCharacterWithCharacter]},
+  {[wrd.cName]: biz.ccleanCarriageReturnFromString, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.creplaceCharacterWithCharacter]},
+  {[wrd.cName]: biz.cconvertStringToLowerCase, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cconvertStringToUpperCase, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cdoesStringContainUpperCaseCharacter, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cdoesStringContainLowerCaseCharacter, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cisFirstCharacterLowerCase, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cisFirstCharacterUpperCase, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.creplaceCharacterAtIndexOfString, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []}
+];
+
+/**
+ * @function initCharacterStringParsing
+ * @description Adds the characterStringParsing business rules meta-data to the
+ * D-data structure businessRulesMetaData-framework data structure.
+ * The meta-data is used to dynamically import all code dependencies such that a given business rule can be executed in a separate thread.
+ * Multi-threading allows for parallel processing and greatly improved performance!!
+ * @returns {boolean} True or False to indicate if the data structures were initialized or not.
+ * @author Seth Hollingsead
+ * @date 2025/07/15
+ */
+async function initCharacterStringParsing() {
+  const functionName = initCharacterStringParsing.name;
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+  let returnData = false;
+  // Add all of the rules meta-data to the D-data structure!
+  if (D[sys.cbusinessRulesMetaData] && D[sys.cbusinessRulesMetaData][wrd.cframework]) {
+    D[sys.cbusinessRulesMetaData][wrd.cframework].push(...rulesMetaData);
+    returnData = true;
+  }
+  await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+  return returnData;
+}
 
 /**
  * @function singleQuoteSwapAfterEquals
@@ -34,12 +79,12 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDo
  * output: 'input[name="emailAddress"][class="username"]'
  * @param {string} inputData A string that contains text with single quotes that should be swapped for double quotes.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} A string that contains text where single quotes have been exchanged for double quotes.
+ * @returns {string} A string that contains text where single quotes have been exchanged for double quotes.
  * @author Seth Hollingsead
  * @date 2021/10/28
  */
 async function singleQuoteSwapAfterEquals(inputData, inputMetaData) {
-  let functionName = singleQuoteSwapAfterEquals.name;
+  const functionName = singleQuoteSwapAfterEquals.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`inputData is: ${JSON.stringify(inputData)}`);
   // console.log(`inputMetaData is: ${JSON.stringify(inputMetaData)}`);
@@ -83,13 +128,13 @@ async function singleQuoteSwapAfterEquals(inputData, inputMetaData) {
  * @description Swaps all forward slash characters in a string for back slash characters.
  * @param {string} inputData String that might contain some forward slashes.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The same as the input string, just all forward slash characters
+ * @returns {string} The same as the input string, just all forward slash characters
  * swapped for back slash characters.
  * @author Seth Hollingsead
  * @date 2021/10/28
  */
 async function swapForwardSlashToBackSlash(inputData, inputMetaData) {
-  let functionName = swapForwardSlashToBackSlash.name;
+  const functionName = swapForwardSlashToBackSlash.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`inputData is: ${JSON.stringify(inputData)}`);
   // console.log(`inputMetaData is: ${JSON.stringify(inputMetaData)}`);
@@ -114,13 +159,13 @@ async function swapForwardSlashToBackSlash(inputData, inputMetaData) {
  * @description Swaps all back slash characters in a string for forward slash characters.
  * @param {string} inputData String that might contains some back slashes.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The same as the input string, just all back slash characters
+ * @returns {string} The same as the input string, just all back slash characters
  * swapped for forward slash characters.
  * @author Seth Hollingsead
  * @date 2021/10/28
  */
 async function swapBackSlashToForwardSlash(inputData, inputMetaData) {
-  let functionName = swapBackSlashToForwardSlash.name;
+  const functionName = swapBackSlashToForwardSlash.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`inputData is: ${JSON.stringify(inputData)}`);
   // console.log(`inputMetaData is: ${JSON.stringify(inputMetaData)}`);
@@ -149,13 +194,13 @@ async function swapBackSlashToForwardSlash(inputData, inputMetaData) {
  * @description Swaps all double forward slash characters for single forward slash characters.
  * @param {string} inputData String that might contain some double forward slashes.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The same as the input string, just all double forward slash characters
+ * @returns {string} The same as the input string, just all double forward slash characters
  * swapped for single forward slash characters.
  * @author Seth Hollingsead
  * @date 2021/10/28
  */
 async function swapDoubleForwardSlashToSingleForwardSlash(inputData, inputMetaData) {
-  let functionName = swapDoubleForwardSlashToSingleForwardSlash.name;
+  const functionName = swapDoubleForwardSlashToSingleForwardSlash.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`inputData is: ${JSON.stringify(inputData)}`);
   // console.log(`inputMetaData is: ${JSON.stringify(inputMetaData)}`);
@@ -184,13 +229,13 @@ async function swapDoubleForwardSlashToSingleForwardSlash(inputData, inputMetaDa
  * @description Swaps all double back slash characters for single back slash characters.
  * @param {string} inputData String that might contain some double back slashes.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The same as the input string, just all double back slash characters
+ * @returns {string} The same as the input string, just all double back slash characters
  * swapped for single back slash characters.
  * @author Seth Hollingsead
  * @date 2021/10/28
  */
 async function swapDoubleBackSlashToSingleBackSlash(inputData, inputMetaData) {
-  let functionName = swapDoubleBackSlashToSingleBackSlash.name;
+  const functionName = swapDoubleBackSlashToSingleBackSlash.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`inputData is: ${JSON.stringify(inputData)}`);
   // console.log(`inputMetaData is: ${JSON.stringify(inputMetaData)}`);
@@ -215,12 +260,12 @@ async function swapDoubleBackSlashToSingleBackSlash(inputData, inputMetaData) {
  * @description Replaces all spaces in the input string with plus symbols.
  * @param {string} inputData A string that contains spaces that should be converted to plus symbols.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The same as the input string but with space characters converted to plus symbols.
+ * @returns {string} The same as the input string but with space characters converted to plus symbols.
  * @author Seth Hollingsead
  * @date 2022/01/21
  */
 async function replaceSpacesWithPlus(inputData, inputMetaData) {
-  let functionName = replaceSpacesWithPlus.name;
+  const functionName = replaceSpacesWithPlus.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -239,12 +284,12 @@ async function replaceSpacesWithPlus(inputData, inputMetaData) {
  * @description Replaces all colons in the input string with underscore symbols.
  * @param {string} inputData A string that contains colons that should be converted to underscore symbols.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The same as teh input String but with colon characters converted to underscore symbols.
+ * @returns {string} The same as teh input String but with colon characters converted to underscore symbols.
  * @author Seth Hollingsead
  * @date 2022/01/23
  */
 async function replaceColonWithUnderscore(inputData, inputMetaData) {
-  let functionName = replaceColonWithUnderscore.name;
+  const functionName = replaceColonWithUnderscore.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -263,12 +308,12 @@ async function replaceColonWithUnderscore(inputData, inputMetaData) {
  * @description Cleans carriage return characters from the input data and trims off any leading or training spaces.
  * @param {string} inputData The string that should be scrubbed for carriage returns.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The same as teh input string, but with all carriage return characters removed.
+ * @returns {string} The same as teh input string, but with all carriage return characters removed.
  * @author Seth Hollingsead
  * @date 2022/01/23
  */
 async function cleanCarriageReturnFromString(inputData, inputMetaData) {
-  let functionName = cleanCarriageReturnFromString.name;
+  const functionName = cleanCarriageReturnFromString.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -291,12 +336,12 @@ async function cleanCarriageReturnFromString(inputData, inputMetaData) {
  * @description Converts the input String to the same string but with no upper case letters.
  * @param {string} inputData The string that should have all upper case letters changed to lower case letters.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The corrected string with all lower case letters.
+ * @returns {string} The corrected string with all lower case letters.
  * @author Seth Hollingsead
  * @date 2022/01/23
  */
 async function convertStringToLowerCase(inputData, inputMetaData) {
-  let functionName = convertStringToLowerCase.name;
+  const functionName = convertStringToLowerCase.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -314,12 +359,12 @@ async function convertStringToLowerCase(inputData, inputMetaData) {
  * @description Converts the input string to the same string but with no lower case letters.
  * @param {string} inputData The string that should have all lower case letters changed to upper case letters.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The corrected string with all upper case letters.
+ * @returns {string} The corrected string with all upper case letters.
  * @author Seth Hollingsead
  * @date 2022/01/23
  */
 async function convertStringToUpperCase(inputData, inputMetaData) {
-  let functionName = convertStringToUpperCase.name;
+  const functionName = convertStringToUpperCase.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -337,13 +382,13 @@ async function convertStringToUpperCase(inputData, inputMetaData) {
  * @description Determines if the input string contains at least one upper case character or not.
  * @param {string} inputData The string that should be checked for upper case characters.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} True or False to indicate if the string contains
+ * @returns {boolean} True or False to indicate if the string contains
  * at least one upper case character or more, or not any upper case characters.
  * @author Seth Hollingsead
  * @date 2022/01/23
  */
 async function doesStringContainUpperCaseCharacter(inputData, inputMetaData) {
-  let functionName = doesStringContainUpperCaseCharacter.name;
+  const functionName = doesStringContainUpperCaseCharacter.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -366,13 +411,13 @@ async function doesStringContainUpperCaseCharacter(inputData, inputMetaData) {
  * @description Determines if the input string contains at least one lower case character or not.
  * @param {string} inputData The string that should be checked for lower case characters.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} True or False to indicate if the string contains
+ * @returns {boolean} True or False to indicate if the string contains
  * at least one lower case character or more, or not any lower case characters.
  * @author Seth Hollingsead
  * @date 2022/01/23
  */
 async function doesStringContainLowerCaseCharacter(inputData, inputMetaData) {
-  let functionName = doesStringContainLowerCaseCharacter.name;
+  const functionName = doesStringContainLowerCaseCharacter.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -395,12 +440,12 @@ async function doesStringContainLowerCaseCharacter(inputData, inputMetaData) {
  * @description Determines if the first character of the string is a lower case character or not.
  * @param {string} inputData The string that should be checked to determine if the first character is lower case or not.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} True or False to indicate if the first character of the string is a lower case character or not.
+ * @returns {boolean} True or False to indicate if the first character of the string is a lower case character or not.
  * @author Seth Hollingsead
  * @date 2022/01/23
  */
 async function isFirstCharacterLowerCase(inputData, inputMetaData) {
-  let functionName = isFirstCharacterLowerCase.name;
+  const functionName = isFirstCharacterLowerCase.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -418,12 +463,12 @@ async function isFirstCharacterLowerCase(inputData, inputMetaData) {
  * @description Determines if the first character of the string is an upper case character or not.
  * @param {string} inputData The string that should be checked to determine if the first character is upper case or not.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} True or False to indicate if the first character of the string is an upper case character or not.
+ * @returns {boolean} True or False to indicate if the first character of the string is an upper case character or not.
  * @author Seth Hollingsead
  * @date 2022/01/23
  */
 async function isFirstCharacterUpperCase(inputData, inputMetaData) {
-  let functionName = isFirstCharacterUpperCase.name;
+  const functionName = isFirstCharacterUpperCase.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -445,14 +490,14 @@ async function isFirstCharacterUpperCase(inputData, inputMetaData) {
  * inputData[0] = originalString - The string where the replacement should be made.
  * inputData[1] = index - The index of the character where the replacement should be made.
  * @param {string} inputMetaData The character or string that should be used to make the replacement, inserted at the specified index.
- * @return {string} The string after the replacement has been made.
+ * @returns {string} The string after the replacement has been made.
  * @author Seth Hollingsead
  * @date 2021/10/28
  * @NOTE: https://stackoverflow.com/questions/1431094/how-do-i-replace-a-character-at-a-particular-index-in-javascript
  * @NOTE Cannot use the loggers here, because of a circular dependency.
  */
 async function replaceCharacterAtIndexOfString(inputData, inputMetaData) {
-  // let functionName = replaceCharacterAtIndexOfString.name;
+  // const functionName = replaceCharacterAtIndexOfString.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`originalString is: ${originalString}`);
   // console.log(`index is: ${index}`);
@@ -471,6 +516,7 @@ async function replaceCharacterAtIndexOfString(inputData, inputMetaData) {
 }
 
 export default {
+  initCharacterStringParsing,
   singleQuoteSwapAfterEquals,
   swapForwardSlashToBackSlash,
   swapBackSlashToForwardSlash,

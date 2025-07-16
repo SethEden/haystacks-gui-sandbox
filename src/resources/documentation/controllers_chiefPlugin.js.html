@@ -62,7 +62,7 @@ const namespacePrefix = wrd.cframework + bas.cDot + wrd.ccontrollers + bas.cDot 
  * @function loadPluginRegistryData
  * @description Loads the plugin registry meta data which includes paths to plugins.
  * @param {string} pluginRegistryPath This is the path to host application plugin registry file.
- * @return {object} A JSON object loaded from the specified path with the plugin paths and plugin metaData.
+ * @returns {object} A JSON object loaded from the specified path with the plugin paths and plugin metaData.
  * @author Seth Hollingsead
  * @date 2022/09/13
  */
@@ -82,7 +82,7 @@ async function loadPluginRegistryData(pluginRegistryPath) {
  * @function persistPluginRegistryToDataStructure
  * @description Saves the plugin registry data to the D-data structure.
  * @param {object} pluginRegistryData This is the data from host application plugin registry file.
- * @return {boolean} True or False to indicate if the persistense was successful or not.
+ * @returns {boolean} True or False to indicate if the persistense was successful or not.
  * @author Seth Hollingsead
  * @date 2022/09/13
  */
@@ -101,7 +101,7 @@ async function persistPluginRegistryToDataStructure(pluginRegistryData) {
 /**
  * @function listLoadedPlugins
  * @description This is a wrapper function for pluginBroker.listAllLoadedPlugins.
- * @return {array&lt;string>} A list array of the names of the plugins that are currently loaded.
+ * @returns {array&lt;string>} A list array of the names of the plugins that are currently loaded.
  * @author Seth Hollingsead
  * @date 2023/02/06
  */
@@ -118,7 +118,7 @@ async function listLoadedPlugins() {
 /**
  * @function getAllPluginsInRegistry
  * @description This is a wrapper function for pluginBroker.listPluginsInRegistry.
- * @return {array&lt;string>} A list array of the names of the plugins in the plugin registry.
+ * @returns {array&lt;string>} A list array of the names of the plugins in the plugin registry.
  * @author Seth Hollingsead
  * @date 2022/09/15
  */
@@ -136,7 +136,7 @@ async function getAllPluginsInRegistry() {
  * @function getAllPluginsPathsInRegistry
  * @description This is a wrapper function for pluginBroker.listPluginsPathsInRegistry
  * The purpose is to get the array of paths for all of the plugins that must be loaded.
- * @return {array&lt;string>} A list array of all the paths of all the plugins in the plugin registry.
+ * @returns {array&lt;string>} A list array of all the paths of all the plugins in the plugin registry.
  * @author Seth Hollingsead
  * @date 2022/09/20
  */
@@ -153,7 +153,7 @@ async function getAllPluginsPathsInRegistry() {
 /**
  * @function getAllPluginsInRegistryPath
  * @description This is a wrapper function for pluginBroker.listPluginsInRegistryPath.
- * @return {array&lt;string>} A list array of the names of the plugins located at the specified path on
+ * @returns {array&lt;string>} A list array of the names of the plugins located at the specified path on
  * the local system from the plugins registry data hive.
  * @author Seth Hollingsead
  * @date 2022/09/15
@@ -171,7 +171,7 @@ async function getAllPluginsInRegistryPath() {
 /**
  * @function countAllPluginsInRegistry
  * @description This is a wrapper function for pluginBroker.countPluginsInRegistry.
- * @return {integer} The count of the number of plugins listed in the plugin registry data hive.
+ * @returns {integer} The count of the number of plugins listed in the plugin registry data hive.
  * @author Seth Hollingsead
  * @date 2022/09/15
  */
@@ -188,7 +188,7 @@ async function countAllPluginsInRegistry() {
 /**
  * @function countAllPluginsInRegistryPath
  * @description This is a wrapper function for pluginBroker.countPluginsInRegistryPath.
- * @return {integer} The count of the number of plugin sub-folders in the plugins path listed in the plugin registry data hive.
+ * @returns {integer} The count of the number of plugin sub-folders in the plugins path listed in the plugin registry data hive.
  * @author Seth Hollingsead
  * @date 2022/09/15
  */
@@ -208,7 +208,7 @@ async function countAllPluginsInRegistryPath() {
  * @param {string} pluginName The name of the plugin that should be registered.
  * @param {string} pluginPath The path to the plugin, to be added to the plugin registry.
  * This should be the path to the plugin/package.json file, but not including the package.json as part of the path URI.
- * @return {boolean} True or False to indicate if the plugin was added to the plugin registry successfully or not.
+ * @returns {boolean} True or False to indicate if the plugin was added to the plugin registry successfully or not.
  * @author Seth Hollingsead
  * @date 2022/09/15
  */
@@ -230,7 +230,7 @@ async function registerNamedPlugin(pluginName, pluginPath) {
  * @function unregisterNamedPlugin
  * @description This is a wrapper function for pluginBroker.unregisterPlugin.
  * @param {string} pluginName The name of the plugin that should be removed from the plugin registry.
- * @return {boolean} True or False to indicate if the plugin was removed from the plugin registry successfully or not.
+ * @returns {boolean} True or False to indicate if the plugin was removed from the plugin registry successfully or not.
  * @author Seth Hollingsead
  * @date 2022/09/15
  */
@@ -250,7 +250,7 @@ async function unregisterNamedPlugin(pluginName) {
  * @function unregisterPlugins
  * @description This is a wrapper function for pluginBroker.unregisterPlugins.
  * @param {array&lt;string>} pluginListArray A list array of plugin names that should be removed from the plugin registry.
- * @return {boolean} True or False to indicate if all the plugins were removed from the plugin registry successfully or not.
+ * @returns {boolean} True or False to indicate if all the plugins were removed from the plugin registry successfully or not.
  * @author Seth Hollingsead
  * @date 2023/02/07
  */
@@ -269,7 +269,7 @@ async function unregisterPlugins(pluginListArray) {
 /**
  * @function synchronizePluginRegistryWithPath
  * @description This is a wrapper function for pluginBroker.syncPluginRegistryWithPluginRegistryPath.
- * @return {boolean} True or False to indicate if the synchronization was performed successfully or not.
+ * @returns {boolean} True or False to indicate if the synchronization was performed successfully or not.
  * @author Seth Hollingsead
  * @date 2022/09/15
  * @NOTE It is expected that the number of plugins loaded at any one time will not be crazy high.
@@ -290,7 +290,7 @@ async function synchronizePluginRegistryWithPath() {
 /**
  * @function clearPluginRegistry
  * @description This is a wrapper function for pluginBroker.unregisterAllPlugins.
- * @return {boolean} True or False to indicate if the plugin registry data hive was cleared successfully or not.
+ * @returns {boolean} True or False to indicate if the plugin registry data hive was cleared successfully or not.
  * @author Seth Hollingsead
  * @date 2022/09/15
  */
@@ -307,7 +307,7 @@ async function clearPluginRegistry() {
 /**
  * @function savePluginRegistryDisk
  * @description This is a wrapper function for pluginBroker.savePluginRegistry.
- * @return {boolean} True or False to indicate if the plugin registry was successfully saved to the disk or not.
+ * @returns {boolean} True or False to indicate if the plugin registry was successfully saved to the disk or not.
  * @author Seth Hollingsead
  * @date 2022/09/15
  */
@@ -327,7 +327,7 @@ async function savePluginRegistryDisk() {
  * @param {array&lt;string>} pluginsPaths Should be the entry-point to the plugin,
  * but it could also be the name of the folder in the plugin registry path that is the entry-point to the plugin.
  * If its the later than we will need to compose the fully qualified path.
- * @return {array&lt;object>} An array that contains all of the meta-data,
+ * @returns {array&lt;object>} An array that contains all of the meta-data,
  * for each of the plugins in the input pluginsPaths array.
  * @author Seth Hollingsead
  * @date 2022/09/02
@@ -374,7 +374,7 @@ async function loadAllPluginsMetaData(pluginsPaths) {
  * loaded for each plugin that should be imported.
  * @param {array&lt;string>} pluginsPaths An array of fully qualified paths where each plugin was loaded from,
  * used to path.join with the execution path entry point file for each plugin.
- * @return {array&lt;string>} An array of fully qualified path URI's for each of the main entry points for
+ * @returns {array&lt;string>} An array of fully qualified path URI's for each of the main entry points for
  * all of the plugins that should be loaded.
  * @author Seth Hollingsead
  * @date 2022/09/02
@@ -422,7 +422,7 @@ async function loadAllPluginsExecutionPaths(pluginsMetaData, pluginsPaths) {
  * @param {array&lt;object>} pluginsMetaData An array of JSON objects that contain all of the package.json data
  * loaded for each plugin that should be imported, we are passing this along here,
  * to have access to the name of each plugin as it is loaded.
- * @return {object} An object containing objects that contain all of the data and functions from each plugin,
+ * @returns {object} An object containing objects that contain all of the data and functions from each plugin,
  * these will need to be decomposed and merged with the D-data structure as appropriate.
  * @author Seth Hollingsead
  * @date 2022/09/01
@@ -493,7 +493,7 @@ async function loadAllPlugins(pluginsExecutionPaths, pluginsMetaData) {
  * this is the final step if the loading of the plugins and basically ensures that all runtime operations of all of the loaded plugins
  * are fully integrated and activated within the haystacks execution environment.
  * @param {object} allPluginsData All of the plugins data for each plugin all combined together into a single JSON data object.
- * @return {boolean} True or False to indicate if all of the data integration was successful or not.
+ * @returns {boolean} True or False to indicate if all of the data integration was successful or not.
  * @author Seth Hollingsead
  * @date 2022/10/23
  */
@@ -527,7 +527,7 @@ async function integrateAllPluginsData(allPluginsData) {
  * @description Integrates a single plugin data set with the haystacks data structures.
  * @param {string} pluginName The name of the plugin that should have its data integrated with the haystacks data structure.
  * @param {object} pluginData The data for the named plugin that should be integrated wtih the haystacks data structure.
- * @return {boolean} True or False to indicate if all the plugin data was integrated successfully with the haystacks data structures.
+ * @returns {boolean} True or False to indicate if all the plugin data was integrated successfully with the haystacks data structures.
  * @author Seth Hollingsead
  * @date 2022/10/23
  */
@@ -621,7 +621,7 @@ async function integratePluginData(pluginName, pluginData) {
  * @function verifyAllPluginsLoaded
  * @description Examines the pluginsLoaded stack to confirm that none of the plugins which
  * were supposed to have been loaded failed to load.
- * @return {boolean} True or False to indicate if all of the plugins were loaded successfully or not.
+ * @returns {boolean} True or False to indicate if all of the plugins were loaded successfully or not.
  * @author Seth Hollingsead
  * @date 2022/09/06
  */
@@ -651,7 +651,7 @@ async function integratePluginData(pluginName, pluginData) {
  * appropriate data structures in the D-data structure.
  * This is a wrapper function for calling the pluginBroker to get the work done.
  * @param {string} pluginName The name of the plugin that should have all its data unloaded from the D-data structure.
- * @return {boolean} True or False to indicate if the plugin was unloaded successfully or not.
+ * @returns {boolean} True or False to indicate if the plugin was unloaded successfully or not.
  * @author Seth Hollingsead
  * @date 2023/02/01
  */
@@ -670,7 +670,7 @@ async function unloadPlugin(pluginName) {
 /**
  * @function getPluginsRegistryPath
  * @description This is a wrapper function for the pluginBroker.getPluginsRegistryPath.
- * @return {string} The path to the plugins listed in the plugin registry as meta-data.
+ * @returns {string} The path to the plugins listed in the plugin registry as meta-data.
  * @author Seth Hollingsead
  * @date 2023/02/07
  */

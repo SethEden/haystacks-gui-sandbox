@@ -5,6 +5,7 @@
  * @description Contains all system defined business rules for parsing strings,
  * with values of all kinds, and various parsing operations.
  * Excluding functions that use the loggers.
+ * @requires module:data
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
  * @requires {@link https://www.npmjs.com/package/path|path}
  * @author Seth Hollingsead
@@ -13,13 +14,14 @@
  */
 
 // Internal imports
-
+import D from '../../structures/data.js';
 // External imports
 import hayConst from '@haystacks/constants';
 import path from 'path';
 
 const {bas, gen, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.businessRules.rules.stringParsingUtilities.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + baseFileName + bas.cDot;
 
@@ -32,14 +34,14 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDo
  * which should have been set by the system when it was loaded.
  * @param {string} inputData The root path as defined by calling path.resolve(__dirname);
  * @param {string} inputMetaData The name of the application.
- * @return {string} A string with the path up to the application folder,
+ * @returns {string} A string with the path up to the application folder,
  * where ever that is installed on the local system currently executing.
  * @author Seth Hollingsead
  * @date 2021/10/27
  * @NOTE Cannot use the loggers here, because dependency data will have never been loaded.
  */
 async function parseSystemRootPath(inputData, inputMetaData) {
-  // let functionName = parseSystemRootPath.name;
+  // const functionName = parseSystemRootPath.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`inputData is: ${JSON.stringify(inputData)}`);
   // console.log(`inputMetaData is: ${JSON.stringify(inputMetaData)}`);
@@ -83,12 +85,12 @@ async function parseSystemRootPath(inputData, inputMetaData) {
  * @description Does the work of finding the application name or a component of the application name for hyphenated application names.
  * @param {string} inputData The name of the application that should be processed.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The name of the application or a component of the application name.
+ * @returns {string} The name of the application or a component of the application name.
  * @author Seth Hollingsead
  * @date 2023/03/15
  */
 async function parseSystemRootPathApplicationName(inputData, inputMetaData) {
-  // let functionName = parseSystemRootPathApplicationName.name;
+  // const functionName = parseSystemRootPathApplicationName.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`inputData is: ${JSON.stringify(inputData)}`);
   // console.log(`inputMetaData is: ${JSON.stringify(inputMetaData)}`);
@@ -128,13 +130,13 @@ async function parseSystemRootPathApplicationName(inputData, inputMetaData) {
  * If it's an array of strings, or collection object, it will get returned as the same as the input, no change.
  * @param {string} inputData The string that should be converted to some value.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {object|string|boolean|integer} Returns a value of whatever type the string should be converted to as appropriate.
+ * @returns {object|string|boolean|integer} Returns a value of whatever type the string should be converted to as appropriate.
  * @author Seth Hollingsead
  * @date 2021/11/10
  * @NOTE Cannot use the loggers here, because of a circular dependency.
  */
 async function stringToDataType(inputData, inputMetaData) {
-  // let functionName = stringToDataType.name;
+  // const functionName = stringToDataType.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`inputData is: ${JSON.stringify(inputData)}`);
   // console.log(`inputMetaData is: ${JSON.stringify(inputMetaData)}`);
@@ -169,7 +171,7 @@ async function stringToDataType(inputData, inputMetaData) {
  * @description Converts a string to a boolean value.
  * @param {string} inputData A string that contains a truthy or falsy value and should be converted to a boolean value.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} A Boolean value of either True or False according to the business rule conversion.
+ * @returns {boolean} A Boolean value of either True or False according to the business rule conversion.
  * @author Seth Hollingsead
  * @date 2021/11/10
  * @NOTE We cannot pass in a 1 or 0 to this function and expect it to evaluate as a True or False because:
@@ -178,7 +180,7 @@ async function stringToDataType(inputData, inputMetaData) {
  * @NOTE Cannot use the loggers here, because of a circular dependency.
  */
 async function stringToBoolean(inputData, inputMetaData) {
-  // let functionName = stringToBoolean.name;
+  // const functionName = stringToBoolean.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`inputData is: ${JSON.stringify(inputData)}`);
   // console.log(`inputMetaData is: ${JSON.stringify(inputMetaData)}`);
@@ -211,13 +213,13 @@ async function stringToBoolean(inputData, inputMetaData) {
  * @param {string} inputData A string that contains some value that we should figure out
  * what kind of data type that data is, Boolean, Integer, Float, String or something else.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} A string that indicates if the data type should be Boolean, Integer, Float, String or something else.
+ * @returns {string} A string that indicates if the data type should be Boolean, Integer, Float, String or something else.
  * @author Seth Hollingsead
  * @date 2021/11/10
  * @NOTE Cannot use the loggers here, because of a circular dependency.
  */
 async function determineObjectDataType(inputData, inputMetaData) {
-  // let functionName = determineObjectDataType.name;
+  // const functionName = determineObjectDataType.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`inputData is: ${JSON.stringify(inputData)}`);
   // console.log(`inputMetaData is: ${JSON.stringify(inputMetaData)}`);
@@ -250,13 +252,13 @@ async function determineObjectDataType(inputData, inputMetaData) {
  * "false", "False", "FALSE", "f", "F", "n", "N", "no", "No", "NO"
  * @param {string} inputData The string that should be checked if it is a Boolean style value or not, could be some form of "true" or "false".
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} A Boolean value of True or False to indicate if the input string is a Boolean or not.
+ * @returns {boolean} A Boolean value of True or False to indicate if the input string is a Boolean or not.
  * @author Seth Hollingsead
  * @date 2021/11/10
  * @NOTE Cannot use the loggers here, because of a circular dependency.
  */
 async function isBoolean(inputData, inputMetaData) {
-  // let functionName = isBoolean.name;
+  // const functionName = isBoolean.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`inputData is: ${JSON.stringify(inputData)}`);
   // console.log(`inputMetaData is: ${JSON.stringify(inputMetaData)}`);
@@ -286,13 +288,13 @@ async function isBoolean(inputData, inputMetaData) {
  * @description Determines if the input string is an integer type of value -9007299254740992 to 9007299254740992.
  * @param {string} inputData The string that should be checked if it is an integer style value or not.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} A Boolean value of true or false to indicate if the input string is an integer or not.
+ * @returns {boolean} A Boolean value of true or false to indicate if the input string is an integer or not.
  * @author Seth Hollingsead
  * @date 2021/11/10
  * @NOTE Cannot use the loggers here, because of a circular dependency.
  */
 async function isInteger(inputData, inputMetaData) {
-  // let functionName = isInteger.name;
+  // const functionName = isInteger.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`inputData is: ${JSON.stringify(inputData)}`);
   // console.log(`inputMetaData is: ${JSON.stringify(inputMetaData)}`);
@@ -321,13 +323,13 @@ async function isInteger(inputData, inputMetaData) {
  * @description Determines if the input string is a floating point type of value or not.
  * @param {string} inputData The string that should be checked if it is an integer style value or not.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} A Boolean value of true or false to indicate if the input string is a floating point number or not.
+ * @returns {boolean} A Boolean value of true or false to indicate if the input string is a floating point number or not.
  * @author Seth Hollingsead
  * @date 2021/11/10
  * @NOTE Cannot use the loggers here, because of a circular dependency.
  */
 async function isFloat(inputData, inputMetaData) {
-  // let functionName = isFloat.name;
+  // const functionName = isFloat.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`inputData is: ${JSON.stringify(inputData)}`);
   // console.log(`inputMetaData is: ${JSON.stringify(inputMetaData)}`);
@@ -351,14 +353,14 @@ async function isFloat(inputData, inputMetaData) {
  * aka if it's not a Boolean, and not an Integer and not a Float then it must be a string.
  * @param {string} inputData The string that should be checked if it is a string and not a Boolean, Integer or Float.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} A Boolean value of true or false to indicate if the input string is a string and
+ * @returns {boolean} A Boolean value of true or false to indicate if the input string is a string and
  * not a Boolean, Integer or Float; or not (meaning it would be one of those 3 data types, disguised as a string).
  * @author Seth Hollingsead
  * @date 2021/11/10
  * @NOTE Cannot use the loggers here, because of a circular dependency.
  */
 async function isString(inputData, inputMetaData) {
-  // let functionName = isString.name;
+  // const functionName = isString.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`inputData is: ${JSON.stringify(inputData)}`);
   // console.log(`inputMetaData is: ${JSON.stringify(inputMetaData)}`);
@@ -384,13 +386,13 @@ async function isString(inputData, inputMetaData) {
  * with the input Meta Data string.
  * @param {string} inputData The string that might contain the double percentage signs.
  * @param {string} inputMetaData The string that should replace the double percentage signs.
- * @return {string} The modified string with the message inserted.
+ * @returns {string} The modified string with the message inserted.
  * @author Seth Hollingsead
  * @date 2021/12/24
  * @NOTE Cannot use the loggers here, because of a circular dependency.
  */
 async function replaceDoublePercentWithMessage(inputData, inputMetaData) {
-  // let functionName = replaceDoublePercentWithMessage.name;
+  // const functionName = replaceDoublePercentWithMessage.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`inputData is: ${JSON.stringify(inputData)}`);
   // console.log(`inputMetaData is: ${JSON.stringify(inputMetaData)}`);
@@ -412,12 +414,12 @@ async function replaceDoublePercentWithMessage(inputData, inputMetaData) {
  * inputMetaData[0] === character2Find - The character to be searched and replaced from the input string.
  * inputMetaData[1] === character2Replace - The character that should be used to replace
  * the character specified for replacement from the input data.
- * @return {string} The same as the input string but with specified characters converted to the other specified character.
+ * @returns {string} The same as the input string but with specified characters converted to the other specified character.
  * @author Seth Hollingsead
  * @date 2021/12/28
  */
 async function utilitiesReplaceCharacterWithCharacter(inputData, inputMetaData) {
-  // let functionName = utilitiesReplaceCharacterWithCharacter.name;
+  // const functionName = utilitiesReplaceCharacterWithCharacter.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`inputData is: ${JSON.stringify(inputData)}`);
   // console.log(`inputMetaData is: ${JSON.stringify(inputMetaData)}`);

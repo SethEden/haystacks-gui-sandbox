@@ -35,12 +35,12 @@ const namespacePrefix = wrd.cframework + bas.cDot + wrd.ccontrollers + bas.cDot 
  * @description Sets up all of the application and framework configuration data.
  * @param {string} appConfigPath The path of the configuration files for the application layer.
  * @param {string} frameworkConfigPath The path of the configuration files for the framework layer.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2021/10/13
  */
 async function setupConfiguration(appConfigPath, frameworkConfigPath) {
-  let functionName = setupConfiguration.name;
+  const functionName = setupConfiguration.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`appConfigPath is: ${appConfigPath}`);
   // console.log(`frameworkConfigPath is: ${frameworkConfigPath}`);
@@ -75,12 +75,12 @@ async function setupConfiguration(appConfigPath, frameworkConfigPath) {
  * @function setupPluginConfiguration
  * @description Sets up all of the plugin configuration data.
  * @param {string} pluginConfigPath The path of the configuration files for the plugin layer.
- * @return {object} All of the loaded and parsed plugin configuration data.
+ * @returns {object} All of the loaded and parsed plugin configuration data.
  * @author Seth Hollingsead
  * @date 2022/09/13
  */
 async function setupPluginConfiguration(pluginConfigPath) {
-  let functionName = setupPluginConfiguration.name;
+  const functionName = setupPluginConfiguration.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginConfigPath is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginConfigPathIs + pluginConfigPath);
@@ -103,12 +103,12 @@ async function setupPluginConfiguration(pluginConfigPath) {
  * @function parsePluginConfigurationData
  * @description Loads and parses the plugin configuration data.
  * @param {string} allPluginConfigData The plugin configuration data loaded from the path, that needs parsing.
- * @return {object} The JSON object after all the parsing and processing operations are completed.
+ * @returns {object} The JSON object after all the parsing and processing operations are completed.
  * @author Seth Hollingsead
  * @date 2022/09/09
  */
 async function parsePluginConfigurationData(allPluginConfigData) {
-  let functionName = parsePluginConfigurationData.name;
+  const functionName = parsePluginConfigurationData.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.callPluginConfigDataIs + JSON.stringify(allPluginConfigData));
   let highLevelPluginSystemConfigurationContainer = {};
@@ -232,13 +232,13 @@ async function parsePluginConfigurationData(allPluginConfigData) {
  * @description Parses through all of the configuration data that we just loaded from the XML files and
  * adds that data to the correct data-structures in the D.[configuration] data hive.
  * @param {object} allConfigurationData A JSON data structure object that contains all configuration meta-data.
- * @return {boolean} True or False to indicate if the configuration data was applied successfully or not.
+ * @returns {boolean} True or False to indicate if the configuration data was applied successfully or not.
  * @author Seth Hollingsead
  * @date 2021/11/10
  * @NOTE Cannot use the loggers here, because dependency data will have never been loaded.
  */
 async function parseLoadedConfigurationData(allConfigurationData) {
-  // let functionName = parseLoadedConfigurationData.name;
+  // const functionName = parseLoadedConfigurationData.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`allConfigurationData is: ${JSON.stringify(allConfigurationData)}`);
   let highLevelSystemConfigurationContainer = {};

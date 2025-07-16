@@ -85,7 +85,7 @@ xml2js.Parser({
  * @description Loads the specified file and parses it into JSON objects, all strings.
  * @param {string} inputData The path and file name of the XML file that should be loaded and parsed into JSON objects.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {object} A parsed JSON object containing all of the data, meta-data, objects,
+ * @returns {object} A parsed JSON object containing all of the data, meta-data, objects,
  * values and attributes that were stored  in the specified XML file.
  * @author Seth Hollingsead
  * @date 2022/04/28
@@ -124,7 +124,7 @@ async function getXmlData(inputData, inputMetaData) {
  * We want to keep everything as modular as possible to allow for this future proofing flexibility.
  * @param {string} inputData The path and file name of the CSV file that should be loaded and parsed into JSON objects.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {object} The JSON object as it was loaded from the file with minimal to no additional processing.
+ * @returns {object} The JSON object as it was loaded from the file with minimal to no additional processing.
  * @author Seth Hollingsead
  * @date 2022/04/28
  */
@@ -156,7 +156,7 @@ async function getCsvData(inputData, inputMetaData) {
  * @param {string} inputData The path and file name of the JSON file that
  * should be loaded and parsed into JSON objects.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {object} The JSON object as it was loaded from the file with minimal to no additional processing.
+ * @returns {object} The JSON object as it was loaded from the file with minimal to no additional processing.
  * @author Seth Hollingsead
  * @date 2022/04/28
  * @NOTE Cannot use the loggers her, because of a circular dependency.
@@ -183,7 +183,7 @@ async function getJsonData(inputData, inputMetaData) {
  * @description Writes out JSON data to the specified file and path location, it will automatically over-write any existing file.
  * @param {string} inputData The path and file name for the file that should have data written to it.
  * @param {object} inputMetaData The data that should be written to the specified file.
- * @return {boolean} True of False to indicate if the file was written out successfully or not.
+ * @returns {boolean} True of False to indicate if the file was written out successfully or not.
  * @author Seth Hollingsead
  * @date 2022/04/28
  */
@@ -212,7 +212,7 @@ async function writeJsonData(inputData, inputMetaData) {
  * @description Writes out a string of ASCII data to the specified file and path location, it will automatically over-write any existing file.
  * @param {string} inputData The path and file name for the file that should have data written to it.
  * @param {string} inputMetaData The data that should be written to the specified file.
- * @return {boolean} True or False to indicate if the file was written out successfully or not.
+ * @returns {boolean} True or False to indicate if the file was written out successfully or not.
  * @author Seth Hollingsead
  * @date 2025/01/07
  */
@@ -241,7 +241,7 @@ async function writeAsciiData(inputData, inputMetaData) {
  * @description Loads the contents of the ASCII file at the specified path and file name, returns the entire contents of the file.
  * @param {string} inputData The path and file name of the file that should have its contents loaded into memory for reading and parsing.
  * @param {string} inputMetaData Not used for this business rules.
- * @return {object} The contents of the file loaded, False if nothing was loaded.
+ * @returns {object} The contents of the file loaded, False if nothing was loaded.
  * @author Seth Hollingsead
  * @date 2022/11/11
  */
@@ -269,7 +269,7 @@ async function loadAsciiFileFromPath(inputData, inputMetaData) {
  * needs to be reset after the work is done with it. So these are the things that this wrapper function can do.
  * @param {string} inputData The path that needs to be scanned.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {object} An object containing any array of all the files in the folder and all sub-folders.
+ * @returns {object} An object containing any array of all the files in the folder and all sub-folders.
  * @author Seth Hollingsead
  * @date 2022/04/28
  * @NOTE Cannot use the loggers here, because of a circular dependency.
@@ -305,7 +305,7 @@ async function readDirectoryContents(inputData, inputMetaData) {
  * @param {array&lt;boolean,integer>} inputMetaData An array that contains a boolean flag for enable the limit and an integer for what the limit should be:
  * inputMetaData[0] = enableLimit - True or False to indicate if the boolean limit should be enabled or not.
  * inputMetaData[1] = filesLimit - The number of files that should be limited when scanning, if the enableLimit is set to True.
- * @return {array&lt;string>} An array of all the files in the folder up to the limit if specified.
+ * @returns {array&lt;string>} An array of all the files in the folder up to the limit if specified.
  * @author Seth Hollingsead
  * @date 2022/05/02
  */
@@ -343,7 +343,7 @@ async function scanDirectoryContents(inputData, inputMetaData) {
  * @description Scans the specified path and returns the list of folders at that level. Does not scan recursively.
  * @param {string} inputData The path that should be scanned for getting a folder list at that folder level.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {array&lt;string>} The list of folders found at the specified path.
+ * @returns {array&lt;string>} The list of folders found at the specified path.
  * @author Seth Hollingsead
  * @date 2022/06/10
  */
@@ -374,7 +374,7 @@ async function getDirectoryList(inputData, inputMetaData) {
  * @description Recursively parses through all the sub-folders in a given path and loads all of the files contained in each sub-folder into a map.
  * @param {string} inputData The system path that should be scanned recursively for files.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {object} A map of all the files contained in all levels of the specified path in all the folders and sub-folders.
+ * @returns {object} A map of all the files contained in all levels of the specified path in all the folders and sub-folders.
  * @NOTE The function doesn't actually return anything, all the file data is stored in an external data collection.
  * @author wn050
  * @reference https://stackoverflow.com/questions/41462606/get-all-files-recursively-in-directores-nodejs
@@ -457,7 +457,7 @@ async function readDirectorySynchronously(inputData, inputMetaData) {
  * Example:
  * filterArray[0] = exclusion array
  * filterArray[1] = inclusion array
- * @return {boolean} A True or False value to indicate if the full copy process is successful or not.
+ * @returns {boolean} A True or False value to indicate if the full copy process is successful or not.
  * @author Seth Hollingsead
  * @date 2022/05/02
  * @NOTE This is mainly used by the build system to execute a copy process for the
@@ -483,7 +483,7 @@ async function copyAllFilesAndFoldersFromFolderToFolder(inputData, inputMetaData
  * give a name to the file for the current date-time and release version, saving to the destination folder.
  * @param {string} inputData The folder that should be packaged up for the release zip file.
  * @param {string} inputMetaData The folder where the zip file release package should be saved.
- * @return {boolean} A True or False value to indicate if the release package process is successful or not.
+ * @returns {boolean} A True or False value to indicate if the release package process is successful or not.
  * @author Seth Hollingsead
  * @date 2022/05/02
  */
@@ -568,7 +568,7 @@ async function buildReleasePackage(inputData, inputMetaData) {
  * @param {array&lt;string>} inputData All the folders and paths to include in the zip archive.
  * @param {string} inputMetaData The full path and file name to the
  * destination where the zip file should be saved.
- * @return {boolean} A True or False value to indicate if the zip file was created successfully or not.
+ * @returns {boolean} A True or False value to indicate if the zip file was created successfully or not.
  * @author Seth Hollingsead
  * @date 2022/05/02
  */
@@ -603,7 +603,7 @@ async function createZipArchive(inputData, inputMetaData) {
  * or top-level folder path for the application.
  * @param {string} inputData Not used for this business rule.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The real rot path or top-level path for the application.
+ * @returns {string} The real rot path or top-level path for the application.
  * @NOTE
  */
 async function cleanRootPath(inputData, inputMetaData) {
@@ -635,7 +635,7 @@ async function cleanRootPath(inputData, inputMetaData) {
  * Example:
  * inputMetaData[0] = exclusionArray
  * inputMetaData[1] = inclusionArray
- * @return {boolean} A True or False to indicate if the copy operation was successful or not.
+ * @returns {boolean} A True or False to indicate if the copy operation was successful or not.
  * @author Simon Zyx
  * @date 2014/09/25
  * {@link https://stackoverflow.com/questions/13786160/copy-folder-recursively-in-node-js}
@@ -713,7 +713,7 @@ async function copyFileSync(inputData, inputMetaData) {
  * Example:
  * inputMetaData[0] = exclusionArray
  * inputMetaData[1] = inclusionArray
- * @return {boolean} A True or False value to indicate fi the copy operation was a success or not.
+ * @returns {boolean} A True or False value to indicate fi the copy operation was a success or not.
  * @author Simon Zyx
  * @date 2014/09/25
  * {@link https://stackoverflow.com/questions/13786160/copy-folder-recursively-in-node-js}
@@ -808,7 +808,7 @@ async function copyFolderRecursiveSync(inputData, inputMetaData) {
  * @description Deletes a file at the specified file path and file name.
  * @param {string} inputData The fully qualified path and file name for the file that should be deleted.
  * @param {string} inputMetaData The current working directory.
- * @return {boolean} A True or False to indicate if the delete was successful or not.
+ * @returns {boolean} A True or False to indicate if the delete was successful or not.
  * @author Karl-Edward F.P. Jean-Mehu
  * @date 2024/02/02
  */
@@ -877,7 +877,7 @@ async function deleteFile(inputData, inputMetaData) {
  * @description Opens a file and appends a message to the file, then closes the file.
  * @param {string} inputData The fully qualified path and file name for the file that should be opened, appended and saved.
  * @param {string} inputMetaData The message that should be appended to the specified file.
- * @return {boolean} A True or False to indicate if the append happened successfully or not.
+ * @returns {boolean} A True or False to indicate if the append happened successfully or not.
  * @author Seth Hollingsead
  * @date 2022/05/02
  * @NOTE Cannot use the loggers here, because of a circular dependency.

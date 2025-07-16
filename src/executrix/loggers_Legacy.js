@@ -41,7 +41,7 @@ const namespacePrefix =  wrd.cframework + bas.cDot + wrd.cexecutrix + bas.cDot +
  * And dumping data to an output log file is critical to debugging certain tests and workflows.
  * @param {string} classPath The class path for the caller of this function file.function or class.method.
  * @param {string} message The message or data contents that should be dumped to the output.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2021/12/27
  * @NOTE Cannot use the loggers here, because of a circular dependency.
@@ -105,7 +105,7 @@ async function consoleLog(classPath, message) {
  * @param {string} classPath The class path for the caller of this function file.function or class.method.
  * @param {array<object>} tableData An array of objects that should be printed to the console as if it was data.
  * @param {array<string>} columnNames An array of column names that should be used when outputting the table.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/02/22
  */
@@ -124,7 +124,7 @@ async function consoleTableLog(classPath, tableData, columnNames) {
  * @description Displays a constants log validation summary pass-fail results depending on the appropriate settings flag, which is passed in by the caller.
  * @param {string} message The message that should be displayed, if the setting determines that it should be displayed.
  * @param {boolean} passFail True or False to indicate if the pass or fail message should be displayed to the console log.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/03/29
  */
@@ -166,7 +166,7 @@ async function constantsValidationSummaryLog(message, passFail) {
  * @param {string} message The message or data contents that should be dumped to the output (log file and/or console).
  * @param {boolean} loggingToFileAndConsole A TRUE or FALSE value to indicate if the log should be done to the specified log file and the console.
  * If no log file is specified by the caller/settings system then this will be FALSE and only the console will be logged.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2021/10/27
  * @NOTE Cannot use the loggers here, because of a circular dependency.
@@ -217,7 +217,7 @@ async function consoleLogProcess(debugSetting, logFile, classPath, message, logg
  * to determine if the message is a valid message to dump to the console and/or the log file (if specified).
  * @param {string|integer|boolean|object} outputMessage The message that has been parsed/processed.
  * @param {string|integer|boolean|object} originalMessage The original message passed in before processing/parsing.
- * @return {boolean} A TRUE or FALSE to indicate if the output message should be dumped to the log file and/or the console.
+ * @returns {boolean} A TRUE or FALSE to indicate if the output message should be dumped to the log file and/or the console.
  * @author Seth Hollingsead
  * @date 2021/10/27
  * @NOTE Cannot use the loggers here, because of a circular dependency.
@@ -253,7 +253,7 @@ async function validMessage(outputMessage, originalMessage) {
  * @param {string} logFile The file name and path to the log file where the data should be printed.
  * @param {string} classPath The class path for the caller of this function file.function or class.method.
  * @param {string} message The message or data contents that should be dumped to the output.
- * @return {string} Returns the message that should be printed out to the console and logged to the log file.
+ * @returns {string} Returns the message that should be printed out to the console and logged to the log file.
  * @author Seth Hollingsead
  * @date 2021/10/27
  * @NOTE Cannot use the loggers here, because of a circular dependency.
@@ -315,7 +315,7 @@ async function parseClassPath(logFile, classPath, message) {
 /**
  * @function getLogFileNameAndPath
  * @description Determines, using configuration settings what the log file name and path should be.
- * @return {string} The full path and file name for the log file.
+ * @returns {string} The full path and file name for the log file.
  * @author Seth Hollingsead
  * @date 2022/03/11
  */
@@ -344,7 +344,7 @@ async function getLogFileNameAndPath() {
  * @description Prints a message to a log/text file.
  * @param {string} file The file path and file name where message data should be printed.
  * @param {string} message The message that should be logged to the log file if the specified flag is true.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2021/10/27
  * @NOTE Cannot use the loggers here, because of a circular dependency.

@@ -60,13 +60,13 @@ socketsClient().then(r => {
  * @NOTE console log, file log and log transmission are also each individually controlled by global configuration control flags,
  * independently of the schema, or class path configuration settings.
  * @param {string} message The message or data contents that should be dumped to the various output channels.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2024/12/31 - Originally 2021/12/27
  * @NOTE Cannot use the loggers here, because of a circular dependency.
  */
 async function consoleLog(classPathControlFlag, message) {
-  // let functionName = consoleLog.name;
+  // const functionName = consoleLog.name;
   if (Object.keys(D).length !== 0 && message !== undefined) { // Make sure we don't log anything if we haven't yet loaded the configuration data.
     let consoleLogEnabled = await configurator.getConfigurationSetting(wrd.csystem, cfg.cconsoleLogEnabled);
     if (consoleLogEnabled === true) {
@@ -176,7 +176,7 @@ async function consoleLog(classPathControlFlag, message) {
  * to a configuration setting control flag that is either true or false, OR
  * the name of a control flag that should be evaluated as either true or false to indicate if
  * the console log, file log, and log transmission should be performed.
- * @return {object} A JSON object that contains some meta-data and boolean values. 2 booleans to indicate if the control flag is
+ * @returns {object} A JSON object that contains some meta-data and boolean values. 2 booleans to indicate if the control flag is
  * a control flag that was found or not found, and also a second boolean that indicates if the control flag value is
  * true or false to indicate if the console logging should proceed, or not proceed.
  * the JSON object structure returned will be as follows:
@@ -191,7 +191,7 @@ async function consoleLog(classPathControlFlag, message) {
  * @date 2024/12/31
  */
 async function loggerSchemaGateLogic(classPathControlFlag) {
-  // let functionName = loggerSchemaGateLogic.name;
+  // const functionName = loggerSchemaGateLogic.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`classPath is: ${classPathControlFlag}`);
   let loggerSchema = await chiefData.getSchemaData(sys.cloggerSchema);
@@ -228,12 +228,12 @@ async function loggerSchemaGateLogic(classPathControlFlag) {
  * @param {string} classPath The class path for the caller of this function file.function or class.method.
  * @param {array<object>} tableData An array of objects that should be printed to the console as if it was data.
  * @param {array<string>} columnNames An array of column names that should be used when outputting the table.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/02/22
  */
 async function consoleTableLog(classPath, tableData, columnNames) {
-  let functionName = consoleTableLog.name;
+  const functionName = consoleTableLog.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`classPath is: ${classPath}`);
   // console.log(`tableData is: ${JSON.stringify(tableData)}`);
@@ -265,12 +265,12 @@ async function consoleTableLog(classPath, tableData, columnNames) {
  * @description Displays a constants log validation summary pass-fail results depending on the appropriate settings flag, which is passed in by the caller.
  * @param {string} message The message that should be displayed, if the setting determines that it should be displayed.
  * @param {boolean} passFail True or False to indicate if the pass or fail message should be displayed to the console log.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/03/29
  */
 async function constantsValidationSummaryLog(message, passFail) {
-  // let functionName = constantsValidationSummaryLog.name;
+  // const functionName = constantsValidationSummaryLog.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`message is: ${message}`);
   // console.log(`passFail is: ${passFail}`);
@@ -334,7 +334,7 @@ async function constantsValidationSummaryLog(message, passFail) {
  * isSocketLoggingOn: isSocketLoggingOn,
  * isSocketServerBroadcastOn: isSocketServerBroadcastOn,
  * classPath: classPathControlFlag
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2024/12/31
  * @NOTE This function uses Serial Chaining Logic:
@@ -345,7 +345,7 @@ async function constantsValidationSummaryLog(message, passFail) {
  * This ensures only one WebSocket transmission strategy is active at a time, based on configuration/schema.
  */
 async function consoleLogProcess(logOptions) {
-  // let functionName = consoleLogProcess.name;
+  // const functionName = consoleLogProcess.name;
   let {
     logFile,
     isControlFlag,
@@ -423,12 +423,12 @@ async function consoleLogProcess(logOptions) {
 /**
  * @function getLogFileNameAndPath
  * @description Determines, using configuration settings what the log file name and path should be.
- * @return {string} The full path and file name for the log file.
+ * @returns {string} The full path and file name for the log file.
  * @author Seth Hollingsead
  * @date 2022/03/11
  */
 async function getLogFileNameAndPath() {
-  // let functionName = getLogFileNameAndPath.name;
+  // const functionName = getLogFileNameAndPath.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   let returnData = '';
   let logFile = await configurator.getConfigurationSetting(wrd.csystem, cfg.cclientRootPath);
@@ -452,13 +452,13 @@ async function getLogFileNameAndPath() {
  * @description Prints a message to a log/text file.
  * @param {string} file The file path and file name where message data should be printed.
  * @param {string} message The message that should be logged to the log file if the specified flag is true.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2021/10/27
  * @NOTE Cannot use the loggers here, because of a circular dependency.
  */
 async function printMessageToFile(file, message) {
-  // let functionName = printMessageToFile.name;
+  // const functionName = printMessageToFile.name;
   // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
   // console.log(`file is: ${file}`);
   // console.log(`message is: ${message}`);

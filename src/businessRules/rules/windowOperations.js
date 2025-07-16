@@ -28,6 +28,7 @@ import path from 'path';
 
 const {bas, biz, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.businessRules.rules.windowOperations.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + baseFileName + bas.cDot;
 
@@ -37,7 +38,7 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDo
  * finds the path and file name for the windows configuration JSON file.
  * @param {string} inputData Not used for this business rule.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} A True or False value to indicate if the windows configuration path and file name was found and set correctly or not.
+ * @returns {boolean} A True or False value to indicate if the windows configuration path and file name was found and set correctly or not.
  * @author Seth Hollingsead
  * @date 2025/06/26
  */
@@ -97,7 +98,7 @@ async function parseWindowsConfigurationPath(inputData, inputMetaData) {
  * @description Parses out each of the window configuration settings and loads them then stores them in the configuration system.
  * @param {string} inputData The namespace that will be used for the windows configurations.
  * @param {object} inputMetaData The window configuration loaded from the windowConfiguration.json file.
- * @return {boolean} True or False to indicate if the window configuration was loaded successfully or not.
+ * @returns {boolean} True or False to indicate if the window configuration was loaded successfully or not.
  * @author Seth Hollingsead
  * @date 2025/06/25
  */
@@ -147,7 +148,7 @@ async function parseLoadedWindowConfiguration(inputData, inputMetaData) {
  * Window instance objects are helpful for window management and IPC - Inter-Process Communications between windows.
  * @param {string} inputData Not used for this business rule.
  * @param {object} inputMetaData Not used for this business rule.
- * @return {boolean} A True or False value to indicate if the WindowsOps data structure is created successfully or not.
+ * @returns {boolean} A True or False value to indicate if the WindowsOps data structure is created successfully or not.
  * @author Seth Hollingsead
  * @date 2025/06/26
  */
@@ -171,7 +172,7 @@ async function initWindowsOperations(inputData, inputMetaData) {
  * and any additional meta-data such as: windowId, window schema name, etc.
  * @param {string} inputData The window schema name.
  * @param {object} inputMetaData The Electron Window object.
- * @return {boolean} A True or False value to indicate if the window object was successfully added to the D[windowsOps] data array.
+ * @returns {boolean} A True or False value to indicate if the window object was successfully added to the D[windowsOps] data array.
  * @author Seth Hollingsead
  * @date 2025/06/26
  */
@@ -202,7 +203,7 @@ async function addWindowToWindowsOps(inputData, inputMetaData) {
  * @description Removes a window instance from D[windowsOps] when the window is closed.
  * @param {string} inputData The window schema name.
  * @param {object} inputMetaData The Electron application window object (optional, for extra safety).
- * @return {boolean} A True or False to indicate if the window object was successfully removed from the D[windowsOps] data array.
+ * @returns {boolean} A True or False to indicate if the window object was successfully removed from the D[windowsOps] data array.
  * @author Seth Hollingsead
  * @date 2025/06/26
  */
@@ -259,7 +260,7 @@ async function removeWindowFromWindowsOps(inputData, inputMetaData) {
  * @description Returns a JSON that contains all of the windows configurations as they are loaded in the D-data structure.
  * @param {string} inputData Not used for this business rule.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {object} A JSON object that contains all of the configuration objects for all of the windows.
+ * @returns {object} A JSON object that contains all of the configuration objects for all of the windows.
  * @author Seth Hollingsead
  * @date 2025/06/25
  */
@@ -286,7 +287,7 @@ async function getAllWindowConfigurations(inputData, inputMetaData) {
  * Toolbars, Media Library, Spectrum Visualizer, Editor, Timeline, Instrumentation, etc.
  * @param {object} inputData The JSON object that contains all of the meta-data to be used for creating the window.
  * @param {string} inputMetaData The schema name of the window which will define where to get the HTML for the window.
- * @return {boolean} A True or False value to indicate if the window was successfully created or not.
+ * @returns {boolean} A True or False value to indicate if the window was successfully created or not.
  * @author Seth Hollingsead
  * @date 2025/06/25
  */
@@ -362,7 +363,7 @@ async function createWindowRule(inputData, inputMetaData) {
  * Each event updates the in-memory configuration for that window and logs the event.
  * @param {string} inputData The window schema name.
  * @param {object} inputMetaData The Electron browserWindow (application window) instance.
- * @return {boolean} A True or False value to indicate if the events are setup successfully or not.
+ * @returns {boolean} A True or False value to indicate if the events are setup successfully or not.
  * @author Seth Hollingsead
  * @date 2025/06/26
  */
@@ -452,7 +453,7 @@ async function attachWindowEventListeners(inputData, inputMetaData) {
  * @param {string} inputData The name of the window, should either be a framework window name, like:
  * main, console, configuration, or an application window name, like: equalizer, editor, timeline, etc.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The URL path to the HTML file to be loaded.
+ * @returns {string} The URL path to the HTML file to be loaded.
  * @author Seth Hollingsead
  * @date 2025/06/25
  */
@@ -487,7 +488,7 @@ async function resolveWindowSchemaHtmlPath(inputData, inputMetaData) {
  * and saves it to the windowConfiguration.json. Honors a config flag if user-controlled overwrite is required.
  * @param {string} inputData Path to output file (or use default if blank)
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} A True or False value to indicate if the save was successful or not successful.
+ * @returns {boolean} A True or False value to indicate if the save was successful or not successful.
  * @author Seth Hollingsead
  * @date 2025/06/26
  */

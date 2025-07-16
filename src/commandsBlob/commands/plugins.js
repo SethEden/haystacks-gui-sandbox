@@ -22,6 +22,7 @@ import path from 'path';
 
 const {bas, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.commandsBlob.commands.plugins.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.ccommandsBlob + bas.cDot + wrd.ccommands + bas.cDot + baseFileName + bas.cDot;
 
@@ -30,7 +31,7 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.ccommandsBlob + bas.cDot
  * @description This is a command function that calls the warden.listLoadedPlugins function
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,array<string>>} An array with a boolean True or False value to indicate if
+ * @returns {array<boolean,array<string>>} An array with a boolean True or False value to indicate if
  * the application should exit or not, followed by the list of plugins that have been loaded.
  * @author Seth Hollingsead
  * @date 2023/02/06
@@ -58,13 +59,13 @@ async function listAllLoadedPlugins(inputData, inputMetaData) {
  * @description This is a command function that calls the chiefPlugin.getAllPluginsInRegistry function.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,array<string>>} An array with a boolean True or False value to indicate if
+ * @returns {array<boolean,array<string>>} An array with a boolean True or False value to indicate if
  * the application should exit or not exit, followed by the list of plugins in the registry.
  * @author Seth Hollingsead
  * @date 2022/09/16
  */
 async function listAllPluginsInRegistry(inputData, inputMetaData) {
-  let functionName = listAllPluginsInRegistry.name;
+  const functionName = listAllPluginsInRegistry.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -86,13 +87,13 @@ async function listAllPluginsInRegistry(inputData, inputMetaData) {
  * @description This is a command function that calls the chiefPlugin.getAllPluginsInRegistryPath function.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,array<string>>} An array with a boolean True or False value to indicate if
+ * @returns {array<boolean,array<string>>} An array with a boolean True or False value to indicate if
  * the application should exit or not exit, followed by the list of plugins in the plugins registry path.
  * @author Seth Hollingsead
  * @date 2022/09/16
  */
 async function listAllPluginsInRegistryPath(inputData, inputMetaData) {
-  let functionName = listAllPluginsInRegistryPath.name;
+  const functionName = listAllPluginsInRegistryPath.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -112,13 +113,13 @@ async function listAllPluginsInRegistryPath(inputData, inputMetaData) {
  * @description This is a command function that calls the chiefPlugin.countAllPluginsInRegistry function.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,integer>} An array with a boolean True or False value to indicate if
+ * @returns {array<boolean,integer>} An array with a boolean True or False value to indicate if
  * the application should exit or not exit, followed by the number of plugins found in the plugins registry.
  * @author Seth Hollingsead
  * @date 2022/09/16
  */
 async function countPluginsInRegistry(inputData, inputMetaData) {
-  let functionName = countPluginsInRegistry.name;
+  const functionName = countPluginsInRegistry.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -138,13 +139,13 @@ async function countPluginsInRegistry(inputData, inputMetaData) {
  * @description This is a command function that calls the chiefPlugin.countAllPluginsInRegistryPath.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,integer>} An array with a boolean True or False value to indicate if
+ * @returns {array<boolean,integer>} An array with a boolean True or False value to indicate if
  * the application should exit or not exit, followed by the number of plugins found in the plugins registry.
  * @author Seth Hollingsead
  * @date 2022/09/16
  */
 async function countPluginsInRegistryPath(inputData, inputMetaData) {
-  let functionName = countPluginsInRegistryPath.name;
+  const functionName = countPluginsInRegistryPath.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -169,13 +170,13 @@ async function countPluginsInRegistryPath(inputData, inputMetaData) {
  * inputData[1] = pluginName
  * inputData[2] = pluginPath
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,boolean>} An array with a boolean True or False value to indicate if
+ * @returns {array<boolean,boolean>} An array with a boolean True or False value to indicate if
  * the application should exit or not exit, followed by another boolean value to indicate if the plugin was registered successfully or not.
  * @author Seth Hollingsead
  * @date 2022/09/16
  */
 async function registerPlugin(inputData, inputMetaData) {
-  let functionName = registerPlugin.name;
+  const functionName = registerPlugin.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -238,14 +239,14 @@ async function registerPlugin(inputData, inputMetaData) {
  * inputData[0] = 'unregisterPlugin'
  * inputData[1] = pluginName
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,boolean>} An array with a boolean True or False value to indicate if
+ * @returns {array<boolean,boolean>} An array with a boolean True or False value to indicate if
  * the application should exit or not exit, followed by another boolean value to indicate if
  * the plugin was unregistered successfully or not.
  * @author Seth Hollingsead
  * @date 2022/09/16
  */
 async function unregisterPlugin(inputData, inputMetaData) {
-  let functionName = unregisterPlugin.name;
+  const functionName = unregisterPlugin.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -270,14 +271,14 @@ async function unregisterPlugin(inputData, inputMetaData) {
  * inputData[0] = 'unregisterPlugins'
  * inputData[1] = pluginName1,pluginName2,pluginNameX...
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,boolean>} An array with a boolean True or False value to indicate if
+ * @returns {array<boolean,boolean>} An array with a boolean True or False value to indicate if
  * the application should exit or not exit, followed by another boolean value to indicate if
  * the plugins were unregistered successfully or not.
  * @author Seth Hollingsead
  * @date 2023/02/07
  */
 async function unregisterPlugins(inputData, inputMetaData) {
-  let functionName = unregisterPlugins.name;
+  const functionName = unregisterPlugins.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -305,14 +306,14 @@ async function unregisterPlugins(inputData, inputMetaData) {
  * @description This is a command function that calls the chiefPlugin.synchronizePluginRegistryWithPath function.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,boolean>} An array with a boolean True or False value to indicate if
+ * @returns {array<boolean,boolean>} An array with a boolean True or False value to indicate if
  * the application should exit or not exit, followed by another boolean value to indicate if
  * the plugin registry synchronization was successful or not.
  * @author Seth Hollingsead
  * @date 2022/09/16
  */
 async function syncPluginRegistryWithPath(inputData, inputMetaData) {
-  let functionName = syncPluginRegistryWithPath.name;
+  const functionName = syncPluginRegistryWithPath.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -332,13 +333,13 @@ async function syncPluginRegistryWithPath(inputData, inputMetaData) {
  * @description Prints out the plugins path that is listed in the plugin registry meta-data.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string>} An array with a boolean True or False value to indicate if
+ * @returns {array<boolean,string>} An array with a boolean True or False value to indicate if
  * the application should exit or not exit, followed by a string that is the plugins path.
  * @author Seth Hollingsead
  * @date 2023/02/07
  */
 async function listPluginsRegistryPath(inputData, inputMetaData) {
-  let functionName = listPluginsRegistryPath.name;
+  const functionName = listPluginsRegistryPath.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -356,14 +357,14 @@ async function listPluginsRegistryPath(inputData, inputMetaData) {
  * @description This is a command function that calls the chiefPlugin.clearPluginRegistry function.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,boolean>} An array with a boolean True or False value to indicate if
+ * @returns {array<boolean,boolean>} An array with a boolean True or False value to indicate if
  * the application should exit or not exit, followed by another boolean value to indicate if
  * all the plugins were unregistered successfully or not.
  * @author Seth Hollingsead
  * @date 2022/09/16
  */
 async function unregisterAllPlugins(inputData, inputMetaData) {
-  let functionName = unregisterAllPlugins.name;
+  const functionName = unregisterAllPlugins.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -383,14 +384,14 @@ async function unregisterAllPlugins(inputData, inputMetaData) {
  * @description This is a command function that calls the chiefPlugin.savePluginRegistryDisk function.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,boolean>} An array with a boolean True or False value to indicate if
+ * @returns {array<boolean,boolean>} An array with a boolean True or False value to indicate if
  * the application should exit or not exit, followed by another boolean value to indicate if
  * the plugin registry was saved successfully or not.
  * @author Seth Hollingsead
  * @date 2022/09/16
  */
 async function savePluginRegistryToDisk(inputData, inputMetaData) {
-  let functionName = savePluginRegistryToDisk.name;
+  const functionName = savePluginRegistryToDisk.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -415,14 +416,14 @@ async function savePluginRegistryToDisk(inputData, inputMetaData) {
  * inputData[1] = pluginPath - The fully qualified path where to load the plugin from, or
  * the name of the plugin folder in the plugins registry path where the plugin can be found.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,boolean>} An array with a boolean True or False value to indicate if
+ * @returns {array<boolean,boolean>} An array with a boolean True or False value to indicate if
  * the application should exit or not exit, followed by another boolean value to indicate if
  * the plugin was loaded successfully or not.
  * @author Seth Hollingsead
  * @date 2022/09/16
  */
 async function loadPlugin(inputData, inputMetaData) {
-  let functionName = loadPlugin.name;
+  const functionName = loadPlugin.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -447,14 +448,14 @@ async function loadPlugin(inputData, inputMetaData) {
  * inputData[0] = 'loadPlugins'
  * inputData[1] = Array of fully qualified plugin paths were to load all the plugins from.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,boolean>} An array with a boolean True or False value to indicate if
+ * @returns {array<boolean,boolean>} An array with a boolean True or False value to indicate if
  * the application should exit or not exit, followed by another boolean value to indicate if
  * all the plugins were loaded successfully or not.
  * @author Seth Hollingsead
  * @date 2022/09/16
  */
 async function loadPlugins(inputData, inputMetaData) {
-  let functionName = loadPlugins.name;
+  const functionName = loadPlugins.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -482,14 +483,14 @@ async function loadPlugins(inputData, inputMetaData) {
  * @description This is a command function that calls the warden.loadPluginsFromRegistry function.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,boolean>} An array with a boolean True or False value to indicate if
+ * @returns {array<boolean,boolean>} An array with a boolean True or False value to indicate if
  * the application should exit or not exit, followed by another boolean value to indicate if
  * all the plugins from the plugin registry were loaded successfully or not.
  * @author Seth Hollingsead
  * @date 2022/09/16
  */
 async function loadPluginsFromRegistry(inputData, inputMetaData) {
-  let functionName = loadPluginsFromRegistry.name;
+  const functionName = loadPluginsFromRegistry.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -513,14 +514,14 @@ async function loadPluginsFromRegistry(inputData, inputMetaData) {
  * inputData[0] = 'unloadPlugin'
  * inputData[1] = pluginName - The name of the plugin that should be unloaded.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,boolean>} An array with a boolean True or False value to indicate if
+ * @returns {array<boolean,boolean>} An array with a boolean True or False value to indicate if
  * the application should exit or not exit, followed by another boolean value to indicate if
  * the specified plugin was unloaded successfully or not.
  * @author Seth Hollingsead
  * @date 2022/09/16
  */
 async function unloadPlugin(inputData, inputMetaData) {
-  let functionName = unloadPlugin.name;
+  const functionName = unloadPlugin.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -545,14 +546,14 @@ async function unloadPlugin(inputData, inputMetaData) {
  * inputData[0] = 'unloadPlugins'
  * inputData[1] = Array of plugin names that should be unloaded.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,boolean>} An array with a boolean True or False value to indicate if
+ * @returns {array<boolean,boolean>} An array with a boolean True or False value to indicate if
  * the application should exit or not exit, followed by another boolean value to indicate if
  * the specified plugin was unloaded successfully or not.
  * @author Seth Hollingsead
  * @date 2022/09/16
  */
 async function unloadPlugins(inputData, inputMetaData) {
-  let functionName = unloadPlugins.name;
+  const functionName = unloadPlugins.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -580,14 +581,14 @@ async function unloadPlugins(inputData, inputMetaData) {
  * @description This is a command function that calls the warden.unloadAllPlugins function.
  * @param {string} inputData Not used for this command.
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,boolean>} An array with a boolean True or False value to indicate if
+ * @returns {array<boolean,boolean>} An array with a boolean True or False value to indicate if
  * the application should exit or not exit, followed by another boolean value to indicate if
  * all the plugins were unloaded successfully or not.
  * @author Seth Hollingsead
  * @date 2022/09/16
  */
 async function unloadAllPlugins(inputData, inputMetaData) {
-  let functionName = unloadAllPlugins.name;
+  const functionName = unloadAllPlugins.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);

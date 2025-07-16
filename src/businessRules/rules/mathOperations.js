@@ -4,6 +4,7 @@
  * @description Contains all of the business rule functions for doing math operations and conversions.
  * @requires module:ruleParsing
  * @requires module:loggers
+ * @requires module:data
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
  * @requires {@link https://www.npmjs.com/package/path|path}
  * @author Seth Hollingsead
@@ -14,12 +15,14 @@
 // Internal imports
 import ruleParsing from './ruleParsing.js';
 import loggers from '../../executrix/loggers.js';
+import D from '../../structures/data.js';
 // External imports
 import hayConst from '@haystacks/constants';
 import path from 'path';
 
 const {bas, biz, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.businessRules.rules.mathOperations.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + baseFileName + bas.cDot;
 
@@ -28,13 +31,13 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDo
  * @description Converts a hexadecimal color value to an RGB color value.
  * @param {string} inputData The hexadecimal value that should be converted to an RGB value.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {array<integer,integer,integer>} The RGB value.
+ * @returns {array<integer,integer,integer>} The RGB value.
  * @author Seth Hollingsead
  * @date 2022/01/27
  * @reference {@link: https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb}
  */
 async function hex2rgbConversion(inputData, inputMetaData) {
-  let functionName = hex2rgbConversion.name;
+  const functionName = hex2rgbConversion.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + JSON.stringify(inputMetaData));
@@ -77,13 +80,13 @@ async function hex2rgbConversion(inputData, inputMetaData) {
  * but this business rule processing the same from a string input.
  * @param {string} inputData The value that should be evaluated to determine if it is odd or not odd.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} True or False to indicate if the value passed in is an odd value or not an odd value.
+ * @returns {boolean} True or False to indicate if the value passed in is an odd value or not an odd value.
  * @author Seth Hollingsead
  * @date 2022/01/25
  * @reference {@link https://stackoverflow.com/questions/5016313/how-to-determine-if-a-number-is-odd-in-javascript}
  */
 async function isOdd(inputData, inputMetaData) {
-  let functionName = isOdd.name;
+  const functionName = isOdd.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -109,7 +112,7 @@ async function isOdd(inputData, inputMetaData) {
  * but this business rule processing the same from a string input.
  * @param {string} inputData The value that should be evaluated to determine if it is even or not even.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} True or False to indicate if the value passed in is an even value or not an even value.
+ * @returns {boolean} True or False to indicate if the value passed in is an even value or not an even value.
  * @author Seth Hollingsead
  * @date 2022/01/25
  * @reference {@link https://stackoverflow.com/questions/5016313/how-to-determine-if-a-number-is-odd-in-javascript}
@@ -117,7 +120,7 @@ async function isOdd(inputData, inputMetaData) {
  * but I provided it here anyways for completeness.
  */
 async function isEven(inputData, inputMetaData) {
-  let functionName = isEven.name;
+  const functionName = isEven.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);

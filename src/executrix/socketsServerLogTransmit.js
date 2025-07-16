@@ -36,7 +36,7 @@ let broadcastFunction = null;
  * @function initLogTransmission
  * @description Initializes log transmission by dependency-injecting the server's broadcast function.
  * @param {function} inputData The function to use for broadcasting log messages (e.g., socketsServer.broadcastShellOutput).
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2025/07/07
  * @NOTE CANNOT USE haystacks.consoleLog here, because of a circular dependency with loggers.
@@ -54,7 +54,7 @@ function initLogTransmission(inputData) {
  * @description Forwards a log message to all connected socket clients.
  * This function should be called by the logger if "server" log transmission mode is active.
  * @param {string|object} message The log message to send (string, or JSON-serializable).
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2025/07/07
  * @NOTE CANNOT USE haystacks.consoleLog here, because of a circular dependency with loggers.

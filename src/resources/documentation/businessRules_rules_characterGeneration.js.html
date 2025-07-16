@@ -57,7 +57,7 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDo
  * a random special character from the input list of special characters.
  * @param {string} inputData The list of allowable special characters that should be used to randomly select from.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} Randomly returns a random mixed case letter of the english alphabet,
+ * @returns {string} Randomly returns a random mixed case letter of the english alphabet,
  * or a random special character from the list of allowable special characters.
  * @author Seth Hollingsead
  * @date 2022/01/25
@@ -82,7 +82,7 @@ async function randomlyGenerateMixedCaseLetterOrSpecialCharacter(inputData, inpu
  * a random special character from the input list of special characters.
  * @param {string} inputData The list of allowable special characters that should be used to randomly select from.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} Randomly returns a random upper case letter of the english alphabet,
+ * @returns {string} Randomly returns a random upper case letter of the english alphabet,
  * or a random special character from the ist of allowable special characters.
  * @author Seth Hollingsead
  * @date 2022/01/25
@@ -107,7 +107,7 @@ async function randomlyGenerateUpperCaseLetterOrSpecialCharacter(inputData, inpu
  * a random special character from the input list of special characters.
  * @param {string} inputData The list of allowable special characters that should be used to randomly select from.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} Randomly returns a random lower case letter of the english alphabet,
+ * @returns {string} Randomly returns a random lower case letter of the english alphabet,
  * or a random special character from the list of allowable special characters.
  * @author Seth Hollingsead
  * @date 2022/01/25
@@ -132,7 +132,7 @@ async function randomlyGenerateLowerCaseLetterOrSpecialCharacter(inputData, inpu
  * a random special character from the input ist of special characters.
  * @param {string} inputData The list of allowable special characters that should be used to randomly select from.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} Randomly returns a random number, a random mixed case letter of the english alphabet,
+ * @returns {string} Randomly returns a random number, a random mixed case letter of the english alphabet,
  * or a random special character from the ist of allowable special characters.
  * @author Seth Hollingsead
  * @date 2022/01/25
@@ -157,7 +157,7 @@ async function randomlyGenerateEitherMixedCaseLetterOrNumberOrSpecialCharacter(i
  * a random special character from the input ist of special characters.
  * @param {string} inputData The list of allowable special characters that should be used to randomly select from.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} Randomly returns a random number, a random upper case letter of the english alphabet,
+ * @returns {string} Randomly returns a random number, a random upper case letter of the english alphabet,
  * or a random special character from the list of allowable special characters.
  * @author Seth Hollingsead
  * @date 2022/01/25
@@ -182,7 +182,7 @@ async function randomlyGenerateEitherUpperCaseLetterOrNumberOrSpecialCharacter(i
  * a random special character from the input list of special characters.
  * @param {string} inputData The list of allowable special characters that should be used to randomly select from.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} Randomly returns a random number, a random lower case letter of the english alphabet,
+ * @returns {string} Randomly returns a random number, a random lower case letter of the english alphabet,
  * or a random special character from the list of allowable special characters.
  * @author Seth Hollingsead
  * @date 2022/01/25
@@ -206,7 +206,7 @@ async function randomlyGenerateEitherLowerCaseLetterOrNumberOrSpecialCharacter(i
  * @description Randomly generates an alpha-numeric code from a-z or A-Z or 0-9.
  * @param {string} inputData Not used for this business rule.
  * @param  {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} Either a random letter (could be upper case or lower case, which is also random) or a random number.
+ * @returns {string} Either a random letter (could be upper case or lower case, which is also random) or a random number.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
@@ -229,7 +229,7 @@ async function randomlyGenerateMixedCaseAlphaNumericCharacter(inputData, inputMe
  * @description Randomly generates an alpha-numeric code from A-Z or 0-9.
  * @param {string} inputData Not used for this business rule.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} Either a random upper case letter or a random number.
+ * @returns {string} Either a random upper case letter or a random number.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
@@ -252,7 +252,7 @@ async function randomlyGenerateUpperCaseAlphaNumericCharacter(inputData, inputMe
  * @description Randomly generates an alpha-numeric code from a-z or 0-9.
  * @param {string} inputData Not used for this business rule.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} Either a random lower case letter or a random number.
+ * @returns {string} Either a random lower case letter or a random number.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
@@ -275,7 +275,7 @@ async function randomlyGenerateLowerCaseAlphaNumericCharacter(inputData, inputMe
  * @description Randomly generates a string character in the range of 0-9.
  * @param {string} inputData Not used for this business rule.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} A single randomly generated string character in the range of 0-9.
+ * @returns {string} A single randomly generated string character in the range of 0-9.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
@@ -296,7 +296,7 @@ async function randomlyGenerateNumericCharacter(inputData, inputMetaData) {
  * @description Randomly select a special character from a list of allowable special characters.
  * @param {string} inputData The list of allowable special characters that should be used to randomly select from.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} A character randomly selected from the input list of allowable characters.
+ * @returns {string} A character randomly selected from the input list of allowable characters.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
@@ -327,7 +327,7 @@ async function randomlyGenerateSpecialCharacter(inputData, inputMetaData) {
  * inputMetaData[1] = includeMaximum - A True or False value that indicates if the maximum should be included or
  * excluded from the range of allowable range of values to return from.
  * inputMetaData[2] = addMinimum - A True or False value that indicates if the minimum should be added to the value or not.
- * @return {string} The new random number that was generated according to the input parameters.
+ * @returns {string} The new random number that was generated according to the input parameters.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
@@ -366,7 +366,7 @@ async function randomlyGenerateNumberInRange(inputData, inputMetaData) {
  * @description Randomly generates a boolean value {@code TRUE} or {@code FALSE}.
  * @param {string} inputData Not used for this business rule.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} A boolean value that is
+ * @returns {boolean} A boolean value that is
  * either {@code TRUE} or {@code FALSE} as a random 50-50 chance of one or the other.
  * @author Seth Hollingsead
  * @date 2022/01/25
@@ -389,7 +389,7 @@ async function randomlyGenerateBooleanValue(inputData, inputMetaData) {
  * lower case random english alphabetic letter from a-z or A-Z.
  * @param {string} inputData Not used for this business rule.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} A randomly generated english alphabetic letter from a-z or A-Z.
+ * @returns {string} A randomly generated english alphabetic letter from a-z or A-Z.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
@@ -412,7 +412,7 @@ async function randomlyGenerateMixedCaseAlphabeticCharacter(inputData, inputMeta
  * @description Randomly generates a lower case english alphabetic letter from a-z.
  * @param {string} inputData Not used for this business rule.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} A randomly generated english alphabetic letter from a-z.
+ * @returns {string} A randomly generated english alphabetic letter from a-z.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
@@ -435,7 +435,7 @@ async function randomlyGenerateLowerCaseLetter(inputData, inputMetaData) {
  * @description Randomly generates an upper case alphabetic letter from A-Z.
  * @param {string} inputData Not used for this business rule.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} A randomly generated alphabetic letter from A-Z.
+ * @returns {string} A randomly generated alphabetic letter from A-Z.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
@@ -459,7 +459,7 @@ async function randomlyGenerateUpperCaseLetter(inputData, inputMetaData) {
  * @param {string} inputData A string that contains a number in the range of 1-26 that
  * should be converted to an upper case letter of the english alphabet.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} A letter of the alphabet where 1-26 is converted in a letter A-Z.
+ * @returns {string} A letter of the alphabet where 1-26 is converted in a letter A-Z.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */
@@ -489,7 +489,7 @@ async function convertNumberToUpperCaseLetter(inputData, inputMetaData) {
  * @param {string} inputData A string that contains a number in the range of 1-26 that
  * should be converted in a lower case letter of the english alphabet.
  * @param {string} inputMetaData The name of the language who's alphabet should be used for international characters.
- * @return {string} A letter of the alphabet where 1-26 is converted to a letter a-z.
+ * @returns {string} A letter of the alphabet where 1-26 is converted to a letter a-z.
  * @author Seth Hollingsead
  * @date 2022/01/25
  */

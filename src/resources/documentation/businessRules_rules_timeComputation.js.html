@@ -59,7 +59,7 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDo
  * @param {string} inputData The formatting string, that tells moment in what format to
  * return the value for the day, month, year, hour, minute, second and millisecond.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} A time stamp string that has been formatted according to the input format.
+ * @returns {string} A time stamp string that has been formatted according to the input format.
  * @author Seth Hollingsead
  * @date 2022/05/04 - May the Forth be with you!! ;-)
  * @NOTE Cannot use the loggers here, because of a circular dependency.
@@ -82,7 +82,7 @@ async function getNowMoment(inputData, inputMetaData) {
  * @description Computes the time difference between two different date-time stamps in milliseconds.
  * @param {string} inputData The start of the time period that should be computed.
  * @param {string} inputMetaData The end of the time period that should be computed.
- * @return {integer} The difference between the beginning time and ending time in milliseconds.
+ * @returns {integer} The difference between the beginning time and ending time in milliseconds.
  * @author Seth Hollingsead
  * @date 2022/05/04 - May the Forth be with you!! ;-)
  */
@@ -105,7 +105,7 @@ async function computeDeltaTime(inputData, inputMetaData) {
  * @description Converts a time interval into a different kind of format.
  * @param {integer} inputData A time interval measured in milliseconds.
  * @param {string} inputMetaData The formatting template that should be used to format the time interval.
- * @return {string} A time interval formatted according to the input format template string.
+ * @returns {string} A time interval formatted according to the input format template string.
  * @author Seth Hollingsead
  * @date 2022/05/04 - May the Forth be with you!! ;-)
  */
@@ -133,7 +133,7 @@ async function reformatDeltaTime(inputData, inputMetaData) {
  * @description Causes the JavaScript code to wait for a period of time defined by the input.
  * @param {integer} inputData The number of milliseconds that the system should sleep for.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {void}
+ * @returns {void}
  * @author Seth Hollingsead
  * @date 2022/05/04 - May the Forth be with you!! ;-)
  * @reference {@link https://www.sitepoint.com/delay-sleep-pause-wait/}

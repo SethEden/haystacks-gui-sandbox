@@ -31,7 +31,7 @@ const namespacePrefix = wrd.capplication + bas.cDot + apc.cApplicationName + bas
  * dynamic data storage technique for client commands is working.
  * @param {string} inputData The string input data.
  * @param {string} inputMetaData The string of input meta-data.
- * @return {array<boolean,string|integer|boolean|object|array,object>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array,object>} An array with a boolean True or False value to
  * indicate if the application should exist or not exit, followed by the command output and finally the promise for the command execution.
  * @author Seth Hollingsead
  * @date 2025/06/23
@@ -68,7 +68,7 @@ async function customEchoCommand(inputData, inputMetaData) {
  * inputData[5] = Boolean True or False to indicate if typing individual characters should be enabled.
  * inputData[6] = Speed-Typing Performance Index, time-out in milliseconds between typing each character.
  * @param {string} inputMetaData Not used for this command.
- * @return {boolean} True to indicate that the command should not exit when it is completed, however,
+ * @returns {boolean} True to indicate that the command should not exit when it is completed, however,
  * this command puts the application into an infinite loop, so it will technically never return.
  * @author Seth Hollingsead
  * @date 2025/06/23
@@ -208,7 +208,7 @@ async function bossPanic(inputData, inputMetaData) {
  * @description Client Command One
  * @param {string} inputData Not used for this command. 
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string|integer|boolean|object|array,object>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array,object>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output and finally the promise for the command execution.
  * @author Seth Hollingsead
  * @date 2025/06/23
@@ -233,7 +233,7 @@ async function clientCommand01(inputData, inputMetaData) {
  * @description Client Command Two
  * @param {string} inputData Not used for this command. 
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string|integer|boolean|object|array,object>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array,object>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output and finally the promise for the command execution.
  * @author Seth Hollingsead
  * @date 2025/06/23
@@ -258,7 +258,7 @@ async function clientCommand02(inputData, inputMetaData) {
  * @description Client Command Three
  * @param {string} inputData Not used for this command. 
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string|integer|boolean|object|array,object>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array,object>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output and finally the promise for the command execution.
  * @author Seth Hollingsead
  * @date 2025/06/23
@@ -283,7 +283,7 @@ async function clientCommand03(inputData, inputMetaData) {
  * @description Client Command Four
  * @param {string} inputData Not used for this command. 
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string|integer|boolean|object|array,object>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array,object>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output and finally the promise for the command execution.
  * @author Seth Hollingsead
  * @date 2025/06/23
@@ -308,7 +308,7 @@ async function clientCommand04(inputData, inputMetaData) {
  * @description Client Command Five
  * @param {string} inputData Not used for this command. 
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string|integer|boolean|object|array,object>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array,object>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output and finally the promise for the command execution.
  * @author Seth Hollingsead
  * @date 2025/06/23
@@ -333,7 +333,7 @@ async function clientCommand05(inputData, inputMetaData) {
  * @description Client Command Six
  * @param {string} inputData Not used for this command. 
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string|integer|boolean|object|array,object>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array,object>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output and finally the promise for the command execution.
  * @author Seth Hollingsead
  * @date 2025/06/23
@@ -358,7 +358,7 @@ async function clientCommand06(inputData, inputMetaData) {
  * @description Client Command Seven
  * @param {string} inputData Not used for this command. 
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string|integer|boolean|object|array,object>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array,object>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output and finally the promise for the command execution.
  * @author Seth Hollingsead
  * @date 2025/06/23
@@ -383,7 +383,7 @@ async function clientCommand07(inputData, inputMetaData) {
  * @description Client Command Eight
  * @param {string} inputData Not used for this command. 
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string|integer|boolean|object|array,object>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array,object>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output and finally the promise for the command execution.
  * @author Seth Hollingsead
  * @date 2025/06/23
@@ -408,7 +408,7 @@ async function clientCommand08(inputData, inputMetaData) {
  * @description Client Command Nine
  * @param {string} inputData Not used for this command. 
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string|integer|boolean|object|array,object>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array,object>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output and finally the promise for the command execution.
  * @author Seth Hollingsead
  * @date 2025/06/23
@@ -433,7 +433,7 @@ async function clientCommand09(inputData, inputMetaData) {
  * @description Client Command Ten
  * @param {string} inputData Not used for this command. 
  * @param {string} inputMetaData Not used for this command.
- * @return {array<boolean,string|integer|boolean|object|array,object>} An array with a boolean True or False value to
+ * @returns {array<boolean,string|integer|boolean|object|array,object>} An array with a boolean True or False value to
  * indicate if the application should exit or not exit, followed by the command output and finally the promise for the command execution.
  * @author Seth Hollingsead
  * @date 2025/06/23

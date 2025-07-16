@@ -31,7 +31,7 @@ const namespacePrefix = wrd.capplication + bas.cDot + apc.cApplicationName + bas
  * @description A quick business rule to validate that the new dynamic data storage technique for business rules.
  * @param {string} inputData The string input data.
  * @param {string} inputMetaData The string of input meta-data.
- * @return {string} An echo of the inputData with some hard-coded modifier.
+ * @returns {string} An echo of the inputData with some hard-coded modifier.
  * @author Seth Hollingsead
  * @date 2025/06/23
  */
@@ -54,7 +54,7 @@ async function customEcho(inputData, inputMetaData) {
  * @description Parses through an array of integers and determine which value is the most popular.
  * @param {array<integer>} inputData The array that should be evaluated for most popular value.
  * @param {integer} inputMetaData The length of the array that was passed in.
- * @return {integer} The most popular value in the array.
+ * @returns {integer} The most popular value in the array.
  * @author Seth Hollingsead
  * @date 2025/06/23
  * @NOTE: Test command: businessRule mostPopularNumber 1 2 2 3 4 5 2
@@ -184,7 +184,7 @@ async function mostPopularNumber(inputData, inputMetaData) {
  * @description Determines if the input string is almost a Palindrome string or not.
  * @param {string} inputData The string that should be evaluated to determine if it is a Palindrome string or not.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} True or False to indicate if the input string is a Palindrome or almost palindrome string or not.
+ * @returns {boolean} True or False to indicate if the input string is a Palindrome or almost palindrome string or not.
  * @author Seth Hollingsead
  * @date 2025/06/23
  * @NOTE Test command: businessRule isAlmostPalindrome annae
@@ -275,7 +275,7 @@ loop2:
  * @description Calculates the average of 3 coordinates in a 2-Dimensional plane.
  * @param {array<array<integer|float|double>>} inputData array of coordinates for the 3 points to compute average for.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {array<integer|float|double>} Returns the XY coordinate of the average point between all points.
+ * @returns {array<integer|float|double>} Returns the XY coordinate of the average point between all points.
  * @author Seth Hollingsead
  * @date 2025/06/23
  * @NOTE Test command: businessRule threePointAverage [1,1] [2,2] [3,3]
@@ -345,7 +345,7 @@ async function threePointAverage(inputData, inputMetaData) {
  * @description Receives an array and a value, counts the number of occurrences of that value in the array.
  * @param {integer|string|object} inputData The instance that should be counted in the array.
  * @param {array<integer|string|object>} inputMetaData The array which should have it's values counted.
- * @return {integer} The count of the objects/values that was found to match out of the array.
+ * @returns {integer} The count of the objects/values that was found to match out of the array.
  * @author Seth Hollingsead
  * @date 2025/06/23
  */

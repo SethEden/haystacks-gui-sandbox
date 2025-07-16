@@ -29,12 +29,12 @@ const namespacePrefix = wrd.cframework + bas.cDot + wrd.cbrokers + bas.cDot + ba
  * @description Merges plugin defined workflows with the system defined workflows.
  * @param {string} pluginName The name of the current plugin these workflows belong to.
  * @param {object} pluginWorkflows A JSON object that contains the plugin workflows that should be merged with the system workflows.
- * @return {boolean} True or False to indicate if the merge was successful or not.
+ * @returns {boolean} True or False to indicate if the merge was successful or not.
  * @author Seth Hollingsead
  * @date 2022/10/25
  */
 async function addPluginWorkflows(pluginName, pluginWorkflows) {
-  let functionName = addPluginWorkflows.name;
+  const functionName = addPluginWorkflows.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginNameIs + pluginName);
@@ -63,13 +63,13 @@ async function addPluginWorkflows(pluginName, pluginWorkflows) {
  * @description Given the name of the workflow that is being requested,
  * get that workflow from the D-data structure workflows data hive.
  * @param {string} workflowName The name of the workflow we should get workflow data for.
- * @return {string|boolean} The workflow value, which ideally would be a list of commands and command parameters.
+ * @returns {string|boolean} The workflow value, which ideally would be a list of commands and command parameters.
  * False if no workflow by the specified name was found.
  * @author Seth Hollingsead
  * @date 2022/02/04
  */
 async function getWorkflow(workflowName) {
-  let functionName = getWorkflow.name;
+  const functionName = getWorkflow.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // workflowName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cworkflowNameIs + workflowName);
@@ -87,12 +87,12 @@ async function getWorkflow(workflowName) {
  * @function doesWorkflowExist
  * @description Uses the recursive searchWorkflow function to determine if the workflow can be found in the workflow data structure.
  * @param {string} workflowName The name of the workflow that should be searched for.
- * @return {boolean} True or False to indicate if the workflow already exists or not.
+ * @returns {boolean} True or False to indicate if the workflow already exists or not.
  * @author Seth Hollingsead
  * @date 2022/05/24
  */
 async function doesWorkflowExist(workflowName) {
-  let functionName = doesWorkflowExist.name;
+  const functionName = doesWorkflowExist.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // workflowName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cworkflowNameIs + workflowName);
@@ -112,10 +112,10 @@ async function doesWorkflowExist(workflowName) {
  * @description Searches through a data structure to determine if the specified workflow exists within it.
  * @param {object} workflowData The workflow data structure that should be searched for the specified workflow.
  * @param {string} workflowName The name of the workflow that should be searched for in the workflow data structure.
- * @return {boolean} True or False to indicate if the workflow was found or not.
+ * @returns {boolean} True or False to indicate if the workflow was found or not.
  */
 async function doesWorkflowExistInWorkflowData(workflowData, workflowName) {
-  let functionName = doesWorkflowExist.name;
+  const functionName = doesWorkflowExist.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // workflowName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cworkflowNameIs + workflowName);
@@ -136,12 +136,12 @@ async function doesWorkflowExistInWorkflowData(workflowData, workflowName) {
  * data structures and returns the one workflow data object that matches the input name.
  * @param {object} allWorkflows The workflow data that should be searched recursively for the specified workflow.
  * @param {string} workflowName The name of the workflow that should be found.
- * @return {object} The workflow object that corresponds to the input workflow name.
+ * @returns {object} The workflow object that corresponds to the input workflow name.
  * @author Seth Hollingsead
  * @date 2022/05/24
  */
 async function searchWorkflow(workflowData, workflowName) {
-  let functionName = searchWorkflow.name;
+  const functionName = searchWorkflow.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // workflowData is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cworkflowDataIs + JSON.stringify(workflowData));
@@ -178,13 +178,13 @@ async function searchWorkflow(workflowData, workflowName) {
  * @description Recursively gets all of the workflows from all levels and flattens them into a single array for printing out to the workflow help command.
  * @param {object} workflowDataStructure The workflow data structure that should be recursively flattened into a single array for output.
  * If the input is undefined then the main CommandWorkflows data structure will be used at the root of the workflows data hive.
- * @return {array<string>|boolean} An array of all the workflows currently loaded into the D-data structure under the CommandWorkflows data hive or
+ * @returns {array<string>|boolean} An array of all the workflows currently loaded into the D-data structure under the CommandWorkflows data hive or
  * a boolean True or False to indicate that a leaf-node has been found by the recursive caller.
  * @author Seth Hollingsead
  * @date 2022/05/25
  */
 async function getAllWorkflows(workflowDataStructure) {
-  let functionName = getAllWorkflows.name;
+  const functionName = getAllWorkflows.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // workflowDataStructure is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cworkflowDataStructureIs + JSON.stringify(workflowDataStructure));
@@ -241,12 +241,12 @@ async function getAllWorkflows(workflowDataStructure) {
  * @param {object} workflowDataStructure The workflow data structure that should be recursively searched for the namespace specified.
  * If the input is undefined then the main CommandWorkflows data structure will be used at the root of the workflows data hive.
  * @param {string} namespaceToFind The namespace to look for in the workflow metaData data structure.
- * @return {object|boolean} The namespace object if it is found, or False if the namespace object was not found.
+ * @returns {object|boolean} The namespace object if it is found, or False if the namespace object was not found.
  * @author Seth Hollingsead
  * @date 2022/05/25
  */
 async function getWorkflowNamespaceDataObject(workflowDataStructure, namespaceToFind) {
-  let functionName = getWorkflowNamespaceDataObject.name;
+  const functionName = getWorkflowNamespaceDataObject.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // workflowDataStructure is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cworkflowDataStructureIs + JSON.stringify(workflowDataStructure));
@@ -286,12 +286,12 @@ async function getWorkflowNamespaceDataObject(workflowDataStructure, namespaceTo
  * @description Parses through the workflows and finds the workflows associated with the named plugin.
  * Then removes that data shredding it from existence at the edge of a black hole.
  * @param {string} pluginName The name of the plugin that should have its workflows removed from the D-data structure.
- * @return {boolean} True or False to indicate if the removal of the data was completed successfully or not.
+ * @returns {boolean} True or False to indicate if the removal of the data was completed successfully or not.
  * @author Seth Hollingsead
  * @date 2023/02/01
  */
 async function removePluginWorkflows(pluginName) {
-  let functionName = removePluginWorkflows.name;
+  const functionName = removePluginWorkflows.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   // pluginName is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.cpluginNameIs + pluginName);

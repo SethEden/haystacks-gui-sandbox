@@ -5,6 +5,7 @@
  * @requires module:ruleParsing
  * @requires module:configurator
  * @requires module:loggers
+ * @requires module:data
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
  * @requires {@link https://mathjs.org/index.html|math}
  * @requires {@link https://www.npmjs.com/package/path|path}
@@ -17,6 +18,7 @@
 import ruleParsing from '../ruleParsing.js';
 import configurator from '../../../executrix/configurator.js';
 import loggers from '../../../executrix/loggers.js';
+import D from '../../../structures/data.js';
 // External imports
 import hayConst from '@haystacks/constants';
 import * as math from 'mathjs';
@@ -24,15 +26,54 @@ import path from 'path';
 
 const {abt, bas, biz, cfg, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
+const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.businessRules.rules.stringParsing.wordStringParsing.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + wrd.cstring + wrd.cParsing + bas.cDot + baseFileName + bas.cDot;
+
+const rulesMetaData = [
+  {[wrd.cName]: biz.cisStringCamelCase, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.cdoesStringContainUpperCaseCharacter, biz.cdoesStringContainLowerCaseCharacter, biz.cisFirstCharacterUpperCase, biz.cisFirstCharacterLowerCase]},
+  {[wrd.cName]: biz.cmapWordToCamelCaseWord, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.csimplifyAndConsolidateString, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.cutilitiesReplaceCharacterWithCharacter]},
+  {[wrd.cName]: biz.ccompareSimplifiedAndConsolidatedStrings, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.ccountCamelCaseWords, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cdoesStringContainAcronym, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cdetermineWordDelimiter, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.ccountDelimiterInString, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgetWordCountInString, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cisStringList, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.caggregateNumericalDifferenceBetweenTwoStrings, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []}
+];
+
+/**
+ * @function initWordStringParsing
+ * @description Adds the wordStringParsing business rules meta-data to the
+ * D-data structure businessRulesMetaData-framework data structure.
+ * The meta-data is used to dynamically import all code dependencies such that a given business rule can be executed in a separate thread.
+ * Multi-threading allows for parallel processing and greatly improved performance!!
+ * @returns {boolean} True or False to indicate if the data structures were initialized or not.
+ * @author Seth Hollingsead
+ * @date 2025/07/15
+ */
+async function initWordStringParsing() {
+  const functionName = initWordStringParsing.name;
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+  let returnData = false;
+  // Add all of the rules meta-data to the D-data structure!
+  if (D[sys.cbusinessRulesMetaData] && D[sys.cbusinessRulesMetaData][wrd.cframework]) {
+    D[sys.cbusinessRulesMetaData][wrd.cframework].push(...rulesMetaData);
+    returnData = true;
+  }
+  await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+  return returnData;
+}
 
 /**
  * @function isStringCamelCase
  * @description Determines if an input string is a camel case string or not.
  * @param {string} inputData The string that should be checked for the camel case qualifications.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} True or False to indicate if the string is camel case or not.
+ * @returns {boolean} True or False to indicate if the string is camel case or not.
  * @author Seth Hollingsead
  * @date 2022/01/23
  * @NOTE Even if we have an all upper case acronym at the end fo the camel case string,
@@ -45,7 +86,7 @@ const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDo
  * aBc
  */
 async function isStringCamelCase(inputData, inputMetaData) {
-  let functionName = isStringCamelCase.name;
+  const functionName = isStringCamelCase.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -94,12 +135,12 @@ async function isStringCamelCase(inputData, inputMetaData) {
  * @description Takes a string key and an indexed string value and maps the word to an upper case first letter word.
  * @param {string} inputData The string key/value that should be converted to a camel case word.
  * @param {string} inputMetaData The string index for the map to the value that should be used.
- * @return {string} A string where the word has been converted into a camel case word.
+ * @returns {string} A string where the word has been converted into a camel case word.
  * @author Seth Hollingsead
  * @date 2022/01/23
  */
 async function mapWordToCamelCaseWord(inputData, inputMetaData) {
-  let functionName = mapWordToCamelCaseWord.name;
+  const functionName = mapWordToCamelCaseWord.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -118,7 +159,7 @@ async function mapWordToCamelCaseWord(inputData, inputMetaData) {
  * with all digits and symbols and whitespace removed.
  * @param {string} inputData The string that should be simplified and consolidated.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} A string that has been simplified and consolidated by converting to lower case, removing all digits, symbols and white space.
+ * @returns {string} A string that has been simplified and consolidated by converting to lower case, removing all digits, symbols and white space.
  * @author Seth Hollingsead
  * @date 2022/01/23
  * @NOTE I think this function is not completely working as expected, probably something to do with that regular expression.
@@ -126,7 +167,7 @@ async function mapWordToCamelCaseWord(inputData, inputMetaData) {
  * Output was: upberdrivercodeclearanceffakablue
  */
 async function simplifyAndConsolidateString(inputData, inputMetaData) {
-  let functionName = simplifyAndConsolidateString.name;
+  const functionName = simplifyAndConsolidateString.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -146,12 +187,12 @@ async function simplifyAndConsolidateString(inputData, inputMetaData) {
  * @description Compares two strings by their simplified versions (see simplifyAndConsolidateString()).
  * @param {string} inputData The first string to be compared.
  * @param {string} inputMetaData The second string to be compared.
- * @return {boolean} A True or False value to indicate if the strings are virtually identical or not.
+ * @returns {boolean} A True or False value to indicate if the strings are virtually identical or not.
  * @author Seth Hollingsead
  * @date 2022/01/23
  */
 async function compareSimplifiedAndConsolidatedStrings(inputData, inputMetaData) {
-  let functionName = compareSimplifiedAndConsolidatedStrings.name;
+  const functionName = compareSimplifiedAndConsolidatedStrings.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -169,7 +210,7 @@ async function compareSimplifiedAndConsolidatedStrings(inputData, inputMetaData)
  * @description Takes a string in camelCase and returns the number of words that it contains based on camel case rules.
  * @param {string} inputData String to count words from.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {integer} The number of camel case words found in the string.
+ * @returns {integer} The number of camel case words found in the string.
  * @author Seth Hollingsead
  * @date 2022/01/23
  * @NOTE Might not work so well with numbers as part of the string, they are not treated as capital letters.
@@ -178,7 +219,7 @@ async function compareSimplifiedAndConsolidatedStrings(inputData, inputMetaData)
  * @NOTE Based on the implementation for the business rule/function arrayParsing.convertCamelCaseStringToArray.
  */
 async function countCamelCaseWords(inputData, inputMetaData) {
-  let functionName = countCamelCaseWords.name;
+  const functionName = countCamelCaseWords.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -206,12 +247,12 @@ async function countCamelCaseWords(inputData, inputMetaData) {
  * Example: nodeJS where JS is an acronym for JavaScript.
  * @param {string} inputData The string that should be scanned to determine if it contains an acronym or not.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} True or False to indicate if the input string contains an acronym.
+ * @returns {boolean} True or False to indicate if the input string contains an acronym.
  * @author Seth Hollingsead
  * @date 2022/01/23
  */
 async function doesStringContainAcronym(inputData, inputMetaData) {
-  let functionName = doesStringContainAcronym.name;
+  const functionName = doesStringContainAcronym.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -242,12 +283,12 @@ async function doesStringContainAcronym(inputData, inputMetaData) {
  * @description Determines what delimiter should e used to break a string up into words if possible.
  * @param {string} inputData The string that should be examined to determine what delimiter should be used to break it up into words.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {string} The delimiter that should be used, or if camelCase then the function will return the string "CamelCase".
+ * @returns {string} The delimiter that should be used, or if camelCase then the function will return the string "CamelCase".
  * @author Seth Hollingsead
  * @date 2022/01/23
  */
 async function determineWordDelimiter(inputData, inputMetaData) {
-  let functionName = determineWordDelimiter.name;
+  const functionName = determineWordDelimiter.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -333,13 +374,13 @@ async function determineWordDelimiter(inputData, inputMetaData) {
  * @description Takes a string and returns the number of specified delimiters it contains.
  * @param {string} inputData String to count delimiters from.
  * @param {string} inputMetaData The delimiter that should be used when counting from the input string.
- * @return {integer} The number of delimiters found in the string.
+ * @returns {integer} The number of delimiters found in the string.
  * @author Seth Hollingsead
  * @date 2022/01/23
  * @NOTE: https://stackoverflow.com/questions/35849174/count-spaces-in-a-string
  */
 async function countDelimiterInString(inputData, inputMetaData) {
-  let functionName = countDelimiterInString.name;
+  const functionName = countDelimiterInString.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -358,12 +399,12 @@ async function countDelimiterInString(inputData, inputMetaData) {
  * delimited by either camel-case, spaces, period, dash, underscore, plus or percent symbols.
  * @param {string} inputData The string that words should be counted from.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {integer} The number of words that were found in the string.
+ * @returns {integer} The number of words that were found in the string.
  * @author Seth Hollingsead
  * @date 2022/01/23
  */
 async function getWordCountInString(inputData, inputMetaData) {
-  let functionName = getWordCountInString.name;
+  const functionName = getWordCountInString.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -390,13 +431,13 @@ async function getWordCountInString(inputData, inputMetaData) {
  * @description Determines if the input string is a list or not.
  * @param {string} inputData The string that should be checked if it is a list or not.
  * @param {string} inputMetaData Not used for this business rule.
- * @return {boolean} True or False to indicate if the input string is a list or not a list.
+ * @returns {boolean} True or False to indicate if the input string is a list or not a list.
  * Using the list of system defined primary, secondary or tertiary command delimiters.
  * @author Seth Hollingsead
  * @date 2022/01/23
  */
 async function isStringList(inputData, inputMetaData) {
-  let functionName = isStringList.name;
+  const functionName = isStringList.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   console.log(msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
@@ -424,12 +465,12 @@ async function isStringList(inputData, inputMetaData) {
  * @description Determines the delta difference between the two input strings and returns it as a number.
  * @param {string} inputData String 1 to compare.
  * @param {string} inputMetaData String 2 to compare.
- * @return {integer} The delta difference between the two strings, expressed as a number.
+ * @returns {integer} The delta difference between the two strings, expressed as a number.
  * @author Seth Hollingsead
  * @date 2022/01/23
  */
 async function aggregateNumericalDifferenceBetweenTwoStrings(inputData, inputMetaData) {
-  let functionName = aggregateNumericalDifferenceBetweenTwoStrings.name;
+  const functionName = aggregateNumericalDifferenceBetweenTwoStrings.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + inputData);
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
@@ -479,6 +520,7 @@ async function aggregateNumericalDifferenceBetweenTwoStrings(inputData, inputMet
 }
 
 export default {
+  initWordStringParsing,
   isStringCamelCase,
   mapWordToCamelCaseWord,
   simplifyAndConsolidateString,
