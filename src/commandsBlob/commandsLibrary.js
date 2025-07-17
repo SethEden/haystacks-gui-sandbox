@@ -74,6 +74,17 @@ async function initCommandsLibrary() {
   D[sys.ccommandsMetaData][wrd.cframework] = [];
   D[sys.ccommandsMetaData][wrd.capplication] = [];
   D[sys.ccommandsMetaData][wrd.cplugins] = {};
+  await advancedCommands.initAdvanced();
+  await auxiliaryCommands.initAuxiliary();
+  await configurationCommands.initConfiguration();
+  await constantsCommands.initConstant();
+  await dataDirectorate.initDataDirectorate();
+  await integrationTestCommands.initIntegrationTests();
+  await performanceMetricCommands.initPerformanceMetric();
+  await pluginCommands.initPlugins();
+  await systemCommands.initSystem();
+  await threadCommands.initThreads();
+
   D[wrd.cCommands] = {};
   D[wrd.cCommands] = {
     // Commands

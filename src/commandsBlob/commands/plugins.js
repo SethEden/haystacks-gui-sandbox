@@ -5,6 +5,7 @@
  * @requires module:chiefPlugin
  * @requires module:warden
  * @requires module:loggers
+ * @requires module:data
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
  * @requires {@link https://www.npmjs.com/package/path|path}
  * @author Seth Hollingsead
@@ -16,15 +17,60 @@
 import chiefPlugin from '../../controllers/chiefPlugin.js';
 import warden from '../../controllers/warden.js';
 import loggers from '../../executrix/loggers.js';
+import D from '../../structures/data.js';
 // External imports
 import hayConst from '@haystacks/constants';
 import path from 'path';
 
-const {bas, msg, sys, wrd} = hayConst;
+const {bas, cmd, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
 const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.commandsBlob.commands.plugins.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.ccommandsBlob + bas.cDot + wrd.ccommands + bas.cDot + baseFileName + bas.cDot;
+
+const commandsMetaData = [
+  {[wrd.cName]: cmd.clistAllLoadedPlugins, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: cmd.clistAllPluginsInRegistry, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: cmd.clistAllPluginsInRegistryPath, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: cmd.ccountPluginsInRegistry, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: cmd.ccountPluginsInRegistryPath, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: cmd.cregisterPlugin, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: cmd.cunregisterPlugin, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: cmd.cunregisterPlugins, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: cmd.csyncPluginRegistryWithPath, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: cmd.clistPluginsRegistryPath, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: cmd.cunregisterAllPlugins, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: cmd.csavePluginRegistryToDisk, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: cmd.cloadPlugin, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: cmd.cloadPlugins, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: cmd.cloadPluginsFromRegistry, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: cmd.cunloadPlugin, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: cmd.cunloadPlugins, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: cmd.cunloadAllPlugins, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []}
+];
+
+/**
+ * @function initPlugins
+ * @description Adds the plugins commands meta-data to the D-data structure commandsMetaData-framework data structure.
+ * The meta-data is used to dynamically import all code dependencies such that a given command can be executed in a separate thread.
+ * Multi-threading allows for parallel processing and greatly improved performance!!
+ * @returns {boolean} True or False to indicate if the data structures were initialized or not.
+ * @author Seth Hollingsead
+ * @date 2025/07/17
+ */
+async function initPlugins() {
+  const functionName = initPlugins.name;
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+  let returnData = false;
+  // Add all of the commands meta-data to the D-data structure!
+  if (D[sys.ccommandsMetaData] && D[sys.ccommandsMetaData][wrd.cframework]) {
+    D[sys.ccommandsMetaData][wrd.cframework].push(...commandsMetaData);
+    returnData = true;
+  }
+  await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+  return returnData;
+}
 
 /**
  * @function listAllLoadedPlugins
@@ -604,6 +650,7 @@ async function unloadAllPlugins(inputData, inputMetaData) {
 }
 
 export default {
+  initPlugins,
   listAllLoadedPlugins,
   listAllPluginsInRegistry,
   listAllPluginsInRegistryPath,

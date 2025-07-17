@@ -5,6 +5,7 @@
 * @requires module:ruleBroker
 * @requires module:configurator
 * @requires module:loggers
+* @requires module:data
 * @requires module:queue
 * @requires module:stack
 * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
@@ -18,6 +19,7 @@
 import ruleBroker from '../../brokers/ruleBroker.js';
 import configurator from '../../executrix/configurator.js';
 import loggers from '../../executrix/loggers.js';
+import D from '../../structures/data.js';
 import queue from '../../structures/queue.js';
 import stack from '../../structures/stack.js';
 // External imports

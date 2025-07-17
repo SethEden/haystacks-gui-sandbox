@@ -106,6 +106,32 @@ async function initRulesLibrary() {
    D[sys.cbusinessRulesMetaData][wrd.cframework] = [];
    D[sys.cbusinessRulesMetaData][wrd.capplication] = [];
    D[sys.cbusinessRulesMetaData][wrd.cplugins] = {};
+  await auxiliaryArrayParsing.initAuxiliaryArrayParsing();
+  await characterArrayParsing.initCharacterArrayParsing();
+  await commandArrayParsing.initCommandArrayParsing();
+  await constantArrayParsing.initConstantArrayParsing();
+  await dataArrayParsing.initDataArrayParsing();
+  await pathArrayParsing.initPathArrayParsing();
+  await wordArrayParsing.initWordArrayParsing();
+  // await auxiliaryStringParsing.initAuxiliaryStringParsing();
+  await characterStringParsing.initCharacterStringParsing();
+  await commandStringParsing.initCommandStringParsing();
+  await constantStringParsing.initConstantStringParsing();
+  await dataStringParsing.initDataStringParsing();
+  await fileStringParsing.initFileStringParsing();
+  await wordStringParsing.initWordStringParsing();
+  await characterGeneration.initCharacterGeneration();
+  await fileOperations.initFileOperations();
+  await languageParsing.initLanguageParsing();
+  await lexicalAnalyzer.initLexicalAnalyzer();
+  await mathOperations.initMathOperations();
+  await promptOperations.initPromptOperations();
+  await ruleParsing.initRuleParsing();
+  await stringGeneration.initStringGeneration();
+  await stringParsingUtilities.initStringParsingUtilities();
+  await timeComputation.initTimeComputation();
+  await windowOperations.initWindowOperations();
+
    D[sys.cbusinessRules] = {};
    D[sys.cbusinessRules] = {
      // eslint-disable-next-line no-unused-vars

@@ -30,11 +30,51 @@ import hayConst from '@haystacks/constants';
 import figlet from 'figlet';
 import path from 'path';
 
-const {bas, biz, cfg, msg, sys, wrd} = hayConst;
+const {bas, biz, cmd, cfg, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
 const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.commandsBlob.commands.system.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.ccommandsBlob + bas.cDot + wrd.ccommands + bas.cDot + baseFileName + bas.cDot;
+
+const commandsMetaData = [
+  {[wrd.cName]: cmd.cechoCommand, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: wrd.cexit, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: wrd.cversion, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: wrd.cabout, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: wrd.cname, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: [biz.cstringToDataType]},
+  {[wrd.cName]: cmd.cclearScreen, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: wrd.chelp, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: [biz.cobjectDeepMerge, biz.carrayDeepClone]},
+  {[wrd.cName]: cmd.cworkflowHelp, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: [biz.carrayDeepClone]},
+  {[wrd.cName]: cmd.cprintCommands, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: cmd.cprintBusinessRules, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: cmd.cprintUserCommandsLog, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: cmd.cprintAllCommandsLog, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: cmd.cclearUserCommandsLog, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: cmd.cclearAllCommandsLog, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []}
+];
+
+/**
+ * @function initSystem
+ * @description Adds the system commands meta-data to the D-data structure commandsMetaData-framework data structure.
+ * The meta-data is used to dynamically import all code dependencies such that a given command can be executed in a separate thread.
+ * Multi-threading allows for parallel processing and greatly improved performance!!
+ * @returns {boolean} True or False to indicate if the data structures were initialized or not.
+ * @author Seth Hollingsead
+ * @date 2025/07/17
+ */
+async function initSystem() {
+  const functionName = initSystem.name;
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+  let returnData = false;
+  // Add all of the commands meta-data to the D-data structure!
+  if (D[sys.ccommandsMetaData] && D[sys.ccommandsMetaData][wrd.cframework]) {
+    D[sys.ccommandsMetaData][wrd.cframework].push(...commandsMetaData);
+    returnData = true;
+  }
+  await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+  return returnData;
+}
 
 /**
  * @function echoCommand
@@ -640,7 +680,7 @@ async function printCommands(inputData, inputMetaData) {
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
   let returnData = [true, []];
-  await loggers.consoleLog(wrd.cInfo, msg.ccommandsAre, D[wrd.cCommands]);
+  await loggers.consoleLog(wrd.cInfo, msg.ccommandsAre + JSON.stringify(D[wrd.cCommands]));
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
   return returnData;
@@ -662,7 +702,7 @@ async function printBusinessRules(inputData, inputMetaData) {
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputDataIs + JSON.stringify(inputData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cinputMetaDataIs + inputMetaData);
   let returnData = [true, []];
-  await loggers.consoleLog(wrd.cInfo, msg.cbusinessRulesAre, D[sys.cbusinessRules]);
+  await loggers.consoleLog(wrd.cInfo, msg.cbusinessRulesAre + JSON.stringify(D[sys.cbusinessRules]));
   await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
   await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
   return returnData;
@@ -813,6 +853,7 @@ async function clearAllCommandsLog(inputData, inputMetaData) {
 }
 
 export default {
+  initSystem,
   echoCommand,
   exit,
   version,
