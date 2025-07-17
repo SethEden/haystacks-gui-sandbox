@@ -6,6 +6,7 @@
  * @requires module:loggers
  * @requires module:data
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
+ * @requires {@link https://nodejs.org/api/url.html|url}
  * @requires {@link https://www.npmjs.com/package/path|path}
  * @author Seth Hollingsead
  * @date 2024/10/09
@@ -18,11 +19,12 @@ import loggers from '../../executrix/loggers.js';
 import D from '../../structures/data.js';
 // External imports
 import hayConst from '@haystacks/constants';
+import { fileURLToPath } from 'url';
 import path from 'path';
 
 const {abt, biz, bas, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
-const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
+const filePath = fileURLToPath(import.meta.url);
 // framework.businessRules.rules.mathOperations.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + baseFileName + bas.cDot;
 

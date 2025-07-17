@@ -7,6 +7,7 @@
  * @requires module:data
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
  * @requires {@link https://nodejs.dev/learn/the-nodejs-fs-module|fs}
+ * @requires {@link https://nodejs.org/api/url.html|url}
  * @requires {@link https://www.npmjs.com/package/path|path}
  * @author Seth Hollingsead
  * @date 2022/05/04 - May the Forth be with you!! ;-)
@@ -19,11 +20,12 @@ import D from '../../structures/data.js';
 // External imports
 import hayConst from '@haystacks/constants';
 // import fs from 'fs';
+import { fileURLToPath } from 'url';
 import path from 'path';
 
 const {bas, biz, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
-const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
+const filePath = fileURLToPath(import.meta.url);
 // framework.businessRules.rules.promptOperations.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + baseFileName + bas.cDot;
 // const term = 13; // carriage return

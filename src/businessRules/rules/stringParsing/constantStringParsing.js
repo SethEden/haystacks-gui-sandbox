@@ -8,7 +8,7 @@
  * @requires module:data
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
  * @requires {@link https://www.npmjs.com/package/chalk|chalk}
- * @requires {@link https://nodejs.dev/}
+ * @requires {@link https://nodejs.org/api/url.html|url}
  * @requires {@link https://www.npmjs.com/package/path|path}
  * @author Seth Hollingsead
  * @date 2022/04/25
@@ -23,11 +23,12 @@ import D from '../../../structures/data.js';
 // External imports
 import hayConst from '@haystacks/constants';
 import chalk from 'chalk';
+import { fileURLToPath } from 'url';
 import path from 'path';
 
 const {bas, biz, cfg, gen, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
-const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
+const filePath = fileURLToPath(import.meta.url);
 // framework.businessRules.rules.stringParsing.constantStringParsing.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + wrd.cstring + wrd.cParsing + bas.cDot + baseFileName + bas.cDot;
 

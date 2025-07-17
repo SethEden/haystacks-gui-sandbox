@@ -11,6 +11,7 @@
 * @requires module:stack
 * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
 * @requires {@link https://www.npmjs.com/package/figlet|figlet}
+* @requires {@link https://nodejs.org/api/url.html|url}
 * @requires {@link https://www.npmjs.com/package/path|path}
 * @author Seth Hollingsead
 * @date 2022/04/20
@@ -28,11 +29,12 @@ import stack from '../../structures/stack.js';
 // External imports
 import hayConst from '@haystacks/constants';
 import figlet from 'figlet';
+import { fileURLToPath } from 'url';
 import path from 'path';
 
 const {bas, biz, cmd, cfg, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
-const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
+const filePath = fileURLToPath(import.meta.url);
 // framework.commandsBlob.commands.system.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.ccommandsBlob + bas.cDot + wrd.ccommands + bas.cDot + baseFileName + bas.cDot;
 

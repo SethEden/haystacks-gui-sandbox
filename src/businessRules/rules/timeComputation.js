@@ -7,6 +7,7 @@
  * @requires module:data
  * @requires {@link https://www.npmjs.com/package/@haystacks/constants|@haystacks/constants}
  * @requires {@link https://www.npmjs.com/package/moment|moment}
+ * @requires {@link https://nodejs.org/api/url.html|url}
  * @requires {@link https://www.npmjs.com/package/path|path}
  * @author Seth Hollingsead
  * @date 2022/05/04 - May the Forth be with you!! ;-)
@@ -20,11 +21,12 @@ import D from '../../structures/data.js';
 import hayConst from '@haystacks/constants';
 import moment from 'moment';
 import 'moment-duration-format';
+import { fileURLToPath } from 'url';
 import path from 'path';
 
 const {bas, biz, gen, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
-const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
+const filePath = fileURLToPath(import.meta.url);
 // framework.businessRules.rules.timeComputation.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + baseFileName + bas.cDot;
 

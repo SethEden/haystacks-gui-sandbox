@@ -17,6 +17,7 @@
  * @requires {@link https://www.npmjs.com/package/xml2js|xml2js}
  * @requires {@link https://nodejs.org/api/child_process.html|child_process}
  * @requires {@link https://www.nodejs.org/api/process.html|process}
+ * @requires {@link https://nodejs.org/api/url.html|url}
  * @requires {@link https://www.npmjs.com/package/path|path}
  * @author Seth Hollingsead
  * @date 2022/04/28
@@ -36,11 +37,12 @@ import papa from 'papaparse';
 import xml2js from 'xml2js';
 import { exec } from 'child_process';
 import process from 'process';
+import { fileURLToPath } from 'url';
 import path from 'path';
 
 const {bas, biz, cfg, gen, msg, phn, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
-const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
+const filePath = fileURLToPath(import.meta.url);
 // framework.businessRules.rules.fileOperations.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + baseFileName + bas.cDot;
 const directoriesToSkip = ['browser_components', 'node_modules', 'www', 'platforms', 'Release', 'Documentation', 'Recycle', 'Trash', 'config.json'];
