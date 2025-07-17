@@ -38,6 +38,40 @@ const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwar
 // framework.commandsBlob.commands.integrationTests.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.ccommandsBlob + bas.cDot + wrd.ccommands + bas.cDot + baseFileName + bas.cDot;
 
+const commandsMetaData = [
+  {[wrd.cName]: cmd.cvalidateConstants, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: [
+    biz.cvalidateConstantsDataValidation, biz.cvalidateConstantsDataValues, biz.cgetConstantsValidationNamespaceParentObject
+  ]},
+  {[wrd.cName]: cmd.cvalidateCommandAliases, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: [biz.cobjectDeepMerge]},
+  {[wrd.cName]: cmd.cvalidateWorkflows, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: cmd.crunAllValidations, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [
+    cmd.cvalidateConstants, cmd.cvalidateCommandAliases, cmd.cvalidateWorkflows
+  ], [sys.cbusinessRulesDependencies]: []}
+];
+
+/**
+ * @function initIntegrationTests
+ * @description Adds the integrationTests commands meta-data to the D-data structure commandsMetaData-framework data structure.
+ * The meta-data is used to dynamically import all code dependencies such that a given command can be executed in a separate thread.
+ * Multi-threading allows for parallel processing and greatly improved performance!!
+ * @returns {boolean} True or False to indicate if the data structures were initialized or not.
+ * @author Seth Hollingsead
+ * @date 2025/07/16
+ */
+async function initIntegrationTests() {
+  const functionName = initIntegrationTests.name;
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+  let returnData = false;
+  // Add all of the commands meta-data to the D-data structure!
+  if (D[sys.ccommandsMetaData] && D[sys.ccommandsMetaData][wrd.cframework]) {
+    D[sys.ccommandsMetaData][wrd.cframework].push(...commandsMetaData);
+    returnData = true;
+  }
+  await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+  return returnData;
+}
+
 /**
  * @function validateConstants
  * @description Validates all constants with a 2-phase verification process.
@@ -805,6 +839,7 @@ async function runAllValidations(inputData, inputMetaData) {
 }
 
 export default {
+  initIntegrationTests,
   validateConstants,
   validateCommandAliases,
   validateWorkflows,

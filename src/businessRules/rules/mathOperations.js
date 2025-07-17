@@ -26,6 +26,36 @@ const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwar
 // framework.businessRules.rules.mathOperations.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + baseFileName + bas.cDot;
 
+const rulesMetaData = [
+  {[wrd.cName]: biz.chex2rgbConversion, [sys.cfilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cisOdd, [sys.cfilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.cisInteger]},
+  {[wrd.cName]: biz.cisEven, [sys.cfilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.cisInteger]}
+];
+
+/**
+ * @function initMathOperations
+ * @description Adds the mathOperations business rules meta-data to the
+ * D-data structure businessRulesMetaData-framework data structure.
+ * The meta-data is used to dynamically import all code dependencies such that a given business rule can be executed in a separate thread.
+ * Multi-threading allows for parallel processing and greatly improved performance!!
+ * @returns {boolean} True or False to indicate if the data structures were initialized or not.
+ * @author Seth Hollingsead
+ * @date 2025/07/16
+ */
+async function initMathOperations() {
+  const functionName = initMathOperations.name;
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+  let returnData = false;
+  // Add all of the rules meta-data to the D-data structure!
+  if (D[sys.cbusinessRulesMetaData] && D[sys.cbusinessRulesMetaData][wrd.cframework]) {
+    D[sys.cbusinessRulesMetaData][wrd.cframework].push(...rulesMetaData);
+    returnData = true;
+  }
+  await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+  return returnData;
+}
+
 /**
  * @function hex2rgbConversion
  * @description Converts a hexadecimal color value to an RGB color value.
@@ -140,6 +170,7 @@ async function isEven(inputData, inputMetaData) {
 }
 
 export default {
+  initMathOperations,
   hex2rgbConversion,
   isOdd,
   isEven

@@ -26,6 +26,30 @@ const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwar
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + baseFileName + bas.cDot;
 
 /**
+ * @function initStringParsingUtilities
+ * @description Adds the stringParsingUtilities business rules meta-data to the
+ * D-data structure businessRulesMetaData-framework data structure.
+ * The meta-data is used to dynamically import all code dependencies such that a given business rules can be executed in a separate thread.
+ * Multi-threading allows for parallel processing and greatly improved performance!!
+ * @returns {boolean} True or False to indicate if the data structures were initialized or not.
+ * @author Seth Hollingsead
+ * @date 2025/07/16
+ */
+async function initStringParsingUtilities() {
+  const functionName = initStringParsingUtilities.name;
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+  let returnData = false;
+  // Add all of the rules meta-data to the D-data structure!
+  if (D[sys.cbusinessRulesMetaData] && D[sys.cbusinessRulesMetaData][wrd.cframework]) {
+    D[sys.cbusinessRulesMetaData][wrd.cframework].push(...rulesMetaData);
+    returnData = true;
+  }
+  await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+  return returnData;
+}
+
+/**
  * @function parseSystemRootPath
  * @description Parses the root path as returned by calling: path.resolve(__dirname);
  * This business rule looks for the "AppName" part of the path
@@ -445,6 +469,7 @@ async function utilitiesReplaceCharacterWithCharacter(inputData, inputMetaData) 
 }
 
 export default {
+  initStringParsingUtilities,
   parseSystemRootPath,
   parseSystemRootPathApplicationName,
   stringToDataType,

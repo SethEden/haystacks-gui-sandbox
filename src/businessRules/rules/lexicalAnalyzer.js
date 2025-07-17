@@ -28,6 +28,39 @@ const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwar
 // framework.businessRules.rules.lexicalAnalyzer.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + baseFileName + bas.cDot;
 
+const rulesMetaData = [
+  {[wrd.cName]: biz.cparseBusinessRuleArgument, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.canalyzeArgument, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.cdoesArrayContainCharacter]},
+  {[wrd.cName]: biz.canalyzeForRegularExpression, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.cdoesArrayContainCharacter]},
+  {[wrd.cName]: biz.cparseArgumentAsRegularExpression, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cparseArgumentAsArray, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.cdoesArrayContainCharacter, biz.cremoveCharacterFromArray, biz.cutilitiesReplaceCharacterWithCharacter]},
+  {[wrd.cName]: biz.cremoveStringLiteralTagsFromArray, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.cremoveCharacterFromArray]}
+];
+
+/**
+ * @function initLexicalAnalyzer
+ * @description Adds the lexicalAnalyzer business rules meta-data to the
+ * D-data structure businessRulesMetaData-framework data structure.
+ * The meta-data is used to dynamically import all code dependencies such that a given business rule can be executed in the separate thread.
+ * Multi-threading allows for parallel processing and greatly improved performance!!
+ * @returns {boolean} True or False to indicate if the data structures were initialized or not.
+ * @author Seth Hollingsead
+ * @date 2025/07/16
+ */
+async function initLexicalAnalyzer() {
+  const functionName = initLexicalAnalyzer.name;
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+  let returnData = false;
+  // Add all of the rules meta-data to the D-data structure!
+  if (D[sys.cbusinessRulesMetaData] && D[sys.cbusinessRulesMetaData][wrd.cframework]) {
+    D[sys.cbusinessRulesMetaData][wrd.cframework].push(...rulesMetaData);
+    returnData = true;
+  }
+  await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+  return returnData;
+}
+
 /**
  * @function parseBusinessRuleArgument
  * @description Parses a single business rule argument and returns it after cleaning it up or
@@ -381,6 +414,7 @@ async function removeStringLiteralTagsFromArray(inputData, inputMetaData) {
 }
 
 export default {
+  initLexicalAnalyzer,
   parseBusinessRuleArgument,
   analyzeArgument,
   analyzeForRegularExpression,

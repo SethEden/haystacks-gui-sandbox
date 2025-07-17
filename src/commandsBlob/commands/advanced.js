@@ -31,11 +31,44 @@ import stack from '../../structures/stack.js';
 import hayConst from '@haystacks/constants';
 import path from 'path';
 
-const {bas, biz, cfg, gen, msg, sys, wrd} = hayConst;
+const {bas, biz, cmd, cfg, gen, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
 const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.commandsBlob.commands.advanced.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.ccommandsBlob + bas.cDot + wrd.ccommands + bas.cDot + baseFileName + bas.cDot;
+
+const commandsMetaData = [
+  {[wrd.cName]: cmd.ccommandSequencer, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [biz.cruleAllCommands], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: wrd.cworkflow, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [biz.cruleAllCommands], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: cmd.cbusinessRule, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: [biz.cruleAllRules]},
+  {[wrd.cName]: cmd.ccommandGenerator, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [biz.cruleAllCommands], [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: cmd.ccommandAliasGenerator, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: [
+    biz.cprompt, biz.cisValidCommandNameString, biz.cconvertCamelCaseStringToArray, biz.cisStringList, biz.cgenerateCommandAliases
+  ]}
+];
+
+/**
+ * @function initAdvanced
+ * @description Adds the advanced commands meta-data to the D-data structure commandsMetaData-framework data structure.
+ * The meta-data is used to dynamically import all code dependencies such that a given command can be executed in a separate thread.
+ * Multi-threading allows for parallel processing and greatly improved performance!!
+ * @returns {boolean} True or False to indicate if the data structures were initialized or not.
+ * @author Seth Hollingsead
+ * @date 2025/07/16
+ */
+async function initAdvanced() {
+  const functionName = initAdvanced.name;
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+  let returnData = false;
+  // Add all of the commands meta-data to the D-data structure!
+  if (D[sys.ccommandsMetaData] && D[sys.ccommandsMetaData][wrd.cframework]) {
+    D[sys.ccommandsMetaData][wrd.cframework].push(...commandsMetaData);
+    returnData = true;
+  }
+  await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+  return returnData;
+}
 
 /**
  * @function commandSequencer
@@ -506,6 +539,7 @@ async function commandAliasGenerator(inputData, inputMetaData) {
 }
 
 export default {
+  initAdvanced,
   commandSequencer,
   workflow,
   businessRule,

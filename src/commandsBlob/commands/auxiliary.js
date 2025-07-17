@@ -20,11 +20,38 @@ import D from '../../structures/data.js';
 import hayConst from '@haystacks/constants';
 import path from 'path';
 
-const {bas, biz, msg, sys, wrd} = hayConst;
+const {bas, biz, cmd, msg, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
 const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwardSlash, ''));
 // framework.commandsBlob.commands.auxiliary.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.ccommandsBlob + bas.cDot + wrd.ccommands + bas.cDot + baseFileName + bas.cDot;
+
+const commandsMetaData = [
+  {[wrd.cName]: cmd.cconvertColors, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: [biz.creplaceCharacterWithCharacter, biz.chex2rgbConversion]}
+];
+
+/**
+ * @function initAuxiliary
+ * @description Adds the auxiliary commands meta-data to the D-data structure commandsMetaData-framework data structure.
+ * The meta-data is used to dynamically import all code dependencies such that a given command can be executed in a separate thread.
+ * Multi-threading allows for parallel processing and greatly improved performance!!
+ * @returns {boolean} True or False to indicate if the data structures were initialized or not.
+ * @author Seth Hollingsead
+ * @date 2025/07/16
+ */
+async function initAuxiliary() {
+  const functionName = initAuxiliary.name;
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+  let returnData = false;
+  // Add all of the commands meta-data to the D-data structure!
+  if (D[sys.ccommandsMetaData] && D[sys.ccommandsMetaData][wrd.cframework]) {
+    D[sys.ccommandsMetaData][wrd.cframework].push(...commandsMetaData);
+    returnData = true;
+  }
+  await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+  return returnData;
+}
 
 /**
  * @function convertColors
@@ -68,5 +95,6 @@ async function convertColors(inputData, inputMetaData) {
 }
 
 export default {
+  initAuxiliary,
   convertColors
 };

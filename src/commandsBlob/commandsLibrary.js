@@ -70,6 +70,10 @@ async function clearCommandsLibrary() {
 async function initCommandsLibrary() {
   let functionName = initCommandsLibrary.name;
   await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+  D[sys.ccommandsMetaData] = {};
+  D[sys.ccommandsMetaData][wrd.cframework] = [];
+  D[sys.ccommandsMetaData][wrd.capplication] = [];
+  D[sys.ccommandsMetaData][wrd.cplugins] = {};
   D[wrd.cCommands] = {};
   D[wrd.cCommands] = {
     // Commands

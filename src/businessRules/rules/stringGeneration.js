@@ -26,6 +26,56 @@ const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwar
 // framework.businessRules.rules.stringGeneration.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + baseFileName + bas.cDot;
 
+const rulesMetaData = [
+  {[wrd.cName]: biz.cgenerateRandomMixedCaseTextByLength, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.crandomlyGenerateMixedCaseAlphabeticCharacter]},
+  {[wrd.cName]: biz.cgenerateRandomUpperCaseTextByLength, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.crandomlyGenerateUpperCaseLetter]},
+  {[wrd.cName]: biz.cgenerateRandomLowerCaseTextByLength, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.crandomlyGenerateLowerCaseLetter]},
+  {[wrd.cName]: biz.cgenerateRandomMixedCaseTextWithSpecialCharactersByLength, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.crandomlyGenerateMixedCaseLetterOrSpecialCharacter]},
+  {[wrd.cName]: biz.cgenerateRandomUpperCaseTextWithSpecialCharactersByLength, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.crandomlyGenerateUpperCaseLetterOrSpecialCharacter]},
+  {[wrd.cName]: biz.cgenerateRandomLowerCaseTextWithSpecialCharactersByLength, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.crandomlyGenerateLowerCaseLetterOrSpecialCharacter]},
+  {[wrd.cName]: biz.cgenerateRandomMixedCaseAlphaNumericCodeByLength, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.crandomlyGenerateMixedCaseAlphaNumericCharacter]},
+  {[wrd.cName]: biz.cgenerateRandomUpperCaseAlphaNumericCodeByLength, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.crandomlyGenerateUpperCaseAlphaNumericCharacter]},
+  {[wrd.cName]: biz.cgenerateRandomLowerCaseAlphaNumericCodeByLength, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.crandomlyGenerateLowerCaseAlphaNumericCharacter]},
+  {[wrd.cName]: biz.cgenerateRandomNumericCodeByLength, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.crandomlyGenerateNumericCharacter]},
+  {[wrd.cName]: biz.cgenerateRandomMixedCaseAlphaNumericCodeWithSpecialCharactersByLength, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.crandomlyGenerateEitherMixedCaseLetterOrNumberOrSpecialCharacter]},
+  {[wrd.cName]: biz.cgenerateRandomUpperCaseAlphaNumericCodeWithSpecialCharactersByLength, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.crandomlyGenerateEitherUpperCaseLetterOrNumberOrSpecialCharacter]},
+  {[wrd.cName]: biz.cgenerateRandomLowerCaseAlphaNumericCodeWithSpecialCharactersByLength, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.crandomlyGenerateEitherLowerCaseLetterOrNumberOrSpecialCharacter]},
+  {[wrd.cName]: biz.cgenerateRandomSpecialCharacterCodeByLength, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.crandomlyGenerateSpecialCharacter]},
+  {[wrd.cName]: biz.cgenerateValidEmail, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.cstringToBoolean]},
+  {[wrd.cName]: biz.cgenerateInvalidEmail, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.cstringToBoolean]},
+  {[wrd.cName]: biz.cgenerateValidEmailWithSpecificSuffixAndDomainName, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cgenerateRandomValidEmail, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.crandomlyGenerateBooleanValue]},
+  {[wrd.cName]: biz.cgenerateInvalidEmailWithSpecificSuffixAndDomainName, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.crandomlyGenerateNumberInRange]},
+  {[wrd.cName]: biz.cgenerateRandomInvalidEmail, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.crandomlyGenerateNumberInRange, biz.crandomlyGenerateBooleanValue]},
+  {[wrd.cName]: biz.cgenerateRandomBrightColor, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.cparseColorRangeInputs]},
+  {[wrd.cName]: biz.cgenerateRandomDarkColor, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.cparseColorRangeInputs]},
+  {[wrd.cName]: biz.cgenerateRandomColor, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.crandomlyGenerateNumberInRange]}
+];
+
+/**
+ * @function initStringGeneration
+ * @description Adds the stringGeneration business rules meta-data to the
+ * D-data structure businessRulesMetaData-framework data structure.
+ * The meta-data is used to dynamically import all code dependencies such that a given business rule can be executed in a separate thread.
+ * Multi-threading allows for parallel processing and greatly improved performance!!
+ * @returns {boolean} True or False to indicate if the data structures were initialized or not.
+ * @author Seth Hollingsead
+ * @date 2025/07/16
+ */
+async function initStringGeneration() {
+  const functionName = initStringGeneration.name;
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cBEGIN_Function);
+  let returnData = false;
+  // Add all of the rules meta-data to the D-data structure!
+  if (D[sys.cbusinessRulesMetaData] && D[sys.cbusinessRulesMetaData][wrd.cframework]) {
+    D[sys.cbusinessRulesMetaData][wrd.cframework].push(...rulesMetaData);
+    returnData = true;
+  }
+  await loggers.consoleLog(namespacePrefix + functionName, msg.creturnDataIs + JSON.stringify(returnData));
+  await loggers.consoleLog(namespacePrefix + functionName, msg.cEND_Function);
+  return returnData;
+}
+
 /**
  * @function generateRandomMixedCaseTextByLength
  * @description Parse the input string, and determine how many mixed case
@@ -1366,6 +1416,7 @@ async function generateRandomColor(inputData, inputMetaData) {
 }
 
 export default {
+  initStringGeneration,
   generateRandomMixedCaseTextByLength,
   generateRandomUpperCaseTextByLength,
   generateRandomLowerCaseTextByLength,

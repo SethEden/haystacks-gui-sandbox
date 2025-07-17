@@ -32,6 +32,10 @@ const filePath = path.resolve(import.meta.url.replace(sys.cfileColonDoubleForwar
 // framework.commandsBlob.commands.performanceMetric.
 const namespacePrefix = wrd.cframework + bas.cDot + sys.ccommandsBlob + bas.cDot + wrd.ccommands + bas.cDot + baseFileName + bas.cDot;
 
+const commandsMetaData = [
+  
+];
+
 /**
  * @function businessRulesMetrics
  * @description A command to compute business rule metrics for each of the
