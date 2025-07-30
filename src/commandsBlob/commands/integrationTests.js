@@ -237,10 +237,20 @@ async function validateConstants(inputData, inputMetaData) {
       await loggers.consoleLog(namespacePrefix + functionName, msg.cBeginPhase1ConstantsValidation);
       await loggers.consoleLog(wrd.cInfo, msg.cBeginPhase1ConstantsValidation);
       // First scan through each file and validate that the constants defined in the constants code file are also contained in the validation file.
+      const phase1Promises = [];
       for (let key1 in validationArray) {
         let constantsPath = validationArray[key1];
-        phase1Results[key1] = await ruleBroker.processRules([constantsPath, key1], [biz.cvalidateConstantsDataValidation]);
+        // Start the async job, but DO NOT await here!
+        phase1Promises.push(
+          ruleBroker.processRules([constantsPath, key1], [biz.cvalidateConstantsDataValidation]).then(result => ({ key: key1, result }))
+        );
       } // End-for (let key1 in validationArray)
+
+      // Wait for all phase 1 jobs to finish
+      const phase1ResultsArr = await Promise.allSettled(phase1Promises);
+      for (const { key, result } of phase1ResultsArr) {
+        phase1Results[key] = result;
+      }
       // END Phase 1 Constants Validation
       await loggers.consoleLog(namespacePrefix + functionName, msg.cEndPhase1ConstantsValidation);
       // phase1Results is:
@@ -251,9 +261,18 @@ async function validateConstants(inputData, inputMetaData) {
       await loggers.consoleLog(namespacePrefix + functionName, msg.cBeginPhase2ConstantsValidation);
       await loggers.consoleLog(wrd.cInfo, msg.cBeginPhase2ConstantsValidation);
       // Now verify that the values of the constants are what they are expected to be by using the constants validation data to validate.
+      const phase2Promises = [];
       for (let key2 in validationArray) {
-        phase2Results[key2] = await ruleBroker.processRules([key2, ''], [biz.cvalidateConstantsDataValues]);
+        phase2Promises.push(
+          ruleBroker.processRules([key2, ''], [biz.cvalidateConstantsDataValues]).then(result => ({ key: key2, result }))
+        );
       } // End-for (let key2 in validationArray)
+
+      // Wait for all phase 2 jobs to finish
+      const phase2ResultsArr = await Promise.allSettled(phase2Promises);
+      for (const { key, result } of phase2ResultsArr) {
+        phase2Results[key] = result;
+      }
       // END Phase 2 Constants Validation
       await loggers.consoleLog(namespacePrefix + functionName, msg.cEndPhase2ConstantsValidation);
       // phase2Results is:

@@ -2,6 +2,7 @@
  * @file ruleBroker.js
  * @module ruleBroker
  * @description Contains all the functions necessary to manage the business rules system.
+ * @requires module:threadBroker
  * @requires module:ruleParsing
  * @requires module:rulesLibrary
  * @requires module:data
@@ -13,6 +14,7 @@
  */
 
 // Internal imports
+import threadBroker from './threadBroker.js';
 import ruleParsing from '../businessRules/rules/ruleParsing.js';
 import rules from '../businessRules/rulesLibrary.js';
 import D from '../structures/data.js';
@@ -159,7 +161,22 @@ async function processRules(inputs, rulesToExecute) {
         // console.log(`key is: ${key}`);
         let value = rulesToExecute[key];
         // console.log(`value is: ${value}`);
-        returnData = await D[sys.cbusinessRules][value](returnData, inputMetaData);
+        const ruleMetaData = await getBusinessRuleMetaDataByName(rule);
+        if (ruleMetaData && ruleMetaData[wrd.cthreadable] === true) {
+          // Build jobData package (include D-config, meta-data, allMetaData map for deps, etc.)
+          const jobData = {
+            jobType: sys.cbusinessRule, // or just 'businessRule'
+            name: value,
+            inputData: returnData,
+            inputMetaData: inputMetaData,
+            metaData: ruleMetaData,
+            allMetaData: D[sys.cbusinessRulesMetaData],
+            dStruct: D, // Only pass config section if you want, or all of D if needed for config flags etc.
+          };
+          returnData = (await threadBroker.startJob(jobData)).result; // unpack result object
+        } else {
+          returnData = await D[sys.cbusinessRules][value](returnData, inputMetaData);
+        }
       } // End-if (rulesToExecute.hasOwnProperty(rule))
     } // End-for (let rule in rulesToExecute)
   } else {
@@ -224,11 +241,85 @@ async function removePluginBusinessRules(pluginName) {
   return returnData;
 }
 
+/**
+ * @function getBusinessRuleMetaDataByName
+ * @description Searches for a business rule meta-data object by rule name across framework, application, and plugins.
+ * The first exact match found is returned.
+ * @param {string} ruleName The name of the business rule to find.
+ * @returns {object|boolean} The matching meta-data object, or null if not found.
+ * @author Seth Hollingsead
+ * @date 2025/07/29
+ */
+async function getBusinessRuleMetaDataByName(ruleName) {
+  const functionName = getBusinessRuleMetaDataByName.name;
+  // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
+  let returnData = false;
+  // 1. Search Framework
+  if (
+    D &&
+    D[sys.cbusinessRulesMetaData] &&
+    D[sys.cbusinessRulesMetaData][wrd.cframework] &&
+    Array.isArray(D[sys.cbusinessRulesMetaData][wrd.cframework])
+  ) {
+    const match = D[sys.cbusinessRulesMetaData][wrd.cframework].find(
+      (meta) => meta.Name === ruleName
+    );
+    if (match) {
+      returnData = match;
+    }
+  }
+
+  // 2. Search Application (if not found yet)
+  if (
+    !returnData &&
+    D &&
+    D[sys.cbusinessRulesMetaData] &&
+    D[sys.cbusinessRulesMetaData][wrd.capplication] &&
+    Array.isArray(D[sys.cbusinessRulesMetaData][wrd.capplication])
+  ) {
+    const match = D[sys.cbusinessRulesMetaData][wrd.capplication].find(
+      (meta) => meta.Name === ruleName
+    );
+    if (match) {
+      returnData = match;
+    }
+  }
+
+  // 3. Search Plugins (all plugins, if not found yet)
+  if (
+    !returnData &&
+    D &&
+    D[sys.cbusinessRulesMetaData] &&
+    D[sys.cbusinessRulesMetaData][wrd.cplugins] &&
+    typeof D[sys.cbusinessRulesMetaData][wrd.cplugins] === wrd.cobject
+  ) {
+    const plugins = D[sys.cbusinessRulesMetaData][wrd.cplugins];
+    for (const pluginName in plugins) {
+      if (
+        Object.prototype.hasOwnProperty.call(plugins, pluginName) &&
+        Array.isArray(plugins[pluginName])
+      ) {
+        const match = plugins[pluginName].find(
+          (meta) => meta.Name === ruleName
+        );
+        if (match) {
+          returnData = match;
+          break; // first match only
+        }
+      }
+    }
+  }
+  // console.log(msg.creturnDataIs + JSON.stringify(returnData));
+  // console.log(`END ${namespacePrefix}${functionName} function`);
+  return returnData;
+}
+
 export default {
   bootStrapBusinessRules,
   resetBusinessRules,
   addClientRules,
   addPluginRules,
   processRules,
-  removePluginBusinessRules
+  removePluginBusinessRules,
+  getBusinessRuleMetaDataByName
 };

@@ -33,7 +33,7 @@ const filePath = fileURLToPath(import.meta.url);
 const namespacePrefix = wrd.cframework + bas.cDot + sys.cbusinessRules + bas.cDot + wrd.crules + bas.cDot + wrd.cstring + wrd.cParsing + bas.cDot + baseFileName + bas.cDot;
 
 const rulesMetaData = [
-  {[wrd.cName]: biz.cvalidateConstantsDataValidation, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: [biz.cloadAsciiFileFromPath, biz.cgetFileNameFromPath]},
+  {[wrd.cName]: biz.cvalidateConstantsDataValidation, [sys.cFilePath]: filePath, [wrd.cthreadable]: true, [sys.cbusinessRulesDependencies]: [biz.cloadAsciiFileFromPath, biz.cgetFileNameFromPath]},
   {[wrd.cName]: biz.cdetermineConstantsContextQualifiedPrefix, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
   {[wrd.cName]: biz.cdetermineSuggestedConstantsValidationLineOfCode, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
   {[wrd.cName]: biz.cvalidateConstantsDataValidationLineItemName, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
@@ -56,7 +56,7 @@ const rulesMetaData = [
   {[wrd.cName]: biz.cconvertConstantTypeToConstantPrefix, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
   {[wrd.cName]: biz.cconstantsOptimizedFulfillmentSystem, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
   {[wrd.cName]: biz.cconstantsFulfillmentSystem, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
-  {[wrd.cName]: biz.cvalidateConstantsDataValues, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []},
+  {[wrd.cName]: biz.cvalidateConstantsDataValues, [sys.cFilePath]: filePath, [wrd.cthreadable]: true, [sys.cbusinessRulesDependencies]: []},
   {[wrd.cName]: biz.cisConstantValid, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.cbusinessRulesDependencies]: []}
 ];
 

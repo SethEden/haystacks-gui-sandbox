@@ -2,7 +2,8 @@
   "controlFlags": {
     "Warning": true,
     "Info": true,
-    "Error": true
+    "Error": true,
+    "threadLog": true
   },
   "flagNames": {
     "logFileConfigFlagName": "logFileEnabled"

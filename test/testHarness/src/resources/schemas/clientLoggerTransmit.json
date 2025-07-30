@@ -4,7 +4,8 @@
     "Warning": true,
     "Info": true,
     "JournalActions": true,
-    "TestResultsLog": true
+    "TestResultsLog": true,
+    "threadLog": true
   },
   "flagNames": {
     "logFileConfigFlagName": "logFileEnabled",

@@ -44,6 +44,24 @@ socketsClient().then(r => {
   if (socketClient == undefined) socketClient = r;
 });
 
+let injectedLogTransport = null;
+
+/**
+ * @function setInjectedLogTransport
+ * @description Injects a transport function for all logger output (including tables). When set,
+ * all logger output is routed through this function in addition to (or instead of) regular logging.
+ * @param {function} transportFunction Receives: {type, classPath, message, tableData, columnNames, ...}
+ * @returns {void}
+ * @author Seth Hollingsead
+ * @date 2025/07/29
+ */
+async function setInjectedLogTransport(transportFunction) {
+  const functionName = setInjectedLogTransport.name;
+  // console.log(`BEGIN ${namespacePrefix}${functionName} function`);
+  injectedLogTransport = transportFunction;
+  // console.log(`END ${namespacePrefix}${functionName} function`);
+}
+
 /**
  * @function consoleLog
  * @description Uses the classPathControlFlag to look up to a namespace configuration setting, or
@@ -245,7 +263,16 @@ async function consoleTableLog(classPath, tableData, columnNames) {
     suppressDefault = true;
   }
   if (!suppressDefault) {
-    console.table(tableData, columnNames);
+    if (injectedLogTransport) {
+      injectedLogTransport({
+        type: sys.cconsoleTableLog,
+        classPath,
+        tableData,
+        columnNames
+      });
+    } else {
+      console.table(tableData, columnNames);
+    }
   }
   if (await configurator.getConfigurationSetting(wrd.csystem, sys.clogToSocketTransmissionEnabled) === true &&
   socketClient && typeof socketClient.send === wrd.cfunction) {
@@ -291,7 +318,15 @@ async function constantsValidationSummaryLog(message, passFail) {
       outputMessage = await colorizer.colorizeMessageSimple(outputMessage, blackColorArray, true);
       outputMessage = await colorizer.colorizeMessageSimple(outputMessage, greenColorArray, false);
       if (!suppressDefault) {
-        console.log(outputMessage);
+        if (injectedLogTransport) {
+          injectedLogTransport({
+            type: sys.cconstantsValidationSummaryLog,
+            message: outputMessage,
+            passFail
+          });
+        } else {
+          console.log(outputMessage);
+        }
       }
       // Path: Broadcast over client socket if enabled
       if (await configurator.getConfigurationSetting(wrd.csystem, sys.clogToSocketTransmissionEnabled) === true && socketClient) {
@@ -304,7 +339,15 @@ async function constantsValidationSummaryLog(message, passFail) {
       outputMessage = await colorizer.colorizeMessageSimple(outputMessage, blackColorArray, true);
       outputMessage = await colorizer.colorizeMessageSimple(outputMessage, redColorArray, false);
       if (!suppressDefault) {
-        console.log(outputMessage);
+        if (injectedLogTransport) {
+          injectedLogTransport({
+            type: sys.cconstantsValidationSummaryLog,
+            message: outputMessage,
+            passFail
+          });
+        } else {
+          console.log(outputMessage);
+        }
       }
       // Patch: Broadcast over client socket if enabled
       if (await configurator.getConfigurationSetting(wrd.csystem, sys.clogToSocketTransmissionEnabled) === true && socketClient) {
@@ -400,7 +443,15 @@ async function consoleLogProcess(logOptions) {
   }
   // If we need to apply additional isMessageValid logic, do it here!!
   if (!suppressDefaultConsoleOutput) {
-    console.log(outputMessage);
+    if (injectedLogTransport) {
+      injectedLogTransport({
+        type: sys.cconsoleLog,
+        classPath: classPathControlFlag,
+        message: outputMessage
+      });
+    } else {
+      console.log(outputMessage);
+    }
   }
 
   if (isFileLoggingOn && logFile) {
@@ -490,6 +541,7 @@ async function printMessageToFile(file, message) {
 }
 
 export default {
+  setInjectedLogTransport,
   consoleLog,
   loggerSchemaGateLogic,
   consoleTableLog,
