@@ -242,14 +242,27 @@ async function validateConstants(inputData, inputMetaData) {
         let constantsPath = validationArray[key1];
         // Start the async job, but DO NOT await here!
         phase1Promises.push(
-          ruleBroker.processRules([constantsPath, key1], [biz.cvalidateConstantsDataValidation]).then(result => ({ key: key1, result }))
+          ruleBroker.processRules([constantsPath, key1], [biz.cvalidateConstantsDataValidation]).then(async result => {
+            // Announce the completion here!
+            await loggers.consoleLog(sys.cthreadLog, 'Phase 1 finished: ' + key1 + ' Result is: ' + JSON.stringify(result));
+            return { key: key1, result }
+          })
         );
       } // End-for (let key1 in validationArray)
 
       // Wait for all phase 1 jobs to finish
       const phase1ResultsArr = await Promise.allSettled(phase1Promises);
-      for (const { key, result } of phase1ResultsArr) {
-        phase1Results[key] = result;
+      for (const p of phase1ResultsArr) {
+        if (p.status === 'fulfilled') {
+          const { key, result } = p.value;
+          phase1Results[key] = result;
+        } else {
+          // Optionally handle/log errors
+          await loggers.consoleLog(
+            wrd.cThread,
+            `FAILED: ${p.reason && p.reason.key ? p.reason.key : 'Unknown'} - Error: ${p.reason}`
+          );
+        }
       }
       // END Phase 1 Constants Validation
       await loggers.consoleLog(namespacePrefix + functionName, msg.cEndPhase1ConstantsValidation);
@@ -264,14 +277,29 @@ async function validateConstants(inputData, inputMetaData) {
       const phase2Promises = [];
       for (let key2 in validationArray) {
         phase2Promises.push(
-          ruleBroker.processRules([key2, ''], [biz.cvalidateConstantsDataValues]).then(result => ({ key: key2, result }))
+          ruleBroker.processRules([key2, ''], [biz.cvalidateConstantsDataValues]).then(async result => {
+            // Announce the completion here!
+            await loggers.consoleLog(sys.cthreadLog, 'Phase 2 finished: ' + key2 + ' Result is: ' + JSON.stringify(result));
+             return { key: key2, result }
+          })
         );
       } // End-for (let key2 in validationArray)
 
       // Wait for all phase 2 jobs to finish
       const phase2ResultsArr = await Promise.allSettled(phase2Promises);
-      for (const { key, result } of phase2ResultsArr) {
-        phase2Results[key] = result;
+      for (const settled of phase2ResultsArr) {
+        if (settled.status === 'fulfilled') {
+          const { key, result } = settled.value;
+          phase2Results[key] = result;
+        } else {
+          // Handle error here, still log and track the key
+          const failedKey = validationArray[phase2ResultsArr.indexOf(settled)];
+          await loggers.consoleLog(
+            sys.cthreadLog,
+            `Phase 2 FAILED: ${failedKey} Error: ${settled.reason && settled.reason.message ? settled.reason.message : JSON.stringify(settled.reason)}`
+          );
+          phase2Results[failedKey] = null;
+        }
       }
       // END Phase 2 Constants Validation
       await loggers.consoleLog(namespacePrefix + functionName, msg.cEndPhase2ConstantsValidation);
