@@ -49,6 +49,9 @@ const namespacePrefix =  wrd.cframework + bas.cDot + wrd.cexecutrix + bas.cDot +
       dStruct, // D-Data Structure
     } = workerData;
 
+    const businessRulesMetaData = workerData.allBusinessRulesMetaData || dStruct.businessRulesMetaData;
+    const commandsMetaData = workerData.allCommandsMetaData || dStruct.commandsMetaData;
+
     // Step 2: Build local D-data structure for this worker
     let D = {
       businessRules: {},
@@ -73,8 +76,8 @@ const namespacePrefix =  wrd.cframework + bas.cDot + wrd.cexecutrix + bas.cDot +
     // Step 5: Optionally wire up debug logging to parent (console.log, etc)
     if (D[wrd.cconfiguration][cfg.csendConsoleLogsToParent]) {
       // Patch console.log to relay logs
-      await loggers.setInjectedLogTransport((...args) => {
-        parentPort.postMessage({ type: wrd.clog, log: args.map(string).join(' ') });
+      await loggers.setInjectedLogTransport((logObj) => {
+        parentPort.postMessage(logObj);
       });
     }
 

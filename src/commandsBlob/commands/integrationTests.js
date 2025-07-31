@@ -41,7 +41,7 @@ const filePath = fileURLToPath(import.meta.url);
 const namespacePrefix = wrd.cframework + bas.cDot + sys.ccommandsBlob + bas.cDot + wrd.ccommands + bas.cDot + baseFileName + bas.cDot;
 
 const commandsMetaData = [
-  {[wrd.cName]: cmd.cvalidateConstants, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: [
+  {[wrd.cName]: cmd.cvalidateConstants, [sys.cFilePath]: filePath, [wrd.cthreadable]: true, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: [
     biz.cvalidateConstantsDataValidation, biz.cvalidateConstantsDataValues, biz.cgetConstantsValidationNamespaceParentObject
   ]},
   {[wrd.cName]: cmd.cvalidateCommandAliases, [sys.cFilePath]: filePath, [wrd.cthreadable]: false, [sys.ccommandsDependencies]: [], [sys.cbusinessRulesDependencies]: [biz.cobjectDeepMerge]},
@@ -244,7 +244,7 @@ async function validateConstants(inputData, inputMetaData) {
         phase1Promises.push(
           ruleBroker.processRules([constantsPath, key1], [biz.cvalidateConstantsDataValidation]).then(async result => {
             // Announce the completion here!
-            await loggers.consoleLog(sys.cthreadLog, 'Phase 1 finished: ' + key1 + ' Result is: ' + JSON.stringify(result));
+            await loggers.consoleLog(sys.cthreadLog, msg.cphase1Finished + key1 + bas.cSpace + msg.cresultIs + JSON.stringify(result));
             return { key: key1, result }
           })
         );
@@ -253,15 +253,12 @@ async function validateConstants(inputData, inputMetaData) {
       // Wait for all phase 1 jobs to finish
       const phase1ResultsArr = await Promise.allSettled(phase1Promises);
       for (const p of phase1ResultsArr) {
-        if (p.status === 'fulfilled') {
+        if (p.status === wrd.cfulfilled) {
           const { key, result } = p.value;
           phase1Results[key] = result;
         } else {
           // Optionally handle/log errors
-          await loggers.consoleLog(
-            wrd.cThread,
-            `FAILED: ${p.reason && p.reason.key ? p.reason.key : 'Unknown'} - Error: ${p.reason}`
-          );
+          await loggers.consoleLog(wrd.cThread, msg.cphase1Failed + (p.reason && p.reason.key ? p.reason.key : wrd.cUnknown) + msg.cERROR_Colon + p.reason);
         }
       }
       // END Phase 1 Constants Validation
@@ -279,8 +276,8 @@ async function validateConstants(inputData, inputMetaData) {
         phase2Promises.push(
           ruleBroker.processRules([key2, ''], [biz.cvalidateConstantsDataValues]).then(async result => {
             // Announce the completion here!
-            await loggers.consoleLog(sys.cthreadLog, 'Phase 2 finished: ' + key2 + ' Result is: ' + JSON.stringify(result));
-             return { key: key2, result }
+            await loggers.consoleLog(sys.cthreadLog, msg.cphase2Finished + key2 + bas.cSpace + msg.cresultIs + JSON.stringify(result));
+            return { key: key2, result }
           })
         );
       } // End-for (let key2 in validationArray)
@@ -288,16 +285,14 @@ async function validateConstants(inputData, inputMetaData) {
       // Wait for all phase 2 jobs to finish
       const phase2ResultsArr = await Promise.allSettled(phase2Promises);
       for (const settled of phase2ResultsArr) {
-        if (settled.status === 'fulfilled') {
+        if (settled.status === wrd.cfulfilled) {
           const { key, result } = settled.value;
           phase2Results[key] = result;
         } else {
           // Handle error here, still log and track the key
           const failedKey = validationArray[phase2ResultsArr.indexOf(settled)];
-          await loggers.consoleLog(
-            sys.cthreadLog,
-            `Phase 2 FAILED: ${failedKey} Error: ${settled.reason && settled.reason.message ? settled.reason.message : JSON.stringify(settled.reason)}`
-          );
+          await loggers.consoleLog(sys.cthreadLog, msg.cphase2Failed + failedKey + bas.cSpace + msg.cERROR_Colon +
+            (settled.reason && settled.reason.message ? settled.reason.message : JSON.stringify(settled.reason)));
           phase2Results[failedKey] = null;
         }
       }

@@ -30,6 +30,7 @@ import stack from '../structures/stack.js';
 // External imports
 import hayConst from '@haystacks/constants';
 import path from 'path';
+import threadBroker from './threadBroker.js';
 
 const {bas, biz, clr, cfg, gen, msg, num, sys, wrd} = hayConst;
 const baseFileName = path.basename(import.meta.url, path.extname(import.meta.url));
@@ -689,6 +690,7 @@ async function executeCommand(commandString) {
   let commandEndTime = '';
   let commandDeltaTime = '';
 
+  // commandQueue is:
   await loggers.consoleLog(namespacePrefix + functionName, msg.ccommandQueueIs + await queue.queuePrint(sys.cCommandQueue));
 
   if (commandMetricsEnabled === true) {
@@ -700,13 +702,32 @@ async function executeCommand(commandString) {
     await loggers.consoleLog(namespacePrefix + functionName, msg.cCommandStartTimeIs + commandStartTime);
   } // End-if (commandMetricsEnabled === true)
   try {
-    if (commandToExecute !== false && commandArgs !== false) {
-      // console.log('commandToExecute is: ' + commandToExecute);
-      returnData = await D[wrd.cCommands][commandToExecute](commandArgs, '');
-    } else if (commandToExecute !== false && commandArgs === false) {
-      // This could be a command without any arguments.
-      // console.log('This could be a command without any arguments.');
-      returnData = await D[wrd.cCommands][commandToExecute]('', '');
+    if (commandToExecute !== false) {
+      // Look up the meta-data for the command (should match the command meta-data structure)
+      const commandMetaData = await getCommandMetaDataByName(commandToExecute);
+
+      // Determine if this command is threadable or not.
+      if (commandMetaData && commandMetaData[wrd.cthreadable] === true) {
+        // Prepare jobData for threadBroker which will call threader to execute the thread-job.
+        const jobData = {
+          jobType: wrd.ccommand,
+          name: commandToExecute,
+          inputData: commandArgs !== false ? commandArgs : '', // Handles no-args
+          inputMetaData: '', // Pass any needed meta-data here
+          metaData: commandMetaData,
+          allMetaData: D[sys.ccommandsMetaData],
+          dStruct: D
+        };
+        // Await the result from the thread worker (unpack .result)
+        returnData = (await threadBroker.startJob(jobData)).result;
+      } else {
+        // Execute directly (main thread)
+        if (commandArgs !== false) {
+          returnData = await D[wrd.cCommands][commandToExecute](commandArgs, '');
+        } else {
+          returnData = await D[wrd.cCommands][commandToExecute]('', '');
+        }
+      }
     } else {
       // This command does not exist, nothing to execute, but we don't want the application to exit.
       // An error message should have already been thrown, but we should throw another one here.
@@ -714,6 +735,23 @@ async function executeCommand(commandString) {
       await loggers.consoleLog(wrd.cWarning, msg.cexecuteCommandMessage1);
       returnData = [true, false];
     }
+    // **********************************************************************
+    // OLD METHOD of invoking a command!
+    // **********************************************************************
+    // if (commandToExecute !== false && commandArgs !== false) {
+    //   // console.log('commandToExecute is: ' + commandToExecute);
+    //   returnData = await D[wrd.cCommands][commandToExecute](commandArgs, '');
+    // } else if (commandToExecute !== false && commandArgs === false) {
+    //   // This could be a command without any arguments.
+    //   // console.log('This could be a command without any arguments.');
+    //   returnData = await D[wrd.cCommands][commandToExecute]('', '');
+    // } else {
+    //   // This command does not exist, nothing to execute, but we don't want the application to exit.
+    //   // An error message should have already been thrown, but we should throw another one here.
+    //   // WARNING: Command does not exist, please enter a valid command and try again!
+    //   await loggers.consoleLog(wrd.cWarning, msg.cexecuteCommandMessage1);
+    //   returnData = [true, false];
+    // }
   } catch (err) {
     await loggers.consoleLog(wrd.cError, msg.cERROR_Colon + bas.cSpace + err);
     await loggers.consoleLog(wrd.cError, msg.cexecuteCommandMessage1);

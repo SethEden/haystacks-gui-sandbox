@@ -6,6 +6,7 @@
   "system.figletFont": "Star Wars",
   "system.debugSettings": true,
   "system.consoleLogEnabled": true,
+  "system.sendConsoleLogsToParent": true,
   "system.logFileEnabled": true,
   "system.includeDateTimeStampInLogFiles": true,
   "system.enableColorizedConsoleLogs": true,
